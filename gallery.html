@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - AI Photoshoot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="templatemo-prism-flux.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav-container">
+      <a href="index.html#home" class="logo">
+        <div class="logo-icon">
+          <div class="logo-prism" aria-hidden="true">
+            <div class="prism-shape"></div>
+          </div>
+        </div>
+        <span class="logo-text">
+          <span class="prism">Fashion</span>
+          <span class="flux">AI</span>
+        </span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
+        <li><a href="studio.html" class="nav-link">Studio</a></li>
+        <li><a href="index.html#signup" class="nav-link">Sign up / Log in</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="gallery-page">
+    <div class="section-header" style="padding-top:120px;">
+      <h2 class="section-title">Gallery</h2>
+      <p class="section-subtitle">Immagini generate e salvate nella tua sessione</p>
+    </div>
+    <div class="gallery-compact-grid" id="galleryList"></div>
+    <div class="gallery-load-more" id="galleryLoadMore" style="display:none;">
+      <button class="gallery-load-more-btn" type="button" title="Mostra altre immagini">
+        Mostra altre
+      </button>
+    </div>
+    <div id="galleryEmpty" style="text-align:center; margin:40px 0; color:var(--text-secondary); display:none;">
+      Nessuna immagine trovata. Genera un look per popolare la gallery.
+    </div>
+  </main>
+
+  <div class="image-viewer" id="imageViewer" aria-hidden="true">
+    <div class="image-viewer-backdrop" id="imageViewerBackdrop"></div>
+    <div class="image-viewer-dialog" role="dialog" aria-modal="true">
+      <button class="image-viewer-close" id="imageViewerClose" aria-label="Chiudi anteprima">&times;</button>
+      <button class="image-viewer-nav prev" id="imageViewerPrev" aria-label="Immagine precedente">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button class="image-viewer-nav next" id="imageViewerNext" aria-label="Immagine successiva">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+      <div class="image-viewer-body">
+        <img id="imageViewerImg" alt="Immagine generata">
+      </div>
+      <div class="image-viewer-footer">
+        <div>
+          <div class="image-viewer-title" id="imageViewerCaption">Anteprima immagine</div>
+          <div class="image-viewer-count" id="imageViewerCount"></div>
+        </div>
+        <div class="image-viewer-actions">
+          <a class="image-viewer-btn" id="imageViewerLink" href="#" target="_blank" rel="noopener noreferrer">Apri immagine</a>
+          <a class="image-viewer-btn" id="imageViewerDownload" href="#" download><i class="fa fa-download" style="margin-right:6px;"></i>Scarica</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const listEl = document.getElementById('galleryList');
+    const emptyEl = document.getElementById('galleryEmpty');
+    const viewer = document.getElementById('imageViewer');
+    const viewerImg = document.getElementById('imageViewerImg');
+    const viewerLink = document.getElementById('imageViewerLink');
+    const viewerClose = document.getElementById('imageViewerClose');
+    const viewerBackdrop = document.getElementById('imageViewerBackdrop');
+    const loadMoreWrap = document.getElementById('galleryLoadMore');
+    const loadMoreBtn = document.querySelector('.gallery-load-more-btn');
+    const viewerCaption = document.getElementById('imageViewerCaption');
+    const viewerCount = document.getElementById('imageViewerCount');
+    const viewerPrev = document.getElementById('imageViewerPrev');
+    const viewerNext = document.getElementById('imageViewerNext');
+    const viewerDownload = document.getElementById('imageViewerDownload');
+
+    let allFiles = [];
+    let currentIndex = -1;
+
+    const readableName = (file) => file?.name?.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').trim() || 'LOOK';
+
+    const hideImageViewer = () => {
+      viewer?.classList.remove('active');
+      viewer?.setAttribute('aria-hidden', 'true');
+      currentIndex = -1;
+      if (viewerImg) viewerImg.src = '';
+      if (viewerLink) viewerLink.href = '#';
+    };
+
+    const setViewerContent = (index) => {
+      if (!viewer || !viewerImg || !viewerLink) return;
+      if (index < 0 || index >= allFiles.length) return;
+      currentIndex = index;
+      const file = allFiles[index];
+      viewerImg.src = file.url;
+      viewerImg.alt = file.name || 'Immagine generata';
+      viewerLink.href = file.url;
+      if (viewerDownload) {
+        viewerDownload.href = file.url;
+        viewerDownload.download = file.name || 'immagine.jpg';
+      }
+      viewerCaption.textContent = readableName(file);
+      viewerCount.textContent = `${index + 1} / ${allFiles.length}`;
+      viewer.classList.add('active');
+      viewer.setAttribute('aria-hidden', 'false');
+    };
+
+    const showImageViewer = (index) => {
+      setViewerContent(index);
+    };
+
+    const showNext = () => {
+      if (!allFiles.length) return;
+      const nextIndex = (currentIndex + 1) % allFiles.length;
+      setViewerContent(nextIndex);
+    };
+
+    const showPrev = () => {
+      if (!allFiles.length) return;
+      const prevIndex = (currentIndex - 1 + allFiles.length) % allFiles.length;
+      setViewerContent(prevIndex);
+    };
+
+    const updateLoadMoreVisibility = () => {
+      if (loadMoreWrap) loadMoreWrap.style.display = 'none';
+    };
+
+    viewerClose?.addEventListener('click', hideImageViewer);
+    viewerBackdrop?.addEventListener('click', hideImageViewer);
+    viewerNext?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showNext();
+    });
+    viewerPrev?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showPrev();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!viewer?.classList.contains('active')) return;
+      if (e.key === 'Escape') hideImageViewer();
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        showNext();
+      }
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        showPrev();
+      }
+    });
+
+    const createCard = (f, idx) => {
+      const name = readableName(f);
+      const card = document.createElement('div');
+      card.className = 'gallery-card';
+      card.style.animationDelay = `${idx * 0.03}s`;
+      card.innerHTML = `
+        <div class="gallery-card-image">
+          <img src="${f.url}" alt="${f.name}">
+        </div>
+        <div class="gallery-card-footer">
+          <div class="gallery-card-title">${name}</div>
+          <div class="gallery-card-actions">
+            <button class="gallery-card-icon open" type="button" title="Apri in lightbox">
+              <i class="fa fa-eye"></i>
+            </button>
+            <a class="gallery-card-icon" href="${f.url}" download="${f.name}" title="Scarica" onclick="event.stopPropagation()">
+              <i class="fa fa-download"></i>
+            </a>
+            <button class="gallery-card-icon ghost" data-name="${f.name}" type="button" title="Elimina">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      `;
+
+      const openBtn = card.querySelector('.gallery-card-icon.open');
+      openBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showImageViewer(idx);
+      });
+
+      const deleteBtn = card.querySelector('.gallery-card-icon.ghost');
+      deleteBtn?.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const ok = confirm(`Vuoi eliminare l'immagine "${f.name}"?`);
+        if (!ok) return;
+        try {
+          const resp = await fetch(`/api/gallery/${encodeURIComponent(f.name)}`, {
+            method: 'DELETE',
+          });
+          if (resp.ok) {
+            const viewerActive = viewer?.classList.contains('active');
+            allFiles = allFiles.filter((x) => x.name !== f.name);
+            if (viewerActive) {
+              if (!allFiles.length) {
+                hideImageViewer();
+              } else {
+                const nextIndex = currentIndex > idx ? currentIndex - 1 : Math.min(currentIndex, allFiles.length - 1);
+                setViewerContent(nextIndex);
+              }
+            }
+            renderGallery();
+            if (!allFiles.length) {
+              emptyEl.style.display = 'block';
+            }
+            updateLoadMoreVisibility();
+          } else {
+            const msg = await resp.text();
+            alert('Impossibile eliminare il file: ' + (msg || resp.status));
+          }
+        } catch (err) {
+          console.error('Delete failed', err);
+          alert("Errore durante l'eliminazione. Riprova.");
+        }
+      });
+      card.addEventListener('click', () => showImageViewer(idx));
+      return card;
+    };
+
+    const renderGallery = () => {
+      listEl.innerHTML = '';
+      if (!allFiles.length) {
+        emptyEl.style.display = 'block';
+        return;
+      }
+      emptyEl.style.display = 'none';
+      allFiles.forEach((file, index) => {
+        listEl.appendChild(createCard(file, index));
+      });
+    };
+
+    async function loadGallery() {
+      try {
+        const resp = await fetch('/api/gallery');
+        const data = await resp.json();
+        allFiles = (data?.files || []).sort((a, b) => new Date(b.mtime || 0) - new Date(a.mtime || 0));
+        renderGallery();
+        updateLoadMoreVisibility();
+      } catch (err) {
+        emptyEl.style.display = 'block';
+        emptyEl.textContent = 'Errore nel caricamento della gallery.';
+        console.error('Gallery load failed', err);
+      }
+    }
+
+    loadMoreBtn?.addEventListener('click', () => {});
+    loadGallery();
+  </script>
+</body>
+</html>

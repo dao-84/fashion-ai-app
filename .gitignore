@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+storage/generated/
+generated/
+node_modules/
+*.log
+*.tmp
+*.temp
+.cache/
+coverage/
+npm-debug.log*
+yarn-error.log*
+storage/

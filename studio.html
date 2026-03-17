@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio - AI Photoshoot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js" defer></script>
+  <link rel="stylesheet" href="templatemo-prism-flux.css">
+</head>
+<body class="studio-body">
+  <header class="header">
+    <nav class="nav-container">
+      <a href="index.html#home" class="logo">
+        <div class="logo-icon">
+          <div class="logo-prism" aria-hidden="true">
+            <div class="prism-shape"></div>
+          </div>
+        </div>
+        <span class="logo-text">
+          <span class="prism">Fashion</span>
+          <span class="flux">AI</span>
+        </span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+        <li><a href="studio.html" class="nav-link active">Studio</a></li>
+        <li><a href="index.html#signup" class="nav-link">Sign up / Log in</a></li>
+        <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Credito residuo">€50,00</span></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="studio-layout">
+    <section class="studio-column studio-left">
+      <div class="studio-panel">
+        <h3 class="studio-panel-title">Carica immagini</h3>
+        <div class="studio-upload-grid">
+          <label class="upload-dropzone" for="studioDressInput">
+            <div class="drop-label">Foto del capo</div>
+            <div class="drop-hint">Trascina o clicca</div>
+            <div class="drop-preview" id="studioDressPreview"></div>
+            <input type="file" id="studioDressInput" accept="image/*" hidden>
+          </label>
+          <label class="upload-dropzone" for="studioModelInput">
+            <div class="drop-label">Foto modella</div>
+            <div class="drop-hint">Trascina o clicca</div>
+            <div class="drop-preview" id="studioModelPreview"></div>
+            <input type="file" id="studioModelInput" accept="image/*" hidden>
+          </label>
+        </div>
+        <div class="studio-ready">
+          <div class="studio-ready-head">
+            <h4>Modelle pronte</h4>
+            <p>Scegli un volto dalla libreria.</p>
+          </div>
+          <div class="studio-ready-grid">
+            <div class="studio-ready-card" data-model-src="images/models/Sofia.jpeg" data-model-name="Sofia">
+              <img src="images/models/Sofia.jpeg" alt="Sofia">
+              <div class="studio-ready-name">Sofia</div>
+            </div>
+            <div class="studio-ready-card" data-model-src="images/models/Mila.jpeg" data-model-name="Katia">
+              <img src="images/models/Mila.jpeg" alt="Mila">
+              <div class="studio-ready-name">Mila</div>
+            </div>
+            <div class="studio-ready-card" data-model-src="images/models/Naomi.jpeg" data-model-name="Lory">
+              <img src="images/models/Naomi.jpeg" alt="Naomi">
+              <div class="studio-ready-name">Naomi</div>
+            </div>
+            <div class="studio-ready-card" data-model-src="images/models/Nicole.jpeg" data-model-name="Pheebe">
+              <img src="images/models/Nicole.jpeg" alt="Nicole">
+              <div class="studio-ready-name">Nicole</div>
+            </div>
+            <div class="studio-ready-card" data-model-src="images/models/Luca.jpeg" data-model-name="Shirley">
+              <img src="images/models/Luca.jpeg" alt="Luca">
+              <div class="studio-ready-name">Luca</div>
+            </div>
+            <div class="studio-ready-card" data-model-src="images/models/Adrian.jpeg" data-model-name="Adrian">
+              <img src="images/models/Adrian.jpeg" alt="Adrian">
+              <div class="studio-ready-name">Adrian</div>
+            </div>
+            <div class="studio-ready-card studio-generate-card">
+              <div class="studio-generate-thumb" id="studioGenAnim" aria-label="Spazio anteprima modella 1:1"></div>
+              <div class="studio-ready-name">Genera modella</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="studio-model-builder active" id="studioModelBuilder">
+          <div class="model-builder-head">
+            <div>
+              <div class="model-builder-eyebrow">Genera modella AI</div>
+              <div class="model-builder-title">Output 3:4 • Anteprima nel riquadro e nel viewer</div>
+            </div>
+            <button type="button" class="model-builder-close" id="studioModelClose" aria-label="Chiudi pannello">X</button>
+          </div>
+
+          <div class="model-builder-section">
+            <div class="model-builder-label">Essenziali</div>
+            <div class="model-builder-grid">
+              <label class="model-field">
+                <span>Genere</span>
+                <select id="studioGenGender">
+                  <option value="female fashion model">Donna</option>
+                  <option value="male fashion model">Uomo</option>
+                  <option value="androgynous fashion model">Androgina</option>
+                </select>
+              </label>
+              <label class="model-field">
+                <span>Etnia</span>
+                <select id="studioGenEthnicity">
+                  <option value="European ethnicity">Europea</option>
+                  <option value="Mediterranean ethnicity">Mediterranea</option>
+                  <option value="African ethnicity">Afro</option>
+                  <option value="Middle Eastern ethnicity">Medio-orientale</option>
+                  <option value="Asian ethnicity">Asiatica</option>
+                  <option value="Latina ethnicity">Latina</option>
+                  <option value="mixed ethnicity">Mista</option>
+                </select>
+              </label>
+              <label class="model-field">
+                <span>Fascia età</span>
+                <select id="studioGenAge">
+                  <option value="age 18-25">18–25</option>
+                  <option value="age 25-35">25–35</option>
+                  <option value="age 35-45">35–45</option>
+                  <option value="age 45+">45+</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="model-builder-section">
+            <button type="button" class="model-advanced-toggle" id="studioAdvancedToggle" aria-expanded="false">
+              <span>Avanzati</span>
+              <span class="model-advanced-icon">v</span>
+            </button>
+            <div class="model-advanced-body" id="studioAdvancedBody" hidden>
+              <div class="model-builder-grid">
+                <label class="model-field">
+                  <span>Corporatura</span>
+                  <select id="studioGenBody">
+                    <option value="very slim body type">Molto magra</option>
+                    <option value="slim body type">Snella</option>
+                    <option value="average body type">Normale</option>
+                    <option value="curvy body type">Curvy</option>
+                    <option value="plus size body type">Plus size</option>
+                    <option value="athletic body type">Atletica</option>
+                  </select>
+                </label>
+                <label class="model-field">
+                  <span>Inquadratura</span>
+                  <select id="studioGenFrame">
+                    <option value="full body shot">Full body</option>
+                    <option value="three-quarter 3/4 shot">3/4</option>
+                    <option value="half body shot">Mezzo busto</option>
+                    <option value="portrait close-up">Ritratto</option>
+                  </select>
+                </label>
+                <label class="model-field">
+                  <span>Mood</span>
+                  <select id="studioGenMood">
+                    <option value="elegant mood">Elegante</option>
+                    <option value="natural mood">Naturale</option>
+                    <option value="bold decisive mood">Decisa</option>
+                    <option value="soft gentle mood">Soft</option>
+                    <option value="editorial fashion mood">Editoriale</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="model-builder-footer">
+            <div class="model-aspect-pill">Formato 3:4</div>
+            <button class="upload-action" type="button" id="studioGenerateModelBtn">Genera modella</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="studio-column studio-center">
+      <div class="studio-panel studio-settings">
+        <div class="settings-group wide">
+          <div class="dress-type-options" id="studioDressTypeOptions">
+            <button class="dress-type-btn active" data-type="dress">
+              <img src="images/icon/clothes.png" alt="Abito">
+              <span>Abito</span>
+            </button>
+            <button class="dress-type-btn" data-type="top">
+              <img src="images/icon/tshirt.png" alt="Top">
+              <span>Top</span>
+            </button>
+            <button class="dress-type-btn" data-type="trousers">
+              <img src="images/icon/trousers.png" alt="Pantalone">
+              <span>Pantalone</span>
+            </button>
+            <button class="dress-type-btn" data-type="skirt">
+              <img src="images/icon/skirt.png" alt="Gonna">
+              <span>Gonna</span>
+            </button>
+            <button class="dress-type-btn" data-type="accessory">
+              <img src="images/icon/pendant.png" alt="Accessorio">
+              <span>Accessorio</span>
+            </button>
+          </div>
+          <div class="style-type-options" id="studioStyleOptions">
+            <button class="style-type-btn" data-style="vogue">Vogue</button>
+            <button class="style-type-btn" data-style="fashion-look-book">Lookbook</button>
+            <button class="style-type-btn" data-style="bw">B&amp;W</button>
+            <button class="style-type-btn" data-style="streetwear-editorial">Streetwear</button>
+            <button class="style-type-btn" data-style="golden-hour">Golden hour</button>
+          </div>
+        </div>
+        <div class="settings-group">
+          <label for="studioAspect">Aspect ratio</label>
+          <select id="studioAspect">
+            <option value="1:1">1:1</option>
+            <option value="3:4">3:4</option>
+            <option value="4:3">4:3</option>
+            <option value="9:16">9:16</option>
+            <option value="16:9">16:9</option>
+          </select>
+        </div>
+        <div class="settings-group">
+          <label for="studioBackground">Selezione background</label>
+          <select id="studioBackground">
+            <option value="lookbook-studio">Studio Neutro Lookbook</option>
+            <option value="editorial-high-end">Editoriale Fashion High-End</option>
+            <option value="runway-show">Passerella Runway</option>
+            <option value="urban-street">Urban Street Style</option>
+            <option value="retail-boutique">Retail Boutique Premium</option>
+            <option value="lifestyle-indoor">Lifestyle Indoor Soft</option>
+            <option value="outdoor-golden-hour">Outdoor Golden Hour</option>
+            <option value="social-clean">Social Content Clean</option>
+            <option value="luxury-hotel-resort">Luxury Hotel Resort</option>
+            <option value="minimal-ecommerce">Minimal E-commerce Catalog</option>
+            <option value="custom">Background personalizzato</option>
+          </select>
+        </div>
+        <div class="settings-group prompt-group">
+          <label for="studioBackgroundPrompt">Prompt background</label>
+          <textarea id="studioBackgroundPrompt" rows="2" placeholder="Es: studio fashion con luci soffuse e neon dorati"></textarea>
+          <div class="prompt-suggestions studio-inline-suggestions">
+            <button class="prompt-suggestion-btn" type="button">Product detail shot (on model)</button>
+            <button class="prompt-suggestion-btn" type="button">commercial photo</button>
+            <button class="prompt-suggestion-btn" type="button">jewelry e-commerce</button>
+            <button class="prompt-suggestion-btn" type="button">luxury product photography</button>
+          </div>
+        </div>
+        <div class="settings-group action-group">
+          <button class="upload-action" id="studioGenerate">Genera</button>
+        </div>
+      </div>
+      <div class="studio-viewer">
+        <div class="studio-viewer-body" id="studioViewerBody">
+          <img id="studioMainImg" alt="Immagine generata">
+        </div>
+        <div class="studio-actions">
+          <button class="image-viewer-btn" id="studioOpen">Apri</button>
+          <button class="image-viewer-btn" id="studioSave">Salva in gallery</button>
+          <button class="image-viewer-btn" id="studioUpscale">Upscale</button>
+          <button class="image-viewer-btn" id="studioPose">Cambia posa</button>
+          <button class="image-viewer-btn" id="studioBg">Cambia background</button>
+          <button class="image-viewer-btn" id="studioRegen">Rigenera</button>
+          <button class="image-viewer-btn" id="studioRefiner">Refiner</button>
+          <a class="image-viewer-btn" id="studioDownload" href="#" download title="Scarica immagine"><i class="fa fa-download" style="margin-right:6px;"></i>Scarica</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="studio-column studio-right">
+      <div class="studio-panel">
+        <h3 class="studio-panel-title">Ultime immagini</h3>
+        <div class="studio-recent-list" id="studioRecent"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="gen-loader" id="studioLoader">
+    <div class="gen-loader-backdrop"></div>
+    <div class="gen-loader-content" aria-label="Generazione in corso">
+      <div class="loader-prism">
+        <div class="prism-face"></div>
+        <div class="prism-face"></div>
+        <div class="prism-face"></div>
+      </div>
+      <div style="margin-top:10px;color:var(--accent-purple);">Generazione...</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const dressInput = document.getElementById('studioDressInput');
+      const modelInput = document.getElementById('studioModelInput');
+      const dressPreview = document.getElementById('studioDressPreview');
+      const modelPreview = document.getElementById('studioModelPreview');
+      const dressTypeOptions = Array.from(document.querySelectorAll('#studioDressTypeOptions .dress-type-btn'));
+      const styleOptionsContainer = document.getElementById('studioStyleOptions');
+      let styleOptions = Array.from(document.querySelectorAll('#studioStyleOptions .style-type-btn'));
+      const aspectSelect = document.getElementById('studioAspect');
+      const backgroundSelect = document.getElementById('studioBackground');
+      const backgroundPrompt = document.getElementById('studioBackgroundPrompt');
+      const generateBtn = document.getElementById('studioGenerate');
+      const dressDropzone = dressInput?.closest('.upload-dropzone');
+      const dressDropLabel = dressDropzone?.querySelector('.drop-label');
+      const modelDropzone = modelInput?.closest('.upload-dropzone');
+      const readySection = document.querySelector('.studio-ready');
+      const mainImg = document.getElementById('studioMainImg');
+      const openBtn = document.getElementById('studioOpen');
+      const saveBtn = document.getElementById('studioSave');
+      const upscaleBtn = document.getElementById('studioUpscale');
+      const poseBtn = document.getElementById('studioPose');
+      const bgBtn = document.getElementById('studioBg');
+      const regenBtn = document.getElementById('studioRegen');
+      const refinerBtn = document.getElementById('studioRefiner');
+      const recentList = document.getElementById('studioRecent');
+      const loader = document.getElementById('studioLoader');
+      const readyCards = Array.from(document.querySelectorAll('.studio-ready-card'));
+      const genCard = document.querySelector('.studio-generate-card');
+      const genPreview = document.getElementById('studioGenAnim');
+      const modelBuilder = document.getElementById('studioModelBuilder');
+      const modelClose = document.getElementById('studioModelClose');
+      const creditBadge = document.getElementById('studioCredit');
+      const genGender = document.getElementById('studioGenGender');
+      const genEthnicity = document.getElementById('studioGenEthnicity');
+      const genAge = document.getElementById('studioGenAge');
+      const genBody = document.getElementById('studioGenBody');
+      const genFrame = document.getElementById('studioGenFrame');
+      const genMood = document.getElementById('studioGenMood');
+      const genAdvancedToggle = document.getElementById('studioAdvancedToggle');
+      const genAdvancedBody = document.getElementById('studioAdvancedBody');
+      const genModelBtn = document.getElementById('studioGenerateModelBtn');
+
+      const garmentTemplates = {
+        dress: 'the model in the image 1 wearing the outfit in the image 2',
+        top: 'the model in the image 1 wearing the top in the image 2',
+        trousers: 'the model in the image 1 wearing the trousers in the image 2',
+        skirt: 'the model in the image 1 wearing the skirt in the image 2',
+        accessory: 'luxury product photography',
+      };
+
+      const accessorySuggestions = [
+        'Product detail shot (on model)',
+        'commercial photo',
+        'jewelry e-commerce',
+        'luxury product photography',
+      ];
+
+      const ACCESSORY_LABEL_MAP = {
+        orecchini: 'earrings',
+        bracciale: 'bracelet',
+        collana: 'necklace',
+        borsa: 'bag',
+      };
+
+      const ACCESSORY_COMMERCIAL_PHOTO_PROMPT =
+        'Create an ultra-realistic luxury commercial product photograph of the jewelry item shown in the reference images. ' +
+        'The final image must faithfully preserve the exact design, proportions, materials, colors, textures, and structural details of the original product. ' +
+        'The jewelry piece should be the clear focal point of the composition, presented with a refined, high-end aesthetic typical of premium fashion and jewelry advertising. ' +
+        'The product must appear extremely sharp, clean, and highly detailed, with realistic reflections and precise material rendering. ' +
+        'The lighting should be cinematic studio lighting, carefully positioned to emphasize metallic reflections, gemstone brilliance, and surface textures such as polished metal, gold, silver, pearls, or stones. ' +
+        'Add subtle dynamic elements that enhance realism and luxury presentation, such as floating highlights, soft reflective surfaces, delicate shadows, or light particles that suggest motion and elegance without overpowering the product. ' +
+        'The composition should feel balanced and sophisticated, similar to high-end jewelry brand advertising. ' +
+        'The product should rest on a refined elegant surface that enhances the sense of sophistication and luxury. ' +
+        'Ensure perfect photorealism, crisp details, premium materials rendering, and a polished luxury look suitable for commercial catalogues, fashion editorials, and e-commerce. ' +
+        'Technical specifications: Resolution: ultra-high definition. Lighting: cinematic studio lighting with controlled highlights and soft reflections. ' +
+        'Focus: extreme detail on materials, reflections, and surface texture. Depth of field: shallow cinematic focus emphasizing the product. ' +
+        'Style: luxury jewelry commercial photography.';
+
+      const ACCESSORY_ECOMMERCE_PROMPT =
+        'Create a clean ultra-realistic e-commerce product photograph of the accessory shown in the reference images. ' +
+        'The final image must preserve the exact design, proportions, materials, colors, textures, and structural details of the original product. ' +
+        'Show only the object as the sole subject, isolated and clearly visible, with no person, no model, no body parts, and no worn styling. ' +
+        'Use balanced commercial catalog lighting, soft controlled reflections, crisp edges, and a refined neutral presentation optimized for online retail and product listings. ' +
+        'Ensure perfect photorealism, sharp focus, accurate materials rendering, clean background separation, and premium product clarity suitable for jewelry e-commerce.';
+
+      const ACCESSORY_LUXURY_PRODUCT_PROMPT =
+        'Create an ultra-realistic luxury product photograph of the accessory shown in the reference images. ' +
+        'The final image must faithfully preserve the exact design, proportions, materials, colors, textures, and construction details of the original product. ' +
+        'Show only the object, with no model, no human figure, no hands, no neck, no ears, and no body interaction. ' +
+        'Use premium cinematic lighting, elegant reflections, delicate shadows, and a sophisticated high-end advertising composition focused entirely on the product. ' +
+        'Ensure crisp detail, photorealistic surfaces, premium materials rendering, and a polished luxury advertising look.';
+
+      const DEFAULT_STYLE_OPTIONS = [
+        { value: 'vogue', label: 'Vogue' },
+        { value: 'fashion-look-book', label: 'Lookbook' },
+        { value: 'bw', label: 'B&W' },
+        { value: 'streetwear-editorial', label: 'Streetwear' },
+        { value: 'golden-hour', label: 'Golden hour' },
+      ];
+
+      const ACCESSORY_STYLE_OPTIONS = [
+        { value: 'orecchini', label: 'Orecchini' },
+        { value: 'bracciale', label: 'Bracciale' },
+        { value: 'collana', label: 'Collana' },
+        { value: 'borsa', label: 'Borsa' },
+      ];
+
+      const STYLE_PROMPTS = {
+        vogue:
+          'realistic fashion editorial portrait, studio lighting, high contrast shadows, glossy skin highlights, dramatic posing, Vogue-style composition, medium format camera look, impeccable detail, sharp eyes, textured clothing',
+        'fashion-look-book':
+          'Ultra-realistic commercial fashion photography with strong editorial quality. ' +
+          'Clean, minimalist studio look, visually uncluttered and focused. ' +
+          'Lighting: soft, directional studio lighting coming slightly from the front-right. ' +
+          'Gentle highlights and soft, elongated shadows. ' +
+          'Subtle specular highlights and smooth light falloff, creating depth and dimension without harsh contrast. ' +
+          'Color grading: cool, slightly desaturated palette with emphasis on neutral greys and blues, balanced with subtle warm tones. ' +
+          'Overall look is clean, modern and refined. ' +
+          'Image quality: extremely sharp focus, high micro-contrast and exceptional detail rendition. ' +
+          'High-fidelity texture rendering, very clean image, no visible noise or grain. ' +
+          'Premium, high-end professional finish. ' +
+          'Camera look: implied medium format or high-end full-frame quality with very high dynamic range. ' +
+          'Prime lens look in the 85mm–135mm range, with natural compression and elegant depth separation. ' +
+          'Aperture around f/2.8 for a balanced depth of field. ' +
+          'Overall mood: sophisticated, modern, aspirational, high-end editorial.',
+        bw:
+          'Black-and-white, cinematic, high-fashion editorial style. ' +
+          'Controlled studio lighting, soft and sculpted, with defined shadows and strong light shaping. ' +
+          'Lighting must enhance volumes and textures, creating a sculptural, dramatic yet elegant look. ' +
+          'Color grading: pure black and white, high contrast. ' +
+          'Tonal range should feel elegant, timeless and cinematic, with deep blacks and clean highlights. ' +
+          'Composition: vertical 4:5 format, subject-centered framing. ' +
+          'Cinematic editorial portrait style, strong visual balance and visual presence. ' +
+          'Overall image quality: highly realistic, premium editorial look. ' +
+          'Very high level of detail, fine texture rendering, crisp and clean image. ' +
+          'No visible noise or artifacts, professional studio finish. ' +
+          'General mood: powerful, refined, elegant, timeless, minimalist, high-fashion editorial.',
+        'streetwear-editorial':
+          'Editorial-print-ready, high-fashion visual style with strong technical emphasis. ' +
+          'Generation mode: multi-panel consistent. ' +
+          'Strict visual coherence across all panels. ' +
+          'Priority: physical perspective accuracy, material realism, environmental coherence. ' +
+          'Intent: high-fashion editorial with extreme wide-angle perspective study. ' +
+          'Secondary intent: technical demonstration of foreshortening and forced perspective. ' +
+          'Designed for double-page spread, fashion magazine collage layout. ' +
+          'Frame and layout: Aspect ratio 3:4. 2x2 grid collage layout. ' +
+          'Uniform panel dimensions. Minimal white or seamless gutter between panels. ' +
+          'Visual language: cinematic, bold, experimental editorial look. ' +
+          'Strong use of extreme wide-angle perspective. ' +
+          'Emphasis on depth, scale distortion, and spatial exaggeration. ' +
+          'Forced perspective and foreshortening must be visually clear and physically coherent. ' +
+          'Image quality: editorial print-ready quality. Very high realism. ' +
+          'High detail fidelity. Accurate material and surface rendering. ' +
+          'Clean, professional finish, no artifacts. ' +
+          'Overall mood: high-impact, modern, fashion-forward, experimental, technically impressive, visually powerful.',
+        'golden-hour':
+          'Cinematic, high-fashion editorial, ultra-realistic visual style. ' +
+          'Camera look: high-end modern full-frame digital photography. ' +
+          'Portrait lens look around 85mm with strong subject separation. ' +
+          'Film look inspired by Portra 800. ' +
+          'Subtle, natural film grain. ' +
+          'Color rendering: rich, warm golden tones. ' +
+          'Overall color palette is warm, luminous and elegant. ' +
+          'Lighting style: golden hour look. ' +
+          'Soft, diffused natural light. ' +
+          'Painterly glow, smooth light falloff, elongated and elegant shadows. ' +
+          'Creamy background bokeh. ' +
+          'Soft, directional light shaping with gentle contrast. ' +
+          'Image rendering: hyper-realistic, photorealistic. ' +
+          'Natural texture preservation, no artificial smoothing. ' +
+          'High dynamic range, very clean tonal transitions. ' +
+          'Image quality: ultra-high resolution, magazine-cover editorial quality. ' +
+          'Very high detail fidelity, premium professional finish, no visible artifacts. ' +
+          'Overall mood: cinematic, warm, elegant, refined, high-end, emotional and atmospheric.',
+        orecchini:
+          'luxury earring photography on model, focus on the ears and face line, refined jewelry styling, sharp metal reflections, premium editorial beauty look',
+        bracciale:
+          'luxury bracelet photography on model, focus on wrist and hand pose, elegant jewelry presentation, clean premium reflections, high-end commercial detail',
+        collana:
+          'luxury necklace photography on model, focus on neck and decollete area, elegant jewelry styling, premium metal shine, refined editorial close framing',
+        borsa:
+          'luxury handbag photography on model, focus on the bag silhouette and hand placement, premium leather texture, refined commercial fashion styling, high-end editorial accessory shot',
+      };
+
+      let selectedDressType = 'dress';
+      let selectedStyle = null;
+      let selectedAccessorySuggestion = null;
+      let selectedReadyModel = null;
+      let lastInput = null;
+      let lastImageUrl = '';
+      let suggestionContainer = document.querySelector('.studio-inline-suggestions');
+      let genAnimMounted = false;
+
+      const showLoader = () => loader?.classList.add('active');
+      const hideLoader = () => loader?.classList.remove('active');
+
+      const CREDIT_START = 50;
+      const CREDIT_COST = 0.04;
+      let creditBalance = CREDIT_START;
+
+      const formatCurrency = (value) =>
+        new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
+
+      const loadCredit = () => {
+        const saved = Number(localStorage.getItem('studioCredit') || CREDIT_START);
+        creditBalance = Number.isFinite(saved) ? saved : CREDIT_START;
+        if (creditBadge) creditBadge.textContent = formatCurrency(creditBalance);
+      };
+
+      const saveCredit = () => localStorage.setItem('studioCredit', creditBalance.toFixed(2));
+
+      const chargeCredits = (images = 1) => {
+        const cost = images * CREDIT_COST;
+        creditBalance = Math.max(0, creditBalance - cost);
+        if (creditBadge) creditBadge.textContent = formatCurrency(creditBalance);
+        saveCredit();
+      };
+
+      loadCredit();
+
+      const openModelBuilder = () => modelBuilder?.classList.add('active');
+      const closeModelBuilder = () => modelBuilder?.classList.remove('active');
+
+      genAdvancedToggle?.addEventListener('click', () => {
+        const shouldOpen = genAdvancedBody?.hidden;
+        if (genAdvancedBody) genAdvancedBody.hidden = !shouldOpen;
+        genAdvancedToggle?.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        const icon = genAdvancedToggle?.querySelector('.model-advanced-icon');
+        if (icon) icon.textContent = shouldOpen ? '^' : 'v';
+      });
+
+      genCard?.addEventListener('click', () => openModelBuilder());
+      modelClose?.addEventListener('click', () => closeModelBuilder());
+
+      const mountGenAnimation = (attempt = 0) => {
+        if (genAnimMounted) return;
+        const target = document.getElementById('studioGenAnim');
+        if (!target) return;
+        if (!window.lottie) {
+          if (attempt < 5) setTimeout(() => mountGenAnimation(attempt + 1), 300);
+          return;
+        }
+        window.lottie.loadAnimation({
+          container: target,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: 'animations/Fluid Loading Animation.json',
+        });
+        genAnimMounted = true;
+      };
+
+      const fileToDataUrl = (file) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(file);
+        });
+
+      const setPreview = (input, previewEl, dropzone) => {
+        if (!input || !previewEl || !dropzone) return;
+        if (input.files && input.files.length) {
+          const file = input.files[0];
+          const url = URL.createObjectURL(file);
+          previewEl.innerHTML = `<img src="${url}" alt="Anteprima" class="studio-upload-thumb">`;
+          dropzone.classList.add('has-image');
+        } else {
+          previewEl.innerHTML = '';
+          dropzone.classList.remove('has-image');
+        }
+      };
+
+      dressInput?.addEventListener('change', () => setPreview(dressInput, dressPreview, dressDropzone));
+      modelInput?.addEventListener('change', () => {
+        setPreview(modelInput, modelPreview, modelDropzone);
+        selectedReadyModel = null;
+        readyCards.forEach((c) => c.classList.remove('active'));
+      });
+
+      const setDressTypeValue = (type) => {
+        selectedDressType = type || 'dress';
+        dressTypeOptions.forEach((b) => b.classList.toggle('active', b.dataset.type === selectedDressType));
+        if (selectedDressType !== 'accessory') {
+          selectedAccessorySuggestion = null;
+        }
+        updateModelUiVisibility();
+        renderStyleOptions();
+        updateSuggestionVisibility();
+      };
+
+      const setStyleValue = (style) => {
+        selectedStyle = style || null;
+        styleOptions.forEach((b) => b.classList.toggle('active', b.dataset.style === selectedStyle));
+      };
+
+      const updateModelUiVisibility = () => {
+        const isAccessory = selectedDressType === 'accessory';
+        if (dressDropLabel) {
+          dressDropLabel.textContent = isAccessory ? 'Foto accessorio' : 'Foto del capo';
+        }
+        if (modelDropzone) {
+          modelDropzone.style.display = isAccessory ? 'none' : '';
+        }
+        if (readySection) {
+          readySection.style.display = isAccessory ? 'none' : '';
+        }
+        if (modelBuilder) {
+          modelBuilder.style.display = isAccessory ? 'none' : '';
+        }
+      };
+
+
+      const renderStyleOptions = () => {
+        if (!styleOptionsContainer) return;
+        const nextOptions =
+          selectedDressType === 'accessory' ? ACCESSORY_STYLE_OPTIONS : DEFAULT_STYLE_OPTIONS;
+        const validValues = new Set(nextOptions.map((option) => option.value));
+        if (!validValues.has(selectedStyle)) {
+          selectedStyle = null;
+        }
+        styleOptionsContainer.innerHTML = nextOptions
+          .map(
+            (option) =>
+              `<button class="style-type-btn${option.value === selectedStyle ? ' active' : ''}" data-style="${option.value}">${option.label}</button>`
+          )
+          .join('');
+        styleOptions = Array.from(styleOptionsContainer.querySelectorAll('.style-type-btn'));
+      };
+      dressTypeOptions.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          setDressTypeValue(btn.dataset.type || 'dress');
+          if (selectedDressType !== 'accessory' && modelInput) {
+            modelInput.disabled = false;
+          }
+        });
+      });
+
+      styleOptionsContainer?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.style-type-btn');
+        if (!btn) return;
+        e.preventDefault();
+        const style = btn.dataset.style || null;
+        setStyleValue(selectedStyle === style ? null : style);
+      });
+
+      readyCards.forEach((card) => {
+        card.addEventListener('click', () => {
+          const src = card.dataset.modelSrc;
+          const name = card.dataset.modelName;
+          if (!src) return;
+          selectedReadyModel = src;
+          readyCards.forEach((c) => c.classList.remove('active'));
+          card.classList.add('active');
+          if (modelPreview && modelDropzone) {
+            modelPreview.innerHTML = `<img src="${src}" alt="${name || 'Modella'}" class="studio-upload-thumb">`;
+            modelDropzone.classList.add('has-image');
+          }
+          if (modelInput) {
+            modelInput.value = '';
+          }
+        });
+      });
+
+      const ensureSuggestions = () => {
+        if (!suggestionContainer) {
+          suggestionContainer = document.createElement('div');
+          suggestionContainer.className = 'prompt-suggestions studio-inline-suggestions';
+          accessorySuggestions.forEach((text) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'prompt-suggestion-btn';
+            btn.textContent = text;
+            suggestionContainer.appendChild(btn);
+          });
+        }
+        if (styleOptionsContainer && suggestionContainer.previousElementSibling !== styleOptionsContainer) {
+          styleOptionsContainer.insertAdjacentElement('afterend', suggestionContainer);
+        }
+        if (!suggestionContainer.dataset.wired) {
+          suggestionContainer.querySelectorAll('button').forEach((btn) => {
+            const text = btn.textContent;
+            btn.addEventListener('click', () => {
+              selectedAccessorySuggestion = text;
+              suggestionContainer.querySelectorAll('button').forEach((item) => {
+                item.classList.toggle('active', item === btn);
+              });
+              if (backgroundPrompt) {
+                backgroundPrompt.value = '';
+                backgroundPrompt.blur();
+              }
+            });
+          });
+          suggestionContainer.dataset.wired = '1';
+        }
+      };
+
+      const updateSuggestionVisibility = () => {
+        ensureSuggestions();
+        if (!suggestionContainer) return;
+        suggestionContainer.style.display = selectedDressType === 'accessory' ? 'flex' : 'none';
+      };
+
+      const MODEL_BASE_PROMPT =
+        'fashion model portfolio photo, full body studio shot, neutral grey background, fair skin, minimal makeup, wearing simple blue jeans and plain white t-shirt, confident relaxed pose, soft studio lighting, professional fashion photography, casting portfolio style, ultra realistic, clean studio lighting, fashion casting sheet style, 85mm lens, fashion editorial photography, high detail skin texture';
+
+      const buildModelPrompt = (settings) => {
+        const clothing = 'wearing a white t-shirt and fitted blue jeans';
+        const bits = [
+          MODEL_BASE_PROMPT,
+          settings.gender || 'female fashion model',
+          settings.ethnicity || 'European ethnicity',
+          settings.age || 'age 25-35',
+          clothing,
+          settings.body || 'slim body type',
+          settings.frame || 'portrait framing',
+          settings.mood || 'elegant mood',
+          'high-end fashion editorial photo, studio lighting, detailed skin texture, cinematic depth of field, realistic eyes, 3:4 aspect ratio',
+        ];
+        const prompt = bits.filter(Boolean).join(', ');
+        return prompt.length > 500 ? prompt.slice(0, 500) : prompt;
+      };
+
+      const buildPrompt = (settings) => {
+        const bgChoice = settings.background || 'studio';
+        const bgCustom = settings.backgroundPrompt || '';
+        const backgroundMap = {
+          'lookbook-studio':
+            'clean neutral fashion lookbook background, seamless light grey studio backdrop, soft diffused studio lighting, minimal shadows, premium commercial fashion photography',
+          'editorial-high-end':
+            'high-end fashion editorial background, luxury set design, dramatic sculpted lighting, refined textures, premium magazine-style art direction',
+          'runway-show':
+            'luxury fashion runway background, catwalk, blurred audience, spotlights, dramatic show lighting, backstage fashion week atmosphere',
+          'urban-street':
+            'urban street style background, modern city setting, editorial streetwear mood, reflective surfaces, subtle neon accents, fashionable metropolitan energy',
+          'retail-boutique':
+            'premium retail boutique interior, elegant fashion store, polished materials, curated displays, luxury shopping atmosphere, sophisticated commercial lighting',
+          'lifestyle-indoor':
+            'soft lifestyle interior, natural daylight, refined modern apartment, warm neutral tones, aspirational living atmosphere, relaxed fashion campaign look',
+          'outdoor-golden-hour':
+            'outdoor golden hour background, warm sunset light, soft glow, elegant natural shadows, cinematic fashion campaign atmosphere',
+          'social-clean':
+            'clean social media content background, bright modern set, minimal styling, contemporary creator aesthetic, polished and scroll-stopping fashion image',
+          'luxury-hotel-resort':
+            'luxury hotel resort background, elegant architecture, refined travel setting, premium leisure atmosphere, soft natural light, luxury fashion campaign mood',
+          'minimal-ecommerce':
+            'minimal e-commerce catalog background, plain seamless backdrop, clean even lighting, distraction-free commercial presentation, product-focused fashion image',
+        };
+        const bgText =
+          bgChoice === 'custom'
+            ? (bgCustom || backgroundMap['lookbook-studio'])
+            : (backgroundMap[bgChoice] || backgroundMap['lookbook-studio']);
+        const garmentType = settings.dressType || 'dress';
+        let garmentTemplate = garmentTemplates[garmentType] || garmentTemplates.dress;
+        if (
+          garmentType === 'accessory' &&
+          selectedAccessorySuggestion === 'Product detail shot (on model)'
+        ) {
+          const accessoryLabel = ACCESSORY_LABEL_MAP[settings.style] || 'accessory';
+          garmentTemplate = `the model in the image wearing the "${accessoryLabel}"`;
+        }
+        let styleText = (settings.style && STYLE_PROMPTS[settings.style]) || '';
+        if (garmentType === 'accessory') {
+          if (selectedAccessorySuggestion === 'commercial photo') {
+            styleText = ACCESSORY_COMMERCIAL_PHOTO_PROMPT;
+          } else if (selectedAccessorySuggestion === 'jewelry e-commerce') {
+            styleText = ACCESSORY_ECOMMERCE_PROMPT;
+          } else if (selectedAccessorySuggestion === 'luxury product photography') {
+            styleText = ACCESSORY_LUXURY_PRODUCT_PROMPT;
+          }
+        }
+        const untuckedControlMap = {
+          top:
+            'top worn untucked, outside the trousers or skirt, hem clearly visible, no tuck',
+          dress:
+            'outfit worn fully outside the trousers, hem clearly visible, no tuck',
+        };
+        const framingTextMap = {
+          top: 'three-quarter 3/4 shot, half body shot, upper body framing focused on the top',
+          trousers:
+            'waist-down fashion shot, lower body framing, focus on the trousers fit and silhouette, legs fully visible, cropped from the waist down',
+          skirt:
+            'waist-down fashion shot, lower body framing, focus on the skirt shape and movement, legs visible, cropped from the waist down',
+        };
+        const framingText = framingTextMap[garmentType] || '';
+        const garmentControlText = untuckedControlMap[garmentType] || '';
+        return `${garmentTemplate}${styleText ? `, style: ${styleText}` : ''}, background: ${bgText}${framingText ? `, ${framingText}` : ''}${bgChoice !== 'custom' && bgCustom ? `, background details: ${bgCustom}` : ''}${garmentControlText ? `, ${garmentControlText}` : ''}`;
+      };
+
+      const refreshRecent = async () => {
+        if (!recentList) return;
+        try {
+          const resp = await fetch('/api/gallery');
+          const data = await resp.json();
+          const files = (data?.files || [])
+            .sort((a, b) => new Date(b.mtime || 0) - new Date(a.mtime || 0))
+            .slice(0, 5);
+          recentList.innerHTML = '';
+          if (!files.length) {
+            recentList.innerHTML = '<div class="studio-recent-empty">Nessuna immagine disponibile</div>';
+            return;
+          }
+          files.forEach((f) => {
+            const item = document.createElement('div');
+            item.className = 'studio-recent-item';
+            const url = f.url?.startsWith('http') ? f.url : `${window.location.origin}${f.url}`;
+            item.innerHTML = `
+              <div class="studio-recent-thumb">
+                <img src="${url}" alt="${f.name}">
+              </div>
+              <div class="studio-recent-actions">
+                <button class="studio-recent-btn" data-action="open" title="Apri">
+                  <i class="fa fa-eye"></i>
+                </button>
+                <a class="studio-recent-btn" href="${url}" download="${f.name}" title="Scarica" onclick="event.stopPropagation()">
+                  <i class="fa fa-download"></i>
+                </a>
+                <button class="studio-recent-btn ghost" data-action="delete" title="Elimina">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>`;
+            item.addEventListener('click', (e) => {
+              const action = e.target.closest('.studio-recent-btn')?.dataset?.action;
+              if (action === 'open') {
+                lastImageUrl = url;
+                if (mainImg) mainImg.src = url;
+                return;
+              }
+              if (action === 'delete') {
+                e.preventDefault();
+                e.stopPropagation();
+                const ok = confirm(`Vuoi eliminare l'immagine "${f.name}"?`);
+                if (!ok) return;
+                fetch(`/api/gallery/${encodeURIComponent(f.name)}`, { method: 'DELETE' })
+                  .then((resp) => {
+                    if (!resp.ok) throw new Error('Delete failed');
+                    item.remove();
+                    refreshRecent();
+                  })
+                  .catch((err) => console.error('Delete failed', err));
+                return;
+              }
+              // default: set preview
+              lastImageUrl = url;
+              if (mainImg) mainImg.src = url;
+            });
+            recentList.appendChild(item);
+          });
+        } catch (err) {
+          console.error('Recent load failed', err);
+          recentList.innerHTML = '<div class="studio-recent-empty">Errore nel caricamento</div>';
+        }
+      };
+
+      setInterval(refreshRecent, 20000);
+      refreshRecent();
+      updateModelUiVisibility();
+      renderStyleOptions();
+      updateSuggestionVisibility();
+
+      const generateModel = async () => {
+        const settings = {
+          gender: genGender?.value,
+          ethnicity: genEthnicity?.value,
+          age: genAge?.value,
+          body: genBody?.value,
+          frame: genFrame?.value,
+          mood: genMood?.value,
+        };
+        const prompt = buildModelPrompt(settings);
+        const input = {
+          prompt,
+          aspect_ratio: '3:4',
+          output_format: 'jpg',
+        };
+
+        showLoader();
+        try {
+          const resp = await fetch('/api/generate-model', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ input }),
+          });
+          if (resp.status === 429) {
+            alert('Limite di richieste raggiunto. Attendi e riprova.');
+            return;
+          }
+          if (!resp.ok) {
+            const txt = await resp.text();
+            throw new Error(`Errore API (${resp.status}): ${txt}`);
+          }
+          const data = await resp.json();
+          const saved = data?.saved || [];
+          const output = data?.output || [];
+          const first = saved[0] || output[0];
+          if (first) {
+            const full = first.startsWith('http') ? first : `${window.location.origin}/${String(first).replace(/^\/+/, '')}`;
+            selectedReadyModel = full;
+            readyCards.forEach((c) => c.classList.remove('active'));
+            if (genCard) {
+              genCard.dataset.modelSrc = full;
+              genCard.dataset.modelName = 'AI Model';
+              genCard.classList.add('active');
+            }
+            if (genPreview) {
+              genPreview.innerHTML = `<img src="${full}" alt="Modella generata" class="studio-model-thumb">`;
+            }
+            lastImageUrl = full;
+            if (mainImg) mainImg.src = full;
+            refreshRecent();
+            chargeCredits(Math.max(saved.length || output.length || 1, 1));
+          }
+        } catch (err) {
+          console.error('Generate model failed', err);
+          alert('Generazione modella fallita. Riprova.');
+        } finally {
+          hideLoader();
+        }
+      };
+
+      const generate = async () => {
+        const isAccessory = selectedDressType === 'accessory';
+        const hasDress = !!dressInput?.files?.length;
+        const hasModel = !!modelInput?.files?.length;
+        const selectedBackground = backgroundSelect?.value || 'studio';
+        const customBackgroundPrompt = backgroundPrompt?.value?.trim() || '';
+
+        if (!hasDress) {
+          alert('Carica la foto del capo.');
+          return;
+        }
+        if (!isAccessory && !hasModel && !selectedReadyModel) {
+          alert('Carica la foto della modella.');
+          return;
+        }
+        if (selectedBackground === 'custom' && !customBackgroundPrompt) {
+          alert('Inserisci un prompt background personalizzato o scegli un background predefinito.');
+          return;
+        }
+
+        const dressFile = dressInput.files[0];
+        const dressDataUrl = await fileToDataUrl(dressFile);
+
+        let modelDataUrl = null;
+        if (selectedReadyModel) {
+          modelDataUrl = selectedReadyModel;
+        } else if (modelInput?.files?.length) {
+          modelDataUrl = await fileToDataUrl(modelInput.files[0]);
+        }
+
+        const settings = {
+          dressDataUrl,
+          modelDataUrl,
+          dressType: selectedDressType,
+          style: selectedStyle,
+          aspect: aspectSelect?.value || '1:1',
+          background: selectedBackground,
+          backgroundPrompt: customBackgroundPrompt,
+        };
+
+        const promptMessage = buildPrompt(settings);
+        const imageInput = isAccessory ? [dressDataUrl] : [modelDataUrl, dressDataUrl];
+        const input = {
+          prompt: promptMessage,
+          image_input: imageInput,
+          output_format: 'jpg',
+          aspect_ratio: settings.aspect || '1:1',
+        };
+        lastInput = input;
+
+        showLoader();
+        try {
+          const resp = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ input }),
+          });
+          if (resp.status === 429) {
+            alert('Limite di richieste raggiunto. Attendi e riprova.');
+            return;
+          }
+          if (!resp.ok) {
+            const txt = await resp.text();
+            throw new Error(`Errore API (${resp.status}): ${txt}`);
+          }
+          const data = await resp.json();
+          const saved = data?.saved || [];
+          const output = data?.output || [];
+          const first = saved[0] || output[0];
+          if (first) {
+            const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+            lastImageUrl = full;
+            if (mainImg) mainImg.src = full;
+            refreshRecent();
+            chargeCredits(Math.max(saved.length || output.length || 1, 1));
+          }
+        } catch (err) {
+          console.error('Generate failed', err);
+          alert('Generazione fallita. Riprova.');
+        } finally {
+          hideLoader();
+        }
+      };
+
+      generateBtn?.addEventListener('click', generate);
+      genModelBtn?.addEventListener('click', generateModel);
+
+      regenBtn?.addEventListener('click', async () => {
+        if (!lastInput) {
+          alert('Nessuna generazione precedente.');
+          return;
+        }
+        showLoader();
+        try {
+          const resp = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ input: lastInput }),
+          });
+          if (!resp.ok) {
+            const txt = await resp.text();
+            throw new Error(`Errore API (${resp.status}): ${txt}`);
+          }
+          const data = await resp.json();
+          const saved = data?.saved || [];
+          const output = data?.output || [];
+          const first = saved[0] || output[0];
+          if (first) {
+            const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+            lastImageUrl = full;
+            if (mainImg) mainImg.src = full;
+            refreshRecent();
+            chargeCredits(Math.max(saved.length || output.length || 1, 1));
+          }
+        } catch (err) {
+          console.error('Rigenerazione fallita', err);
+          alert('Rigenerazione fallita.');
+        } finally {
+          hideLoader();
+        }
+      });
+
+      refinerBtn?.addEventListener('click', async () => {
+        if (!lastImageUrl) {
+          alert('Nessuna immagine da rifinire.');
+          return;
+        }
+        const FIXED_REFINER_PROMPT =
+          'High-fidelity refinement of the original image. Preserve the exact same subject, materials, textures, fabric structure, colors and proportions. No changes to design, shape, stitching, pattern or surface. Enhance clarity, micro-detail and edge definition only. Photorealistic, neutral refinement.';
+        showLoader();
+        try {
+          const resp = await fetch('/api/refine', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: lastImageUrl, prompt: FIXED_REFINER_PROMPT }),
+          });
+          if (!resp.ok) {
+            const txt = await resp.text();
+            throw new Error(`Errore API (${resp.status}): ${txt}`);
+          }
+          const data = await resp.json();
+          const saved = data?.saved || [];
+          const output = data?.output || [];
+          const first = saved[0] || output[0];
+          if (first) {
+            const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+            lastImageUrl = full;
+            if (mainImg) mainImg.src = full;
+            refreshRecent();
+            chargeCredits(Math.max(saved.length || output.length || 1, 1));
+          }
+        } catch (err) {
+          console.error('Refiner fallito', err);
+          alert('Refiner fallito.');
+        } finally {
+          hideLoader();
+        }
+      });
+
+      poseBtn?.addEventListener('click', async () => {
+        if (!lastImageUrl) {
+          alert('Nessuna immagine da usare per il cambio posa.');
+          return;
+        }
+        const FIXED_POSE_PROMPT =
+          'Change the pose of the subject while preserving identity: fashion editorial, consistent face and outfit details, new dynamic pose with natural balance';
+        const input = {
+          prompt: FIXED_POSE_PROMPT,
+          image_input: [lastImageUrl],
+          output_format: 'jpg',
+          aspect_ratio: lastInput?.aspect_ratio || '1:1',
+        };
+        showLoader();
+        try {
+          const resp = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ input }),
+          });
+          if (!resp.ok) {
+            const txt = await resp.text();
+            throw new Error(`Errore API (${resp.status}): ${txt}`);
+          }
+          const data = await resp.json();
+          const saved = data?.saved || [];
+          const output = data?.output || [];
+          const first = saved[0] || output[0];
+          if (first) {
+            const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+            lastImageUrl = full;
+            if (mainImg) mainImg.src = full;
+            refreshRecent();
+            chargeCredits(Math.max(saved.length || output.length || 1, 1));
+          }
+        } catch (err) {
+          console.error('Cambio posa fallito', err);
+          alert('Cambio posa fallito.');
+        } finally {
+          hideLoader();
+        }
+      });
+
+      upscaleBtn?.addEventListener('click', async () => {
+        if (!lastImageUrl) {
+          alert('Nessuna immagine da usare per l\'upscale.');
+          return;
+        }
+        showLoader();
+        try {
+          const resp = await fetch('/api/upscale', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: lastImageUrl }),
+          });
+          if (!resp.ok) {
+            const txt = await resp.text();
+            throw new Error(`Errore API (${resp.status}): ${txt}`);
+          }
+          const data = await resp.json();
+          const saved = data?.saved || [];
+          const output = data?.output || [];
+          const first = saved[0] || output[0];
+          if (first) {
+            const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+            lastImageUrl = full;
+            if (mainImg) mainImg.src = full;
+            refreshRecent();
+            chargeCredits(Math.max(saved.length || output.length || 1, 1));
+          }
+        } catch (err) {
+          console.error('Upscale fallito', err);
+          alert('Upscale fallito.');
+        } finally {
+          hideLoader();
+        }
+      });
+
+      bgBtn?.addEventListener('click', () => {
+        alert('Per cambiare background aggiorna il prompt e premi Genera.');
+      });
+
+      openBtn?.addEventListener('click', () => {
+        if (lastImageUrl) window.open(lastImageUrl, '_blank');
+      });
+
+      const studioDownloadBtn = document.getElementById('studioDownload');
+      const updateDownload = () => {
+        if (studioDownloadBtn && lastImageUrl) {
+          studioDownloadBtn.href = lastImageUrl;
+          studioDownloadBtn.download = lastImageUrl.split('/').pop() || 'immagine.jpg';
+        }
+      };
+      if (mainImg) {
+        new MutationObserver(updateDownload).observe(mainImg, { attributes: true, attributeFilter: ['src'] });
+      }
+
+      saveBtn?.addEventListener('click', () => {
+        if (lastImageUrl) window.open(lastImageUrl, '_blank');
+      });
+
+      setTimeout(() => mountGenAnimation(0), 200);
+    })();
+  </script>
+</body>
+</html>
+

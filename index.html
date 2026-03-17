@@ -1,0 +1,901 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISM FLUX - Virtual Photoshoot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="templatemo-prism-flux.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-prism">
+                <div class="prism-face"></div>
+                <div class="prism-face"></div>
+                <div class="prism-face"></div>
+            </div>
+            <div style="color: var(--accent-purple); font-size: 18px; text-transform: uppercase; letter-spacing: 3px;">Virtual Photoshoot in corso...</div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="header" id="header">
+        <nav class="nav-container">
+            <a href="#home" class="logo">
+                <div class="logo-icon">
+                    <div class="logo-prism" aria-hidden="true">
+                        <div class="prism-shape"></div>
+                    </div>
+                </div>
+                <span class="logo-text">
+                    <span class="prism">Fashion</span>
+                    <span class="flux">AI</span>
+                </span>
+            </a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                <li><a href="studio.html" class="nav-link">Studio</a></li>
+                <li><a href="#signup" class="nav-link">Sign up / Log in</a></li>
+            </ul>
+            
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- SaaS Hero Section -->
+    <section class="saas-hero" id="home">
+        <div class="saas-hero__container">
+            <div class="saas-hero__content">
+                <p class="saas-hero__eyebrow">AI FASHION PHOTOSHOOT</p>
+                <h1 class="saas-hero__title">Generate realistic fashion photos from a single garment image</h1>
+                <p class="saas-hero__description">
+                    Upload your garment, choose a model and background, and create studio-quality fashion images in seconds.
+                    Built for fashion brands, e-commerce teams, and boutiques.
+                </p>
+                <div class="saas-hero__actions">
+                    <a href="studio.html" class="saas-hero__button saas-hero__button--primary">Start generating</a>
+                    <a href="#visual-demo" class="saas-hero__button saas-hero__button--secondary">View demo</a>
+                </div>
+            </div>
+
+            <aside class="saas-hero__preview" aria-label="Product preview">
+                <div class="saas-hero__preview-shell">
+                    <div class="saas-hero__preview-header">
+                        <span class="saas-hero__workflow-label">AI Workflow</span>
+                        <span class="saas-hero__quality-badge">Studio Quality</span>
+                    </div>
+
+                    <div class="saas-hero__steps" aria-label="Workflow steps">
+                        <div class="saas-hero__step">
+                            <span class="saas-hero__step-number">01</span>
+                            <div>
+                                <p class="saas-hero__step-title">Upload garment</p>
+                                <p class="saas-hero__step-text">Start from a single product image.</p>
+                            </div>
+                        </div>
+                        <div class="saas-hero__step">
+                            <span class="saas-hero__step-number">02</span>
+                            <div>
+                                <p class="saas-hero__step-title">Select model</p>
+                                <p class="saas-hero__step-text">Match the right face, pose, and styling direction.</p>
+                            </div>
+                        </div>
+                        <div class="saas-hero__step">
+                            <span class="saas-hero__step-number">03</span>
+                            <div>
+                                <p class="saas-hero__step-title">Generate lookbook</p>
+                                <p class="saas-hero__step-text">Create consistent campaign-ready shots in seconds.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="saas-hero__slideshow saas-hero__image-frame" aria-label="Generated fashion previews">
+                        <img src="images/hero/hero-model-preview.jpeg" alt="Fashion model preview" class="saas-hero__slide is-active">
+                        <img src="images/hero/hero-model-preview2.jpeg" alt="Second fashion model preview" class="saas-hero__slide">
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- Visual Demo Section -->
+    <section class="visual-demo-section" id="visual-demo">
+        <div class="visual-demo">
+            <div class="visual-demo__header">
+                <p class="visual-demo__eyebrow">VISUAL DEMO</p>
+                <h2 class="visual-demo__title">See how your product becomes a full fashion shoot</h2>
+                <p class="visual-demo__description">
+                    From a single garment image to studio-quality campaign visuals. Upload your item, match it with the right
+                    model and background, and generate consistent fashion imagery in seconds.
+                </p>
+            </div>
+
+            <div class="visual-demo__chips" aria-label="Workflow overview">
+                <span class="visual-demo__chip">Upload</span>
+                <span class="visual-demo__chip">Style</span>
+                <span class="visual-demo__chip">Generate</span>
+            </div>
+
+            <div class="visual-demo__grid">
+                <article class="visual-demo-card visual-demo-card--input">
+                    <span class="visual-demo__label">Input garment</span>
+                    <div class="visual-demo__media visual-demo__media--input">
+                        <img src="images/demo/demo-input-garment.png" alt="Input garment preview">
+                    </div>
+                    <h3 class="visual-demo__card-title">Start from a single product image</h3>
+                    <p class="visual-demo__card-copy">
+                        Upload a flat lay, packshot, or garment image to begin the workflow.
+                    </p>
+                </article>
+
+                <article class="visual-demo-card visual-demo-card--process">
+                    <span class="visual-demo__label">AI styling</span>
+                    <div class="visual-demo__media visual-demo__media--process">
+                        <div class="visual-demo__workflow-panel">
+                            <div class="visual-demo__workflow-row">
+                                <span>Model selected</span>
+                                <strong>Editorial model</strong>
+                            </div>
+                            <div class="visual-demo__workflow-row">
+                                <span>Background selected</span>
+                                <strong>Luxury studio set</strong>
+                            </div>
+                            <div class="visual-demo__workflow-row">
+                                <span>Editorial render ready</span>
+                                <strong>AI pipeline active</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="visual-demo__card-title">Match model, pose, and background</h3>
+                    <p class="visual-demo__card-copy">
+                        The system combines styling direction, model selection, and scene consistency to build campaign-ready visuals.
+                    </p>
+                </article>
+
+                <article class="visual-demo-card visual-demo-card--output">
+                    <span class="visual-demo__label">Generated result</span>
+                    <div class="visual-demo__media visual-demo__media--output">
+                        <img src="images/demo/demo-generated-result.jpeg" alt="Generated fashion result preview">
+                    </div>
+                    <h3 class="visual-demo__card-title">Get realistic fashion images in seconds</h3>
+                    <p class="visual-demo__card-copy">
+                        Receive polished studio-quality outputs ready for e-commerce, campaigns, and lookbooks.
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works-section" id="how-it-works">
+        <div class="how-it-works">
+            <div class="how-it-works__header">
+                <p class="how-it-works__eyebrow">HOW IT WORKS</p>
+                <h2 class="how-it-works__title">Create a fashion shoot in three simple steps</h2>
+                <p class="how-it-works__description">
+                    From product image to campaign-ready visuals. No studio, no photographer, no complex workflow.
+                </p>
+            </div>
+
+            <div class="how-it-works__grid">
+                <article class="how-it-works__card">
+                    <span class="how-it-works__number">01</span>
+                    <div class="how-it-works__icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-upload">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/>
+                            <path d="M7 9l5 -5l5 5"/>
+                            <path d="M12 4l0 12"/>
+                        </svg>
+                    </div>
+                    <h3 class="how-it-works__card-title">Upload your garment</h3>
+                    <p class="how-it-works__card-text">
+                        Start from a flat lay, packshot, or isolated garment image.
+                    </p>
+                </article>
+
+                <article class="how-it-works__card">
+                    <span class="how-it-works__number">02</span>
+                    <div class="how-it-works__icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-user-screen">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M19.03 17.818a3 3 0 0 0 1.97 -2.818v-8a3 3 0 0 0 -3 -3h-12a3 3 0 0 0 -3 3v8c0 1.317 .85 2.436 2.03 2.84"/>
+                            <path d="M10 14a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
+                            <path d="M8 21a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2"/>
+                        </svg>
+                    </div>
+                    <h3 class="how-it-works__card-title">Choose model and style</h3>
+                    <p class="how-it-works__card-text">
+                        Match the garment with the right model, background, and creative direction.
+                    </p>
+                </article>
+
+                <article class="how-it-works__card">
+                    <span class="how-it-works__number">03</span>
+                    <div class="how-it-works__icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-sparkles">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2"/>
+                            <path d="M16 6a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2"/>
+                            <path d="M9 18a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/>
+                        </svg>
+                    </div>
+                    <h3 class="how-it-works__card-title">Generate polished results</h3>
+                    <p class="how-it-works__card-text">
+                        Get realistic, consistent visuals ready for e-commerce, campaigns, and lookbooks.
+                    </p>
+                </article>
+            </div>
+
+            <div class="how-it-works__actions">
+                <a href="studio.html" class="how-it-works__button">Try the studio</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-solution-section" id="problem-solution">
+        <div class="problem-solution">
+            <div class="problem-solution__header">
+                <p class="problem-solution__eyebrow">PROBLEM / SOLUTION</p>
+                <h2 class="problem-solution__title">Fashion production is expensive. It doesn't have to be.</h2>
+            </div>
+
+            <div class="problem-solution__grid">
+                <article class="problem-solution__panel problem-solution__panel--problem">
+                    <h3 class="problem-solution__panel-title">Traditional fashion production</h3>
+                    <ul class="problem-solution__list">
+                        <li class="problem-solution__item problem-solution__item--problem" data-problem-solution-item>
+                            <span class="problem-solution__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-camera">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M5 7h1a2 2 0 0 0 1.6 -.8l.8 -1.2a2 2 0 0 1 1.6 -.8h4a2 2 0 0 1 1.6 .8l.8 1.2a2 2 0 0 0 1.6 .8h1a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2"/>
+                                    <path d="M12 13m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/>
+                                </svg>
+                            </span>
+                            <span class="problem-solution__item-text">Photoshoots can cost thousands</span>
+                        </li>
+                        <li class="problem-solution__item problem-solution__item--problem" data-problem-solution-item>
+                            <span class="problem-solution__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-clock">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 7v5l3 3"/>
+                                    <path d="M12 3a9 9 0 1 0 9 9"/>
+                                </svg>
+                            </span>
+                            <span class="problem-solution__item-text">Production takes days or weeks</span>
+                        </li>
+                        <li class="problem-solution__item problem-solution__item--problem" data-problem-solution-item>
+                            <span class="problem-solution__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-currency-euro">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M17.2 7a6 7 0 1 0 0 10"/>
+                                    <path d="M5 10h9"/>
+                                    <path d="M5 14h9"/>
+                                </svg>
+                            </span>
+                            <span class="problem-solution__item-text">Limited creative variations</span>
+                        </li>
+                        <li class="problem-solution__item problem-solution__item--problem" data-problem-solution-item>
+                            <span class="problem-solution__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-photo-off">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M15 8h.01"/>
+                                    <path d="M4 4m0 2a2 2 0 0 1 2 -2h12"/>
+                                    <path d="M4 13.1v4.9a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-12"/>
+                                    <path d="M4 15l4 -4c.928 -.893 2.072 -.893 3 0l2 2"/>
+                                    <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2 2"/>
+                                    <path d="M3 3l18 18"/>
+                                </svg>
+                            </span>
+                            <span class="problem-solution__item-text">Hard to scale content production</span>
+                        </li>
+                    </ul>
+                </article>
+
+                <article class="problem-solution__panel problem-solution__panel--solution">
+                    <h3 class="problem-solution__panel-title">Fashion AI</h3>
+                    <ul class="problem-solution__list">
+                        <li class="problem-solution__item problem-solution__item--solution" data-problem-solution-item>
+                            <span class="problem-solution__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-sparkles">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2"/>
+                                    <path d="M16 6a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2"/>
+                                    <path d="M9 18a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/>
+                                </svg>
+                            </span>
+                            <span class="problem-solution__item-text">Generate visuals in seconds</span>
+                        </li>
+                        <li class="problem-solution__item problem-solution__item--solution" data-problem-solution-item>
+                            <span class="problem-solution__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-bolt">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M13 3l-8 9h6l-1 9l8 -9h-6l1 -9"/>
+                                </svg>
+                            </span>
+                            <span class="problem-solution__item-text">No models or studios required</span>
+                        </li>
+                        <li class="problem-solution__item problem-solution__item--solution" data-problem-solution-item>
+                            <span class="problem-solution__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-palette">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M12 21a9 9 0 1 0 -9 -9a6 6 0 0 0 6 6h3"/>
+                                    <path d="M11.5 7.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
+                                    <path d="M7.5 10.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
+                                    <path d="M16.5 10.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
+                                    <path d="M12.5 13.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
+                                </svg>
+                            </span>
+                            <span class="problem-solution__item-text">Unlimited creative possibilities</span>
+                        </li>
+                        <li class="problem-solution__item problem-solution__item--solution" data-problem-solution-item>
+                            <span class="problem-solution__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-layout-grid">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M4 4h6v6h-6z"/>
+                                    <path d="M14 4h6v6h-6z"/>
+                                    <path d="M4 14h6v6h-6z"/>
+                                    <path d="M14 14h6v6h-6z"/>
+                                </svg>
+                            </span>
+                            <span class="problem-solution__item-text">Create content at scale</span>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+
+            <p class="problem-solution__statement">
+                Fashion brands spend thousands on photoshoots.
+                Fashion AI does it in seconds.
+            </p>
+
+            <div class="problem-solution__cta">
+                <a href="studio.html" class="problem-solution__button">Try the demo</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="results-gallery-section" id="results-gallery">
+        <div class="results-gallery">
+            <div class="results-gallery__header">
+                <h2 class="results-gallery__title">Real results generated with Fashion AI</h2>
+                <p class="results-gallery__subtitle">From a single garment image to premium AI-generated fashion visuals.</p>
+            </div>
+
+            <div class="results-gallery__grid">
+                <article class="results-gallery__card">
+                    <div class="results-gallery__comparison">
+                        <div class="results-gallery__stage results-gallery__input">
+                            <span class="results-gallery__label">Input</span>
+                            <div class="results-gallery__placeholder">
+                                <img src="images/results/studio-look-input.png" alt="Studio look garment input" class="results-gallery__image">
+                            </div>
+                        </div>
+
+                        <div class="results-gallery__arrow" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-arrow-right">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l14 0"/>
+                                <path d="M13 18l6 -6"/>
+                                <path d="M13 6l6 6"/>
+                            </svg>
+                        </div>
+
+                        <div class="results-gallery__stage results-gallery__output">
+                            <span class="results-gallery__label">Output</span>
+                            <div class="results-gallery__placeholder results-gallery__placeholder--highlight">
+                                <img src="images/results/studio-look.jpeg" alt="Studio look AI generated result" class="results-gallery__image">
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="results-gallery__tag">Studio look</span>
+                </article>
+
+                <article class="results-gallery__card">
+                    <div class="results-gallery__comparison">
+                        <div class="results-gallery__stage results-gallery__input">
+                            <span class="results-gallery__label">Input</span>
+                            <div class="results-gallery__placeholder">
+                                <img src="images/results/editorial-style-input.png" alt="Editorial campaign garment input" class="results-gallery__image">
+                            </div>
+                        </div>
+
+                        <div class="results-gallery__arrow" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-arrow-right">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l14 0"/>
+                                <path d="M13 18l6 -6"/>
+                                <path d="M13 6l6 6"/>
+                            </svg>
+                        </div>
+
+                        <div class="results-gallery__stage results-gallery__output">
+                            <span class="results-gallery__label">Output</span>
+                            <div class="results-gallery__placeholder results-gallery__placeholder--highlight">
+                                <img src="images/results/editorial-style.jpeg" alt="Editorial campaign AI generated result" class="results-gallery__image">
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="results-gallery__tag">Editorial campaign</span>
+                </article>
+
+                <article class="results-gallery__card">
+                    <div class="results-gallery__comparison">
+                        <div class="results-gallery__stage results-gallery__input">
+                            <span class="results-gallery__label">Input</span>
+                            <div class="results-gallery__placeholder">
+                                <img src="images/results/street-style-input.png" alt="Street style garment input" class="results-gallery__image">
+                            </div>
+                        </div>
+
+                        <div class="results-gallery__arrow" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-arrow-right">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l14 0"/>
+                                <path d="M13 18l6 -6"/>
+                                <path d="M13 6l6 6"/>
+                            </svg>
+                        </div>
+
+                        <div class="results-gallery__stage results-gallery__output">
+                            <span class="results-gallery__label">Output</span>
+                            <div class="results-gallery__placeholder results-gallery__placeholder--highlight">
+                                <img src="images/results/street-style.jpeg" alt="Street style AI generated result" class="results-gallery__image">
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="results-gallery__tag">Street style</span>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits-section" id="benefits">
+        <div class="benefits">
+            <div class="benefits__header">
+                <h2 class="benefits__title">Why fashion brands use Fashion AI</h2>
+            </div>
+
+            <div class="benefits__grid">
+                <article class="benefits__card">
+                    <div class="benefits__icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-currency-euro">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M17.2 7a6 7 0 1 0 0 10"/>
+                            <path d="M5 10h9"/>
+                            <path d="M5 14h9"/>
+                        </svg>
+                    </div>
+                    <h3 class="benefits__card-title">Save on production costs</h3>
+                    <p class="benefits__text">Reduce the need for expensive photoshoots, studios, models and logistics.</p>
+                </article>
+
+                <article class="benefits__card">
+                    <div class="benefits__icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-bolt">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M13 3l-8 9h6l-1 9l8 -9h-6l1 -9"/>
+                        </svg>
+                    </div>
+                    <h3 class="benefits__card-title">Create content faster</h3>
+                    <p class="benefits__text">Generate premium fashion visuals in seconds instead of waiting days or weeks.</p>
+                </article>
+
+                <article class="benefits__card">
+                    <div class="benefits__icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-palette">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 21a9 9 0 1 0 -9 -9a6 6 0 0 0 6 6h3"/>
+                            <path d="M11.5 7.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
+                            <path d="M7.5 10.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
+                            <path d="M16.5 10.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
+                            <path d="M12.5 13.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
+                        </svg>
+                    </div>
+                    <h3 class="benefits__card-title">Test more creative directions</h3>
+                    <p class="benefits__text">Explore multiple styles, moods and campaign ideas without new production.</p>
+                </article>
+
+                <article class="benefits__card">
+                    <div class="benefits__icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-layout-grid">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M4 4h6v6h-6z"/>
+                            <path d="M14 4h6v6h-6z"/>
+                            <path d="M4 14h6v6h-6z"/>
+                            <path d="M14 14h6v6h-6z"/>
+                        </svg>
+                    </div>
+                    <h3 class="benefits__card-title">Scale visuals across channels</h3>
+                    <p class="benefits__text">Create assets for e-commerce, social media, ads and lookbooks from one garment input.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta-section" id="final-cta">
+        <div class="final-cta">
+            <div class="final-cta__container">
+                <h2 class="final-cta__title">Start creating fashion visuals in seconds</h2>
+                <p class="final-cta__subtitle">Upload a garment and generate premium fashion visuals with AI.</p>
+                <a href="studio.html" class="final-cta__button">Try the demo</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section" id="stats">
+        <div class="section-header">
+            <h2 class="section-title">Service metrics</h2>
+            <p class="section-subtitle">Built for speed, consistency, and scalable visual production.</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-layer-group"></i></div>
+                <div class="stat-number" data-target="10">0</div>
+                <div class="stat-label">Ready-to-use backgrounds</div>
+                <p class="stat-description">Studio, editorial, retail, and lifestyle scenes ready for immediate use.</p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-check-circle"></i></div>
+                <div class="stat-number" data-target="95" data-suffix="%">0%</div>
+                <div class="stat-label">Visual accuracy</div>
+                <p class="stat-description">Reliable garment detail, color consistency, and fit representation across outputs.</p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-bolt"></i></div>
+                <div class="stat-number" data-target="8">0</div>
+                <div class="stat-label">Generated in seconds</div>
+                <p class="stat-description">Fast turnaround for premium visuals without traditional production delays.</p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-clone"></i></div>
+                <div class="stat-number" data-target="1079">0</div>
+                <div class="stat-label">Generated looks</div>
+                <p class="stat-description">A growing library of generated looks built from one garment input across multiple directions.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+        <div class="faq">
+            <div class="faq__header">
+                <h2 class="faq__title">Frequently asked questions</h2>
+            </div>
+
+            <div class="faq__list">
+                <article class="faq__item">
+                    <button class="faq__question" type="button" aria-expanded="false">
+                        <span>Do I need technical skills?</span>
+                        <span class="faq__toggle" aria-hidden="true"></span>
+                    </button>
+                    <div class="faq__answer">
+                        <p>No. Upload a garment image and generate fashion visuals instantly. Fashion AI is designed to be simple and intuitive.</p>
+                    </div>
+                </article>
+
+                <article class="faq__item">
+                    <button class="faq__question" type="button" aria-expanded="false">
+                        <span>What garments can I upload?</span>
+                        <span class="faq__toggle" aria-hidden="true"></span>
+                    </button>
+                    <div class="faq__answer">
+                        <p>You can upload dresses, jackets, shirts, pants and most fashion items. The AI will transform them into professional fashion visuals.</p>
+                    </div>
+                </article>
+
+                <article class="faq__item">
+                    <button class="faq__question" type="button" aria-expanded="false">
+                        <span>Can I use the generated images commercially?</span>
+                        <span class="faq__toggle" aria-hidden="true"></span>
+                    </button>
+                    <div class="faq__answer">
+                        <p>Yes. The images can be used for marketing, social media, e-commerce and campaigns.</p>
+                    </div>
+                </article>
+
+                <article class="faq__item">
+                    <button class="faq__question" type="button" aria-expanded="false">
+                        <span>How long does it take to generate images?</span>
+                        <span class="faq__toggle" aria-hidden="true"></span>
+                    </button>
+                    <div class="faq__answer">
+                        <p>Most visuals are generated in seconds.</p>
+                    </div>
+                </article>
+
+                <article class="faq__item">
+                    <button class="faq__question" type="button" aria-expanded="false">
+                        <span>Do I need special software?</span>
+                        <span class="faq__toggle" aria-hidden="true"></span>
+                    </button>
+                    <div class="faq__answer">
+                        <p>No. Everything works directly in your browser.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Modal -->
+    <div class="upload-modal" id="uploadModal">
+        <div class="upload-backdrop" id="uploadBackdrop"></div>
+        <div class="upload-dialog">
+            <button class="upload-close" id="uploadClose" aria-label="Chiudi upload">&times;</button>
+            <h3 class="upload-title">Carica il look</h3>
+            <p class="upload-subtitle">Inserisci la foto del vestito e la foto della modella per generare il virtual shoot.</p>
+            <div class="upload-grid">
+                <label class="upload-dropzone" for="dressInput">
+                    <div class="drop-label">Foto del vestito</div>
+                    <div class="drop-hint">Trascina o clicca per selezionare</div>
+                    <div class="drop-preview" id="dressPreview"></div>
+                    <input type="file" id="dressInput" accept="image/*" hidden>
+                </label>
+                <label class="upload-dropzone" for="modelInput">
+                    <div class="drop-label">Foto della modella</div>
+                    <div class="drop-hint">Trascina o clicca per selezionare</div>
+                    <div class="drop-preview" id="modelPreview"></div>
+                    <input type="file" id="modelInput" accept="image/*" hidden>
+                </label>
+            </div>
+            <div class="upload-field">
+                <div class="dress-type-label">Tipo capo</div>
+                <div class="dress-type-options" id="dressTypeOptions">
+                    <button class="dress-type-btn active" data-type="dress" title="Abito">
+                        <img src="images/icon/clothes.png" alt="Abito">
+                        <span>Abito</span>
+                    </button>
+                    <button class="dress-type-btn" data-type="top" title="Maglietta">
+                        <img src="images/icon/tshirt.png" alt="Top">
+                        <span>Top</span>
+                    </button>
+                    <button class="dress-type-btn" data-type="trousers" title="Pantalone">
+                        <img src="images/icon/trousers.png" alt="Pantalone">
+                        <span>Pantalone</span>
+                    </button>
+                    <button class="dress-type-btn" data-type="skirt" title="Gonna">
+                        <img src="images/icon/skirt.png" alt="Gonna">
+                        <span>Gonna</span>
+                    </button>
+                    <button class="dress-type-btn" data-type="accessory" title="Accessorio">
+                        <img src="images/icon/pendant.png" alt="Accessorio">
+                        <span>Accessorio</span>
+                    </button>
+                </div>
+            </div>
+            <div class="upload-field">
+                <label for="aspectSelect">Aspect ratio</label>
+                <select id="aspectSelect">
+                    <option value="1:1">1:1 (square)</option>
+                    <option value="3:4">3:4 (ritratto)</option>
+                    <option value="4:3">4:3</option>
+                    <option value="9:16">9:16 (verticale)</option>
+                    <option value="16:9">16:9 (orizzontale)</option>
+                </select>
+            </div>
+            <div class="upload-field">
+                <label for="backgroundSelect">Selezione background</label>
+                <select id="backgroundSelect">
+                    <option value="studio">Studio neutro</option>
+                    <option value="runway">Passerella</option>
+                    <option value="urban">Urban glow</option>
+                    <option value="retail">Retail premium</option>
+                    <option value="lifestyle">Lifestyle soft</option>
+                    <option value="custom">Personalizzato (usa prompt)</option>
+                </select>
+            </div>
+            <div class="upload-field">
+                <label for="backgroundPrompt">Prompt background (opzionale)</label>
+                <textarea id="backgroundPrompt" rows="3" placeholder="Es: studio fashion con luci soffuse e neon dorati"></textarea>
+            </div>
+            <button class="upload-action" id="uploadSubmit" disabled>Invia per generare</button>
+            <div class="model-ready">
+                <div class="model-ready-head">
+                    <h4>Modelle pronte</h4>
+                    <p>Scegli un volto dalla libreria pronta all'uso.</p>
+                </div>
+                <div class="model-ready-grid">
+                    <div class="model-ready-card" data-model-src="images/models/Adrian.jpeg" data-model-name="Adrian">
+                        <img src="images/models/Adrian.jpeg" alt="Modella Adrian">
+                        <div class="model-ready-name">Adrian</div>
+                    </div>
+                    <div class="model-ready-card" data-model-src="images/models/Luca.jpeg" data-model-name="Luca">
+                        <img src="images/models/Luca.jpeg" alt="Modella Luca">
+                        <div class="model-ready-name">Luca</div>
+                    </div>
+                    <div class="model-ready-card" data-model-src="images/models/Mila.jpeg" data-model-name="Mila">
+                        <img src="images/models/Mila.jpeg" alt="Modella Mila">
+                        <div class="model-ready-name">Mila</div>
+                    </div>
+                    <div class="model-ready-card" data-model-src="images/models/Naomi.jpeg" data-model-name="Naomi">
+                        <img src="images/models/Naomi.jpeg" alt="Modella Naomi">
+                        <div class="model-ready-name">Naomi</div>
+                    </div>
+                    <div class="model-ready-card" data-model-src="images/models/Nicole.jpeg" data-model-name="Nicole">
+                        <img src="images/models/Nicole.jpeg" alt="Modella Nicole">
+                        <div class="model-ready-name">Nicole</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Viewer -->
+    <div class="image-viewer" id="imageViewer">
+        <div class="image-viewer-backdrop" id="imageViewerBackdrop"></div>
+        <div class="image-viewer-dialog">
+            <button class="image-viewer-close" id="imageViewerClose" aria-label="Chiudi anteprima">&times;</button>
+            <h3 class="image-viewer-title">Anteprima immagine generata</h3>
+            <div class="image-viewer-body">
+                <img id="imageViewerImg" alt="Immagine generata">
+            </div>
+            <div class="image-viewer-actions">
+                <a class="image-viewer-btn" id="imageViewerLink" href="#" target="_blank" rel="noopener noreferrer">Apri immagine</a>
+                <button class="image-viewer-btn" id="imageViewerSave">Salva in gallery</button>
+                <button class="image-viewer-btn" id="imageViewerPose">Cambia posa</button>
+                <button class="image-viewer-btn" id="imageViewerBg">Cambia background</button>
+                <button class="image-viewer-btn" id="imageViewerRegen">Rigenera</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generation Loader -->
+    <div class="gen-loader" id="genLoader">
+        <div class="gen-loader-backdrop"></div>
+        <div class="gen-loader-content" id="genLoaderAnim" aria-label="Generazione in corso"></div>
+    </div>
+
+    <!-- Publish Modal -->
+    <div class="publish-modal" id="publishModal">
+        <div class="publish-backdrop" id="publishBackdrop"></div>
+        <div class="publish-dialog">
+            <button class="publish-close" id="publishClose" aria-label="Chiudi pubblicazione">&times;</button>
+            <h3 class="section-title" style="font-size:24px; margin-bottom:12px;">Pubblica</h3>
+            <div class="publish-grid">
+                <div class="publish-preview">
+                    <label for="publishImageSelect">Scegli immagine</label>
+                    <select id="publishImageSelect"></select>
+                    <img id="publishImagePreview" src="" alt="Seleziona un'immagine">
+                </div>
+                <div class="publish-form">
+                    <label for="publishGuideline">Linee guida</label>
+                    <select id="publishGuideline">
+                        <option value="e-commerce">E-commerce</option>
+                        <option value="social">Social</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="adv">ADV</option>
+                        <option value="blog">Blog</option>
+                    </select>
+                    <label for="publishTone">Tone (opzionale)</label>
+                    <input type="text" id="publishTone" placeholder="Es: premium editoriale">
+                    <div class="publish-actions">
+                        <button class="upload-action" id="publishGenerate">Genera descrizione</button>
+                        <button class="publish-secondary" id="publishCopyDesc">Copia descrizione</button>
+                        <button class="publish-secondary" id="publishRename">Rinomina file</button>
+                    </div>
+                    <div class="publish-output">
+                        <label for="publishTitle">Titolo</label>
+                        <input type="text" id="publishTitle" placeholder="Titolo breve">
+                        <label for="publishDescription">Descrizione</label>
+                        <textarea id="publishDescription" rows="5" placeholder="Descrizione generata"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#home" class="footer-logo">Fashion AI</a>
+                <p class="footer-description">
+                    AI-powered fashion visuals for brands, e-commerce and creative teams.
+                </p>
+                <a href="studio.html" class="footer-cta">Try the demo</a>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Navigation</h4>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="studio.html">Demo</a>
+                    <a href="#how-it-works">How it works</a>
+                    <a href="#results-gallery">Results</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="cookies.html">Cookies</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                © 2026 Fashion AI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- â”€â”€ BETA ACCESS GUARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <script>
+    (function () {
+        var origFetch = window.fetch;
+
+        function renderBetaDenied() {
+            document.body.innerHTML =
+                '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0a0a0a;">' +
+                '<p style="color:#fff;font-family:sans-serif;font-size:18px;letter-spacing:2px;">Accesso non autorizzato.</p>' +
+                '</div>';
+        }
+
+        async function requestBetaToken() {
+            var stored = sessionStorage.getItem('beta_token');
+            if (stored) return stored;
+
+            var pwd = prompt('Inserisci il codice beta per accedere alle API:');
+            if (!pwd || !pwd.trim()) {
+                renderBetaDenied();
+                throw new Error('Beta access denied');
+            }
+
+            var token = pwd.trim();
+            sessionStorage.setItem('beta_token', token);
+            return token;
+        }
+
+        window.fetch = function (url, opts) {
+            opts = opts || {};
+            if (typeof url !== 'string' || url.indexOf('/api/') !== 0) {
+                return origFetch(url, opts);
+            }
+
+            var attempt = function (token) {
+                var requestOpts = Object.assign({}, opts);
+                requestOpts.headers = Object.assign({}, opts.headers || {});
+                if (token) {
+                    requestOpts.headers.Authorization = 'Bearer ' + token;
+                }
+                return origFetch(url, requestOpts);
+            };
+
+            var storedToken = sessionStorage.getItem('beta_token');
+            return attempt(storedToken).then(function (response) {
+                if (response.status !== 401) {
+                    return response;
+                }
+
+                sessionStorage.removeItem('beta_token');
+                return requestBetaToken().then(function (token) {
+                    return attempt(token);
+                });
+            });
+        };
+    })();
+    </script>
+    <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+
+    <script src="templatemo-prism-scripts.js"></script>
+</body>
+</html>
+
