@@ -39,7 +39,7 @@
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="gallery.html" class="nav-link">Gallery</a></li>
                 <li><a href="studio.html" class="nav-link">Studio</a></li>
-                <li><a href="#signup" class="nav-link">Sign up / Log in</a></li>
+                <li><a href="#signup" class="nav-link" onclick="window.openBetaAccessModal && window.openBetaAccessModal(); return false;">Sign up / Log in</a></li>
             </ul>
             
             <div class="menu-toggle" id="menuToggle">
@@ -837,64 +837,7 @@
         </div>
     </footer>
 
-    <!-- â”€â”€ BETA ACCESS GUARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
-    <script>
-    (function () {
-        var origFetch = window.fetch;
-
-        function renderBetaDenied() {
-            document.body.innerHTML =
-                '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0a0a0a;">' +
-                '<p style="color:#fff;font-family:sans-serif;font-size:18px;letter-spacing:2px;">Accesso non autorizzato.</p>' +
-                '</div>';
-        }
-
-        async function requestBetaToken() {
-            var stored = sessionStorage.getItem('beta_token');
-            if (stored) return stored;
-
-            var pwd = prompt('Inserisci il codice beta per accedere alle API:');
-            if (!pwd || !pwd.trim()) {
-                renderBetaDenied();
-                throw new Error('Beta access denied');
-            }
-
-            var token = pwd.trim();
-            sessionStorage.setItem('beta_token', token);
-            return token;
-        }
-
-        window.fetch = function (url, opts) {
-            opts = opts || {};
-            if (typeof url !== 'string' || url.indexOf('/api/') !== 0) {
-                return origFetch(url, opts);
-            }
-
-            var attempt = function (token) {
-                var requestOpts = Object.assign({}, opts);
-                requestOpts.headers = Object.assign({}, opts.headers || {});
-                if (token) {
-                    requestOpts.headers.Authorization = 'Bearer ' + token;
-                }
-                return origFetch(url, requestOpts);
-            };
-
-            var storedToken = sessionStorage.getItem('beta_token');
-            return attempt(storedToken).then(function (response) {
-                if (response.status !== 401) {
-                    return response;
-                }
-
-                sessionStorage.removeItem('beta_token');
-                return requestBetaToken().then(function (token) {
-                    return attempt(token);
-                });
-            });
-        };
-    })();
-    </script>
-    <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
-
+    <script src="beta-guard-client.js"></script>
     <script src="templatemo-prism-scripts.js"></script>
 </body>
 </html>

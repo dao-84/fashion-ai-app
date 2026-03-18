@@ -26,7 +26,7 @@
         <li><a href="index.html#home" class="nav-link">Home</a></li>
         <li><a href="gallery.html" class="nav-link">Gallery</a></li>
         <li><a href="studio.html" class="nav-link active">Studio</a></li>
-        <li><a href="index.html#signup" class="nav-link">Sign up / Log in</a></li>
+        <li><a href="index.html#signup" class="nav-link" onclick="window.openBetaAccessModal && window.openBetaAccessModal(); return false;">Sign up / Log in</a></li>
         <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Credito residuo">€50,00</span></li>
       </ul>
     </nav>
@@ -291,6 +291,7 @@
     </div>
   </div>
 
+  <script src="beta-guard-client.js"></script>
   <script>
     (function () {
       const dressInput = document.getElementById('studioDressInput');

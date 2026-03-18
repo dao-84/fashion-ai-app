@@ -11,6 +11,7 @@ const PUBLIC_HTML_ROUTES = [
 const PUBLIC_FILE_ROUTES = [
   ['/templatemo-prism-flux.css', 'templatemo-prism-flux.css'],
   ['/templatemo-prism-scripts.js', 'templatemo-prism-scripts.js'],
+  ['/beta-guard-client.js', 'beta-guard-client.js'],
 ];
 
 const PUBLIC_DIR_ROUTES = ['images', 'fonts', 'animations'];
