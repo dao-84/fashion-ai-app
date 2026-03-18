@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -27,163 +27,158 @@
         <li><a href="gallery.html" class="nav-link">Gallery</a></li>
         <li><a href="studio.html" class="nav-link active">Studio</a></li>
         <li><a href="index.html#signup" class="nav-link" onclick="window.openBetaAccessModal && window.openBetaAccessModal(); return false;">Sign up / Log in</a></li>
-        <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Credito residuo">€50,00</span></li>
+        <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Credito residuo">â‚¬50,00</span></li>
       </ul>
     </nav>
   </header>
 
-  <main class="studio-layout">
-    <section class="studio-column studio-left">
-      <div class="studio-panel">
-        <h3 class="studio-panel-title">Carica immagini</h3>
-        <div class="studio-upload-grid">
-          <label class="upload-dropzone" for="studioDressInput">
-            <div class="drop-label">Foto del capo</div>
-            <div class="drop-hint">Trascina o clicca</div>
-            <div class="drop-preview" id="studioDressPreview"></div>
-            <input type="file" id="studioDressInput" accept="image/*" hidden>
-          </label>
-          <label class="upload-dropzone" for="studioModelInput">
-            <div class="drop-label">Foto modella</div>
-            <div class="drop-hint">Trascina o clicca</div>
-            <div class="drop-preview" id="studioModelPreview"></div>
-            <input type="file" id="studioModelInput" accept="image/*" hidden>
-          </label>
-        </div>
-        <div class="studio-ready">
-          <div class="studio-ready-head">
-            <h4>Modelle pronte</h4>
-            <p>Scegli un volto dalla libreria.</p>
-          </div>
-          <div class="studio-ready-grid">
-            <div class="studio-ready-card" data-model-src="images/models/Sofia.jpeg" data-model-name="Sofia">
-              <img src="images/models/Sofia.jpeg" alt="Sofia">
-              <div class="studio-ready-name">Sofia</div>
-            </div>
-            <div class="studio-ready-card" data-model-src="images/models/Mila.jpeg" data-model-name="Katia">
-              <img src="images/models/Mila.jpeg" alt="Mila">
-              <div class="studio-ready-name">Mila</div>
-            </div>
-            <div class="studio-ready-card" data-model-src="images/models/Naomi.jpeg" data-model-name="Lory">
-              <img src="images/models/Naomi.jpeg" alt="Naomi">
-              <div class="studio-ready-name">Naomi</div>
-            </div>
-            <div class="studio-ready-card" data-model-src="images/models/Nicole.jpeg" data-model-name="Pheebe">
-              <img src="images/models/Nicole.jpeg" alt="Nicole">
-              <div class="studio-ready-name">Nicole</div>
-            </div>
-            <div class="studio-ready-card" data-model-src="images/models/Luca.jpeg" data-model-name="Shirley">
-              <img src="images/models/Luca.jpeg" alt="Luca">
-              <div class="studio-ready-name">Luca</div>
-            </div>
-            <div class="studio-ready-card" data-model-src="images/models/Adrian.jpeg" data-model-name="Adrian">
-              <img src="images/models/Adrian.jpeg" alt="Adrian">
-              <div class="studio-ready-name">Adrian</div>
-            </div>
-            <div class="studio-ready-card studio-generate-card">
-              <div class="studio-generate-thumb" id="studioGenAnim" aria-label="Spazio anteprima modella 1:1"></div>
-              <div class="studio-ready-name">Genera modella</div>
-            </div>
+  <main class="studio-shell">
+    <!-- STUDIO HEADER -->
+    <section class="studio-page-header"></section>
+
+    <div class="studio-layout">
+      <!-- STUDIO INPUT PANEL -->
+      <section class="studio-column studio-left">
+        <div class="studio-panel studio-step-card studio-step-card--upload">
+          <div class="studio-upload-grid">
+            <label class="upload-dropzone" for="studioDressInput">
+              <div class="drop-label">Foto del capo</div>
+              <div class="drop-hint">Trascina o clicca</div>
+              <div class="drop-preview" id="studioDressPreview"></div>
+              <input type="file" id="studioDressInput" accept="image/*" hidden>
+            </label>
+            <label class="upload-dropzone" for="studioModelInput">
+              <div class="drop-label">Foto modella</div>
+              <div class="drop-hint">Trascina o clicca</div>
+              <div class="drop-preview" id="studioModelPreview"></div>
+              <input type="file" id="studioModelInput" accept="image/*" hidden>
+            </label>
           </div>
         </div>
 
-        <div class="studio-model-builder active" id="studioModelBuilder">
-          <div class="model-builder-head">
-            <div>
-              <div class="model-builder-eyebrow">Genera modella AI</div>
-              <div class="model-builder-title">Output 3:4 • Anteprima nel riquadro e nel viewer</div>
+        <div class="studio-panel studio-step-card studio-step-card--choice">
+          <div class="studio-progress-workflow">
+            <div class="studio-progress-steps" id="studioProgressSteps">
+              <button type="button" class="studio-progress-step is-active" data-step="model" aria-label="Model">
+                <span class="studio-progress-step__thumb" aria-hidden="true"></span>
+                <span class="studio-progress-step__label">Model</span>
+              </button>
+              <button type="button" class="studio-progress-step" data-step="garment" aria-label="Garment type">
+                <span class="studio-progress-step__thumb" aria-hidden="true"></span>
+                <span class="studio-progress-step__label">Garment type</span>
+              </button>
+              <button type="button" class="studio-progress-step" data-step="style" aria-label="Style">
+                <span class="studio-progress-step__thumb" aria-hidden="true"></span>
+                <span class="studio-progress-step__label">Style</span>
+              </button>
+              <button type="button" class="studio-progress-step" data-step="background" aria-label="Background">
+                <span class="studio-progress-step__thumb" aria-hidden="true"></span>
+                <span class="studio-progress-step__label">Background</span>
+              </button>
             </div>
-            <button type="button" class="model-builder-close" id="studioModelClose" aria-label="Chiudi pannello">X</button>
-          </div>
-
-          <div class="model-builder-section">
-            <div class="model-builder-label">Essenziali</div>
-            <div class="model-builder-grid">
-              <label class="model-field">
-                <span>Genere</span>
-                <select id="studioGenGender">
-                  <option value="female fashion model">Donna</option>
-                  <option value="male fashion model">Uomo</option>
-                  <option value="androgynous fashion model">Androgina</option>
-                </select>
-              </label>
-              <label class="model-field">
-                <span>Etnia</span>
-                <select id="studioGenEthnicity">
-                  <option value="European ethnicity">Europea</option>
-                  <option value="Mediterranean ethnicity">Mediterranea</option>
-                  <option value="African ethnicity">Afro</option>
-                  <option value="Middle Eastern ethnicity">Medio-orientale</option>
-                  <option value="Asian ethnicity">Asiatica</option>
-                  <option value="Latina ethnicity">Latina</option>
-                  <option value="mixed ethnicity">Mista</option>
-                </select>
-              </label>
-              <label class="model-field">
-                <span>Fascia età</span>
-                <select id="studioGenAge">
-                  <option value="age 18-25">18–25</option>
-                  <option value="age 25-35">25–35</option>
-                  <option value="age 35-45">35–45</option>
-                  <option value="age 45+">45+</option>
-                </select>
-              </label>
-            </div>
-          </div>
-
-          <div class="model-builder-section">
-            <button type="button" class="model-advanced-toggle" id="studioAdvancedToggle" aria-expanded="false">
-              <span>Avanzati</span>
-              <span class="model-advanced-icon">v</span>
-            </button>
-            <div class="model-advanced-body" id="studioAdvancedBody" hidden>
-              <div class="model-builder-grid">
-                <label class="model-field">
-                  <span>Corporatura</span>
-                  <select id="studioGenBody">
-                    <option value="very slim body type">Molto magra</option>
-                    <option value="slim body type">Snella</option>
-                    <option value="average body type">Normale</option>
-                    <option value="curvy body type">Curvy</option>
-                    <option value="plus size body type">Plus size</option>
-                    <option value="athletic body type">Atletica</option>
-                  </select>
-                </label>
-                <label class="model-field">
-                  <span>Inquadratura</span>
-                  <select id="studioGenFrame">
-                    <option value="full body shot">Full body</option>
-                    <option value="three-quarter 3/4 shot">3/4</option>
-                    <option value="half body shot">Mezzo busto</option>
-                    <option value="portrait close-up">Ritratto</option>
-                  </select>
-                </label>
-                <label class="model-field">
-                  <span>Mood</span>
-                  <select id="studioGenMood">
-                    <option value="elegant mood">Elegante</option>
-                    <option value="natural mood">Naturale</option>
-                    <option value="bold decisive mood">Decisa</option>
-                    <option value="soft gentle mood">Soft</option>
-                    <option value="editorial fashion mood">Editoriale</option>
-                  </select>
-                </label>
+            <div class="studio-progress-content" id="studioProgressContent">
+              <div class="studio-progress-panel is-active" data-step-panel="model">
+                <div class="studio-ready">
+                  <div class="studio-ready-grid">
+                    <div class="studio-ready-card" data-model-src="images/models/Sofia.jpeg" data-model-name="Sofia">
+                      <img src="images/models/Sofia.jpeg" alt="Sofia">
+                      <div class="studio-ready-name">Sofia</div>
+                    </div>
+                    <div class="studio-ready-card" data-model-src="images/models/Mila.jpeg" data-model-name="Katia">
+                      <img src="images/models/Mila.jpeg" alt="Mila">
+                      <div class="studio-ready-name">Mila</div>
+                    </div>
+                    <div class="studio-ready-card" data-model-src="images/models/Naomi.jpeg" data-model-name="Lory">
+                      <img src="images/models/Naomi.jpeg" alt="Naomi">
+                      <div class="studio-ready-name">Naomi</div>
+                    </div>
+                    <div class="studio-ready-card" data-model-src="images/models/Nicole.jpeg" data-model-name="Pheebe">
+                      <img src="images/models/Nicole.jpeg" alt="Nicole">
+                      <div class="studio-ready-name">Nicole</div>
+                    </div>
+                    <div class="studio-ready-card" data-model-src="images/models/Luca.jpeg" data-model-name="Shirley">
+                      <img src="images/models/Luca.jpeg" alt="Luca">
+                      <div class="studio-ready-name">Luca</div>
+                    </div>
+                    <div class="studio-ready-card" data-model-src="images/models/Adrian.jpeg" data-model-name="Adrian">
+                      <img src="images/models/Adrian.jpeg" alt="Adrian">
+                      <div class="studio-ready-name">Adrian</div>
+                    </div>
+                    <div class="studio-ready-card studio-generate-card">
+                      <div class="studio-generate-thumb" id="studioGenCardAnim" aria-label="Apri model builder"></div>
+                      <div class="studio-ready-name">Genera modella AI</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="studio-progress-panel-actions">
+                  <button type="button" class="studio-progress-confirm" data-next-step="garment">Confirm model</button>
+                </div>
+              </div>
+              <div class="studio-progress-panel" data-step-panel="garment" hidden>
+                <div class="studio-progress-control-wrap">
+                  <div class="dress-type-options studio-progress-dress-options" id="studioProgressDressTypeOptions"></div>
+                </div>
+                <div class="studio-progress-panel-actions">
+                  <button type="button" class="studio-progress-confirm" data-next-step="style">Confirm garment type</button>
+                </div>
+              </div>
+              <div class="studio-progress-panel" data-step-panel="style" hidden>
+                <div class="studio-progress-control-wrap">
+                  <div class="style-type-options studio-progress-style-options" id="studioProgressStyleOptions"></div>
+                  <div class="prompt-suggestions studio-inline-suggestions studio-progress-suggestions" id="studioProgressSuggestions" hidden></div>
+                </div>
+                <div class="studio-progress-panel-actions">
+                  <button type="button" class="studio-progress-confirm" data-next-step="background">Confirm style</button>
+                </div>
+              </div>
+              <div class="studio-progress-panel" data-step-panel="background" hidden>
+                <div class="studio-progress-background">
+                  <label class="studio-progress-field">
+                    <span>Background</span>
+                    <select id="studioProgressBackground">
+                      <option value="lookbook-studio">Studio Neutro Lookbook</option>
+                      <option value="editorial-high-end">Editoriale Fashion High-End</option>
+                      <option value="runway-show">Passerella Runway</option>
+                      <option value="urban-street">Urban Street Style</option>
+                      <option value="retail-boutique">Retail Boutique Premium</option>
+                      <option value="lifestyle-indoor">Lifestyle Indoor Soft</option>
+                      <option value="outdoor-golden-hour">Outdoor Golden Hour</option>
+                      <option value="social-clean">Social Content Clean</option>
+                      <option value="luxury-hotel-resort">Luxury Hotel Resort</option>
+                      <option value="minimal-ecommerce">Minimal E-commerce Catalog</option>
+                      <option value="custom">Background personalizzato</option>
+                    </select>
+                  </label>
+                  <label class="studio-progress-field">
+                    <span>Background prompt</span>
+                    <textarea id="studioProgressBackgroundPrompt" rows="3" placeholder="Es: studio fashion con luci soffuse e neon dorati"></textarea>
+                  </label>
+                </div>
+                <div class="studio-progress-panel-actions">
+                  <button type="button" class="studio-progress-confirm" data-next-step="generate">Confirm background</button>
+                </div>
+              </div>
+              <div class="studio-progress-panel" data-step-panel="generate" hidden>
+                <div class="studio-progress-generate">
+                  <p class="studio-progress-generate-copy">Review your selections and generate the result</p>
+                  <div class="studio-progress-field">
+                    <span>Aspect ratio</span>
+                    <div class="studio-progress-aspect-options" id="studioProgressAspectOptions">
+                      <button type="button" class="studio-progress-aspect-btn" data-aspect="1:1">1:1</button>
+                      <button type="button" class="studio-progress-aspect-btn active" data-aspect="3:4">3:4</button>
+                      <button type="button" class="studio-progress-aspect-btn" data-aspect="4:3">4:3</button>
+                      <button type="button" class="studio-progress-aspect-btn" data-aspect="9:16">9:16</button>
+                      <button type="button" class="studio-progress-aspect-btn" data-aspect="16:9">16:9</button>
+                    </div>
+                  </div>
+                  <button type="button" class="upload-action" id="studioProgressGenerate">Genera</button>
+                </div>
               </div>
             </div>
           </div>
-
-          <div class="model-builder-footer">
-            <div class="model-aspect-pill">Formato 3:4</div>
-            <button class="upload-action" type="button" id="studioGenerateModelBtn">Genera modella</button>
-          </div>
         </div>
-      </div>
 
-    </section>
-
-    <section class="studio-column studio-center">
-      <div class="studio-panel studio-settings">
-        <div class="settings-group wide">
+        <div hidden aria-hidden="true">
           <div class="dress-type-options" id="studioDressTypeOptions">
             <button class="dress-type-btn active" data-type="dress">
               <img src="images/icon/clothes.png" alt="Abito">
@@ -213,71 +208,172 @@
             <button class="style-type-btn" data-style="streetwear-editorial">Streetwear</button>
             <button class="style-type-btn" data-style="golden-hour">Golden hour</button>
           </div>
-        </div>
-        <div class="settings-group">
-          <label for="studioAspect">Aspect ratio</label>
-          <select id="studioAspect">
-            <option value="1:1">1:1</option>
-            <option value="3:4">3:4</option>
-            <option value="4:3">4:3</option>
-            <option value="9:16">9:16</option>
-            <option value="16:9">16:9</option>
-          </select>
-        </div>
-        <div class="settings-group">
-          <label for="studioBackground">Selezione background</label>
-          <select id="studioBackground">
-            <option value="lookbook-studio">Studio Neutro Lookbook</option>
-            <option value="editorial-high-end">Editoriale Fashion High-End</option>
-            <option value="runway-show">Passerella Runway</option>
-            <option value="urban-street">Urban Street Style</option>
-            <option value="retail-boutique">Retail Boutique Premium</option>
-            <option value="lifestyle-indoor">Lifestyle Indoor Soft</option>
-            <option value="outdoor-golden-hour">Outdoor Golden Hour</option>
-            <option value="social-clean">Social Content Clean</option>
-            <option value="luxury-hotel-resort">Luxury Hotel Resort</option>
-            <option value="minimal-ecommerce">Minimal E-commerce Catalog</option>
-            <option value="custom">Background personalizzato</option>
-          </select>
-        </div>
-        <div class="settings-group prompt-group">
-          <label for="studioBackgroundPrompt">Prompt background</label>
-          <textarea id="studioBackgroundPrompt" rows="2" placeholder="Es: studio fashion con luci soffuse e neon dorati"></textarea>
-          <div class="prompt-suggestions studio-inline-suggestions">
-            <button class="prompt-suggestion-btn" type="button">Product detail shot (on model)</button>
-            <button class="prompt-suggestion-btn" type="button">commercial photo</button>
-            <button class="prompt-suggestion-btn" type="button">jewelry e-commerce</button>
-            <button class="prompt-suggestion-btn" type="button">luxury product photography</button>
+          <button class="upload-action" id="studioGenerate">Genera</button>
+          <button type="button" class="studio-advanced-settings__toggle" id="studioSettingsToggle" aria-expanded="false" aria-controls="studioSettingsBody"></button>
+          <div class="studio-advanced-settings__body" id="studioSettingsBody" hidden>
+            <select id="studioAspect">
+              <option value="1:1">1:1</option>
+              <option value="3:4">3:4</option>
+              <option value="4:3">4:3</option>
+              <option value="9:16">9:16</option>
+              <option value="16:9">16:9</option>
+            </select>
+            <select id="studioBackground">
+              <option value="lookbook-studio">Studio Neutro Lookbook</option>
+              <option value="editorial-high-end">Editoriale Fashion High-End</option>
+              <option value="runway-show">Passerella Runway</option>
+              <option value="urban-street">Urban Street Style</option>
+              <option value="retail-boutique">Retail Boutique Premium</option>
+              <option value="lifestyle-indoor">Lifestyle Indoor Soft</option>
+              <option value="outdoor-golden-hour">Outdoor Golden Hour</option>
+              <option value="social-clean">Social Content Clean</option>
+              <option value="luxury-hotel-resort">Luxury Hotel Resort</option>
+              <option value="minimal-ecommerce">Minimal E-commerce Catalog</option>
+              <option value="custom">Background personalizzato</option>
+            </select>
+            <textarea id="studioBackgroundPrompt" rows="2" placeholder="Es: studio fashion con luci soffuse e neon dorati"></textarea>
+            <div class="prompt-suggestions studio-inline-suggestions">
+              <button class="prompt-suggestion-btn" type="button">Product detail shot (on model)</button>
+              <button class="prompt-suggestion-btn" type="button">commercial photo</button>
+              <button class="prompt-suggestion-btn" type="button">jewelry e-commerce</button>
+              <button class="prompt-suggestion-btn" type="button">luxury product photography</button>
+            </div>
           </div>
         </div>
-        <div class="settings-group action-group">
-          <button class="upload-action" id="studioGenerate">Genera</button>
+      </section>
+      <!-- STUDIO OUTPUT PANEL -->
+      <section class="studio-column studio-main">
+        <div class="studio-viewer">
+          <div class="studio-viewer-body" id="studioViewerBody">
+            <img id="studioMainImg" alt="Immagine generata">
+          </div>
+          <div class="studio-actions">
+            <button class="image-viewer-btn" id="studioOpen">Apri</button>
+            <button class="image-viewer-btn" id="studioSave">Salva in gallery</button>
+            <button class="image-viewer-btn" id="studioUpscale">Upscale</button>
+            <button class="image-viewer-btn" id="studioPose">Cambia posa</button>
+            <button class="image-viewer-btn" id="studioBg">Cambia background</button>
+            <button class="image-viewer-btn" id="studioRegen">Rigenera</button>
+            <button class="image-viewer-btn" id="studioRefiner">Refiner</button>
+            <a class="image-viewer-btn" id="studioDownload" href="#" download title="Scarica immagine"><i class="fa fa-download" style="margin-right:6px;"></i>Scarica</a>
+          </div>
         </div>
-      </div>
-      <div class="studio-viewer">
-        <div class="studio-viewer-body" id="studioViewerBody">
-          <img id="studioMainImg" alt="Immagine generata">
+      </section>
+      <section class="studio-column studio-right studio-recent-panel">
+        <div class="studio-panel">
+          <h3 class="studio-panel-title">Ultime immagini</h3>
+          <div class="studio-recent-list" id="studioRecent"></div>
         </div>
-        <div class="studio-actions">
-          <button class="image-viewer-btn" id="studioOpen">Apri</button>
-          <button class="image-viewer-btn" id="studioSave">Salva in gallery</button>
-          <button class="image-viewer-btn" id="studioUpscale">Upscale</button>
-          <button class="image-viewer-btn" id="studioPose">Cambia posa</button>
-          <button class="image-viewer-btn" id="studioBg">Cambia background</button>
-          <button class="image-viewer-btn" id="studioRegen">Rigenera</button>
-          <button class="image-viewer-btn" id="studioRefiner">Refiner</button>
-          <a class="image-viewer-btn" id="studioDownload" href="#" download title="Scarica immagine"><i class="fa fa-download" style="margin-right:6px;"></i>Scarica</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="studio-column studio-right">
-      <div class="studio-panel">
-        <h3 class="studio-panel-title">Ultime immagini</h3>
-        <div class="studio-recent-list" id="studioRecent"></div>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
+
+  <div class="studio-modal" id="studioModelModal" hidden>
+    <div class="studio-modal__backdrop" id="studioModelModalBackdrop"></div>
+    <div class="studio-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="studioModelModalTitle">
+      <div class="studio-model-builder" id="studioModelBuilder">
+        <div class="model-builder-layout">
+          <div class="model-builder-controls">
+            <div class="model-builder-head">
+              <div>
+                <div class="model-builder-eyebrow">Genera modella AI</div>
+                <div class="model-builder-title" id="studioModelModalTitle">Configura le caratteristiche della modella</div>
+              </div>
+              <button type="button" class="model-builder-close" id="studioModelClose" aria-label="Chiudi pannello">X</button>
+            </div>
+
+            <div class="model-builder-section">
+              <div class="model-builder-label">Essenziali</div>
+              <div class="model-builder-grid">
+                <label class="model-field">
+                  <span>Genere</span>
+                  <select id="studioGenGender">
+                    <option value="female fashion model">Donna</option>
+                    <option value="male fashion model">Uomo</option>
+                    <option value="androgynous fashion model">Androgina</option>
+                  </select>
+                </label>
+                <label class="model-field">
+                  <span>Etnia</span>
+                  <select id="studioGenEthnicity">
+                    <option value="European ethnicity">Europea</option>
+                    <option value="Mediterranean ethnicity">Mediterranea</option>
+                    <option value="African ethnicity">Afro</option>
+                    <option value="Middle Eastern ethnicity">Medio-orientale</option>
+                    <option value="Asian ethnicity">Asiatica</option>
+                    <option value="Latina ethnicity">Latina</option>
+                    <option value="mixed ethnicity">Mista</option>
+                  </select>
+                </label>
+                <label class="model-field">
+                  <span>Fascia eta</span>
+                  <select id="studioGenAge">
+                    <option value="age 18-25">18-25</option>
+                    <option value="age 25-35">25-35</option>
+                    <option value="age 35-45">35-45</option>
+                    <option value="age 45+">45+</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="model-builder-section" id="studioAdvancedBody">
+                <div class="model-builder-grid">
+                  <label class="model-field">
+                    <span>Corporatura</span>
+                    <select id="studioGenBody">
+                      <option value="very slim body type">Molto magra</option>
+                      <option value="slim body type">Snella</option>
+                      <option value="average body type">Normale</option>
+                      <option value="curvy body type">Curvy</option>
+                      <option value="plus size body type">Plus size</option>
+                      <option value="athletic body type">Atletica</option>
+                    </select>
+                  </label>
+                  <label class="model-field">
+                    <span>Inquadratura</span>
+                    <select id="studioGenFrame">
+                      <option value="full body shot">Full body</option>
+                      <option value="three-quarter 3/4 shot">3/4</option>
+                      <option value="half body shot">Mezzo busto</option>
+                      <option value="portrait close-up">Ritratto</option>
+                    </select>
+                  </label>
+                  <label class="model-field">
+                    <span>Mood</span>
+                    <select id="studioGenMood">
+                      <option value="elegant mood">Elegante</option>
+                      <option value="natural mood">Naturale</option>
+                      <option value="bold decisive mood">Decisa</option>
+                      <option value="soft gentle mood">Soft</option>
+                      <option value="editorial fashion mood">Editoriale</option>
+                    </select>
+                  </label>
+                </div>
+            </div>
+
+            <div class="model-builder-footer">
+              <button class="upload-action" type="button" id="studioGenerateModelBtn">Genera modella</button>
+            </div>
+          </div>
+
+          <div class="model-builder-preview">
+            <div class="model-builder-preview__head">
+              <span class="model-builder-preview__eyebrow">Preview</span>
+              <div id="studioModelReadyStatus" class="model-builder-preview__status" hidden>Model ready</div>
+            </div>
+            <div class="model-builder-preview__canvas" id="studioGenAnim" aria-label="Anteprima modella generata"></div>
+            <div class="model-builder-preview__result" id="studioModelResultActions" hidden>
+              <div class="model-builder-preview__actions">
+                <button type="button" class="upload-action model-builder-use-btn" id="studioUseGeneratedModel">Use this model</button>
+                <button type="button" class="image-viewer-btn model-builder-regenerate-btn" id="studioRegenerateModel">Regenerate</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="gen-loader" id="studioLoader">
     <div class="gen-loader-backdrop"></div>
@@ -305,6 +401,18 @@
       const backgroundSelect = document.getElementById('studioBackground');
       const backgroundPrompt = document.getElementById('studioBackgroundPrompt');
       const generateBtn = document.getElementById('studioGenerate');
+      const progressAspectOptions = document.getElementById('studioProgressAspectOptions');
+      const progressSteps = Array.from(document.querySelectorAll('#studioProgressSteps .studio-progress-step'));
+      const progressPanels = Array.from(document.querySelectorAll('#studioProgressContent .studio-progress-panel'));
+      const progressDressTypeOptions = document.getElementById('studioProgressDressTypeOptions');
+      const progressStyleOptions = document.getElementById('studioProgressStyleOptions');
+      const progressSuggestions = document.getElementById('studioProgressSuggestions');
+      const progressBackgroundSelect = document.getElementById('studioProgressBackground');
+      const progressBackgroundPrompt = document.getElementById('studioProgressBackgroundPrompt');
+      const progressGenerateBtn = document.getElementById('studioProgressGenerate');
+      const progressConfirmButtons = Array.from(document.querySelectorAll('.studio-progress-confirm'));
+      const progressModelThumb = document.querySelector('.studio-progress-step[data-step="model"] .studio-progress-step__thumb');
+      const progressGarmentThumb = document.querySelector('.studio-progress-step[data-step="garment"] .studio-progress-step__thumb');
       const dressDropzone = dressInput?.closest('.upload-dropzone');
       const dressDropLabel = dressDropzone?.querySelector('.drop-label');
       const modelDropzone = modelInput?.closest('.upload-dropzone');
@@ -321,7 +429,14 @@
       const loader = document.getElementById('studioLoader');
       const readyCards = Array.from(document.querySelectorAll('.studio-ready-card'));
       const genCard = document.querySelector('.studio-generate-card');
+      const genCardAnim = document.getElementById('studioGenCardAnim');
       const genPreview = document.getElementById('studioGenAnim');
+      const modelReadyStatus = document.getElementById('studioModelReadyStatus');
+      const modelResultActions = document.getElementById('studioModelResultActions');
+      const useGeneratedModelBtn = document.getElementById('studioUseGeneratedModel');
+      const regenerateModelBtn = document.getElementById('studioRegenerateModel');
+      const modelModal = document.getElementById('studioModelModal');
+      const modelModalBackdrop = document.getElementById('studioModelModalBackdrop');
       const modelBuilder = document.getElementById('studioModelBuilder');
       const modelClose = document.getElementById('studioModelClose');
       const creditBadge = document.getElementById('studioCredit');
@@ -331,9 +446,9 @@
       const genBody = document.getElementById('studioGenBody');
       const genFrame = document.getElementById('studioGenFrame');
       const genMood = document.getElementById('studioGenMood');
-      const genAdvancedToggle = document.getElementById('studioAdvancedToggle');
-      const genAdvancedBody = document.getElementById('studioAdvancedBody');
       const genModelBtn = document.getElementById('studioGenerateModelBtn');
+      const settingsToggle = document.getElementById('studioSettingsToggle');
+      const settingsBody = document.getElementById('studioSettingsBody');
 
       const garmentTemplates = {
         dress: 'the model in the image 1 wearing the outfit in the image 2',
@@ -415,7 +530,7 @@
           'High-fidelity texture rendering, very clean image, no visible noise or grain. ' +
           'Premium, high-end professional finish. ' +
           'Camera look: implied medium format or high-end full-frame quality with very high dynamic range. ' +
-          'Prime lens look in the 85mm–135mm range, with natural compression and elegant depth separation. ' +
+          'Prime lens look in the 85mmâ€“135mm range, with natural compression and elegant depth separation. ' +
           'Aperture around f/2.8 for a balanced depth of field. ' +
           'Overall mood: sophisticated, modern, aspirational, high-end editorial.',
         bw:
@@ -478,13 +593,18 @@
       };
 
       let selectedDressType = 'dress';
-      let selectedStyle = null;
+      let selectedStyle = 'vogue';
       let selectedAccessorySuggestion = null;
       let selectedReadyModel = null;
+      let selectedAspect = '3:4';
+      let pendingGeneratedModelUrl = '';
       let lastInput = null;
       let lastImageUrl = '';
       let suggestionContainer = document.querySelector('.studio-inline-suggestions');
       let genAnimMounted = false;
+      const progressStepOrder = ['model', 'garment', 'style', 'background', 'generate'];
+      let progressUnlockedIndex = -1;
+      let progressCurrentStep = 'model';
 
       const showLoader = () => loader?.classList.add('active');
       const hideLoader = () => loader?.classList.remove('active');
@@ -513,23 +633,62 @@
 
       loadCredit();
 
-      const openModelBuilder = () => modelBuilder?.classList.add('active');
-      const closeModelBuilder = () => modelBuilder?.classList.remove('active');
+      const openModelBuilder = () => {
+        if (modelReadyStatus) modelReadyStatus.hidden = true;
+        if (modelResultActions) modelResultActions.hidden = true;
+        if (modelModal) modelModal.hidden = false;
+        document.body.classList.add('studio-modal-open');
+      };
+      const closeModelBuilder = () => {
+        if (modelReadyStatus) modelReadyStatus.hidden = true;
+        if (modelResultActions) modelResultActions.hidden = true;
+        if (modelModal) modelModal.hidden = true;
+        document.body.classList.remove('studio-modal-open');
+      };
 
-      genAdvancedToggle?.addEventListener('click', () => {
-        const shouldOpen = genAdvancedBody?.hidden;
-        if (genAdvancedBody) genAdvancedBody.hidden = !shouldOpen;
-        genAdvancedToggle?.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
-        const icon = genAdvancedToggle?.querySelector('.model-advanced-icon');
-        if (icon) icon.textContent = shouldOpen ? '^' : 'v';
+      const applyGeneratedModelSelection = (url) => {
+        if (!url) return;
+        selectedReadyModel = url;
+        readyCards.forEach((c) => c.classList.remove('active'));
+        if (genCard) {
+          genCard.dataset.modelSrc = url;
+          genCard.dataset.modelName = 'AI Model';
+          genCard.classList.add('active');
+        }
+        if (modelPreview && modelDropzone) {
+          modelPreview.innerHTML = `<img src="${url}" alt="Modella generata" class="studio-upload-thumb">`;
+          modelDropzone.classList.add('has-image');
+        }
+        setProgressModelThumbnail(url);
+        if (modelInput) modelInput.value = '';
+      };
+
+      settingsToggle?.addEventListener('click', () => {
+        const shouldOpen = settingsBody?.hidden;
+        if (settingsBody) settingsBody.hidden = !shouldOpen;
+        settingsToggle.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        const state = settingsToggle.querySelector('.studio-advanced-settings__state');
+        if (state) state.textContent = shouldOpen ? 'Open' : 'Closed';
       });
 
       genCard?.addEventListener('click', () => openModelBuilder());
       modelClose?.addEventListener('click', () => closeModelBuilder());
+      modelModalBackdrop?.addEventListener('click', () => closeModelBuilder());
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modelModal && !modelModal.hidden) closeModelBuilder();
+      });
+      useGeneratedModelBtn?.addEventListener('click', () => {
+        if (!pendingGeneratedModelUrl) return;
+        applyGeneratedModelSelection(pendingGeneratedModelUrl);
+        closeModelBuilder();
+      });
+      regenerateModelBtn?.addEventListener('click', () => {
+        generateModel();
+      });
 
       const mountGenAnimation = (attempt = 0) => {
         if (genAnimMounted) return;
-        const target = document.getElementById('studioGenAnim');
+        const target = genCardAnim;
         if (!target) return;
         if (!window.lottie) {
           if (attempt < 5) setTimeout(() => mountGenAnimation(attempt + 1), 300);
@@ -566,20 +725,151 @@
         }
       };
 
+      const setProgressModelThumbnail = (url = '') => {
+        if (!progressModelThumb) return;
+        if (url) {
+          progressModelThumb.style.backgroundImage = `url("${url}")`;
+          progressModelThumb.classList.add('has-image');
+        } else {
+          progressModelThumb.style.backgroundImage = '';
+          progressModelThumb.classList.remove('has-image');
+        }
+      };
+
+      const setProgressGarmentThumbnail = (type = '') => {
+        if (!progressGarmentThumb) return;
+        const sourceBtn = dressTypeOptions.find((btn) => (btn.dataset.type || '') === type);
+        const icon = sourceBtn?.querySelector('img');
+        if (icon?.getAttribute('src')) {
+          progressGarmentThumb.style.backgroundImage = `url("${icon.getAttribute('src')}")`;
+          progressGarmentThumb.classList.add('has-icon');
+        } else {
+          progressGarmentThumb.style.backgroundImage = '';
+          progressGarmentThumb.classList.remove('has-icon');
+        }
+      };
+
+      const getProgressStepIndex = (stepName) => progressStepOrder.indexOf(stepName);
+
+      const setProgressStep = (stepName) => {
+        const nextStep = stepName || 'model';
+        const nextStepIndex = getProgressStepIndex(nextStep);
+        progressSteps.forEach((stepBtn) => {
+          const stepIndex = getProgressStepIndex(stepBtn.dataset.step || '');
+          const isActive = stepBtn.dataset.step === nextStep;
+          const isVisible = stepIndex > -1 && stepIndex <= progressUnlockedIndex;
+          stepBtn.classList.toggle('is-active', isActive);
+          stepBtn.classList.toggle('is-complete', stepIndex > -1 && stepIndex < nextStepIndex && stepIndex <= progressUnlockedIndex);
+          stepBtn.classList.toggle('is-locked', !isVisible);
+          stepBtn.hidden = !isVisible;
+          stepBtn.disabled = !isVisible;
+          stepBtn.setAttribute('aria-selected', isActive && isVisible ? 'true' : 'false');
+        });
+        progressPanels.forEach((panel) => {
+          const isActive = panel.dataset.stepPanel === nextStep;
+          panel.classList.toggle('is-active', isActive);
+          panel.hidden = !isActive;
+        });
+        const progressStepsContainer = document.getElementById('studioProgressSteps');
+        progressStepsContainer?.classList.toggle('is-empty', progressUnlockedIndex < 0);
+        progressCurrentStep = nextStep;
+      };
+
+      const unlockProgressStep = (stepName) => {
+        const stepIndex = getProgressStepIndex(stepName);
+        if (stepIndex === -1) return;
+        progressUnlockedIndex = Math.max(progressUnlockedIndex, stepIndex);
+        setProgressStep(stepName);
+      };
+
+      const renderProgressDressOptions = () => {
+        if (!progressDressTypeOptions) return;
+        progressDressTypeOptions.innerHTML = dressTypeOptions
+          .map((btn) => {
+            const type = btn.dataset.type || 'dress';
+            return `<button class="dress-type-btn${type === selectedDressType ? ' active' : ''}" data-type="${type}">${btn.innerHTML}</button>`;
+          })
+          .join('');
+      };
+
+      const renderProgressStyleOptions = (options) => {
+        if (!progressStyleOptions) return;
+        progressStyleOptions.innerHTML = options
+          .map(
+            (option) =>
+              `<button class="style-type-btn${option.value === selectedStyle ? ' active' : ''}" data-style="${option.value}">${option.label}</button>`
+          )
+          .join('');
+      };
+
+      const syncBackgroundFields = (source = 'original') => {
+        if (source === 'progress') {
+          if (backgroundSelect && progressBackgroundSelect) {
+            backgroundSelect.value = progressBackgroundSelect.value;
+          }
+          if (backgroundPrompt && progressBackgroundPrompt) {
+            backgroundPrompt.value = progressBackgroundPrompt.value;
+          }
+          return;
+        }
+        if (progressBackgroundSelect && backgroundSelect) {
+          progressBackgroundSelect.value = backgroundSelect.value;
+        }
+        if (progressBackgroundPrompt && backgroundPrompt) {
+          progressBackgroundPrompt.value = backgroundPrompt.value;
+        }
+      };
+
+      const syncAspectField = (source = 'original') => {
+        if (source === 'progress') {
+          if (aspectSelect) {
+            aspectSelect.value = selectedAspect;
+          }
+        } else if (aspectSelect) {
+          selectedAspect = aspectSelect.value || '3:4';
+        }
+        progressAspectOptions?.querySelectorAll('.studio-progress-aspect-btn').forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.aspect === selectedAspect);
+        });
+      };
+
+      const setAspectValue = (value) => {
+        selectedAspect = value || '3:4';
+        syncAspectField('progress');
+        if (aspectSelect) {
+          aspectSelect.value = selectedAspect;
+        }
+      };
+
+      const renderProgressSuggestions = () => {
+        if (!progressSuggestions) return;
+        progressSuggestions.innerHTML = accessorySuggestions
+          .map(
+            (text) =>
+              `<button type="button" class="prompt-suggestion-btn${selectedAccessorySuggestion === text ? ' active' : ''}">${text}</button>`
+          )
+          .join('');
+        progressSuggestions.hidden = selectedDressType !== 'accessory';
+        progressSuggestions.style.display = selectedDressType === 'accessory' ? 'flex' : 'none';
+      };
+
       dressInput?.addEventListener('change', () => setPreview(dressInput, dressPreview, dressDropzone));
       modelInput?.addEventListener('change', () => {
         setPreview(modelInput, modelPreview, modelDropzone);
         selectedReadyModel = null;
         readyCards.forEach((c) => c.classList.remove('active'));
+        setProgressModelThumbnail(modelPreview?.querySelector('img')?.src || '');
       });
 
       const setDressTypeValue = (type) => {
         selectedDressType = type || 'dress';
         dressTypeOptions.forEach((b) => b.classList.toggle('active', b.dataset.type === selectedDressType));
+        setProgressGarmentThumbnail(selectedDressType);
         if (selectedDressType !== 'accessory') {
           selectedAccessorySuggestion = null;
         }
         updateModelUiVisibility();
+        renderProgressDressOptions();
         renderStyleOptions();
         updateSuggestionVisibility();
       };
@@ -587,6 +877,9 @@
       const setStyleValue = (style) => {
         selectedStyle = style || null;
         styleOptions.forEach((b) => b.classList.toggle('active', b.dataset.style === selectedStyle));
+        progressStyleOptions?.querySelectorAll('.style-type-btn').forEach((b) => {
+          b.classList.toggle('active', b.dataset.style === selectedStyle);
+        });
       };
 
       const updateModelUiVisibility = () => {
@@ -621,6 +914,7 @@
           )
           .join('');
         styleOptions = Array.from(styleOptionsContainer.querySelectorAll('.style-type-btn'));
+        renderProgressStyleOptions(nextOptions);
       };
       dressTypeOptions.forEach((btn) => {
         btn.addEventListener('click', (e) => {
@@ -640,6 +934,68 @@
         setStyleValue(selectedStyle === style ? null : style);
       });
 
+      progressSteps.forEach((stepBtn) => {
+        stepBtn.addEventListener('click', () => {
+          if (stepBtn.disabled) return;
+          setProgressStep(stepBtn.dataset.step || 'model');
+        });
+      });
+
+      progressConfirmButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const nextStep = button.dataset.nextStep || 'model';
+          unlockProgressStep(nextStep);
+        });
+      });
+
+      progressDressTypeOptions?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.dress-type-btn');
+        if (!btn) return;
+        e.preventDefault();
+        setDressTypeValue(btn.dataset.type || 'dress');
+      });
+
+      progressStyleOptions?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.style-type-btn');
+        if (!btn) return;
+        e.preventDefault();
+        const style = btn.dataset.style || null;
+        setStyleValue(selectedStyle === style ? null : style);
+      });
+
+      progressSuggestions?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.prompt-suggestion-btn');
+        if (!btn) return;
+        selectedAccessorySuggestion = btn.textContent || '';
+        renderProgressSuggestions();
+        if (suggestionContainer) {
+          suggestionContainer.querySelectorAll('button').forEach((item) => {
+            item.classList.toggle('active', item.textContent === selectedAccessorySuggestion);
+          });
+        }
+        if (backgroundPrompt) {
+          backgroundPrompt.value = '';
+          backgroundPrompt.blur();
+        }
+        if (progressBackgroundPrompt) {
+          progressBackgroundPrompt.value = '';
+          progressBackgroundPrompt.blur();
+        }
+      });
+
+      progressBackgroundSelect?.addEventListener('change', () => syncBackgroundFields('progress'));
+      progressBackgroundPrompt?.addEventListener('input', () => syncBackgroundFields('progress'));
+      progressAspectOptions?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.studio-progress-aspect-btn');
+        if (!btn) return;
+        e.preventDefault();
+        setAspectValue(btn.dataset.aspect || '3:4');
+      });
+      backgroundSelect?.addEventListener('change', () => syncBackgroundFields('original'));
+      backgroundPrompt?.addEventListener('input', () => syncBackgroundFields('original'));
+      aspectSelect?.addEventListener('change', () => syncAspectField('original'));
+      progressGenerateBtn?.addEventListener('click', () => generateBtn?.click());
+
       readyCards.forEach((card) => {
         card.addEventListener('click', () => {
           const src = card.dataset.modelSrc;
@@ -652,6 +1008,7 @@
             modelPreview.innerHTML = `<img src="${src}" alt="${name || 'Modella'}" class="studio-upload-thumb">`;
             modelDropzone.classList.add('has-image');
           }
+          setProgressModelThumbnail(src);
           if (modelInput) {
             modelInput.value = '';
           }
@@ -685,6 +1042,11 @@
                 backgroundPrompt.value = '';
                 backgroundPrompt.blur();
               }
+              if (progressBackgroundPrompt) {
+                progressBackgroundPrompt.value = '';
+                progressBackgroundPrompt.blur();
+              }
+              renderProgressSuggestions();
             });
           });
           suggestionContainer.dataset.wired = '1';
@@ -695,6 +1057,7 @@
         ensureSuggestions();
         if (!suggestionContainer) return;
         suggestionContainer.style.display = selectedDressType === 'accessory' ? 'flex' : 'none';
+        renderProgressSuggestions();
       };
 
       const MODEL_BASE_PROMPT =
@@ -790,7 +1153,7 @@
           const data = await resp.json();
           const files = (data?.files || [])
             .sort((a, b) => new Date(b.mtime || 0) - new Date(a.mtime || 0))
-            .slice(0, 5);
+            .slice(0, 8);
           recentList.innerHTML = '';
           if (!files.length) {
             recentList.innerHTML = '<div class="studio-recent-empty">Nessuna immagine disponibile</div>';
@@ -850,9 +1213,15 @@
 
       setInterval(refreshRecent, 20000);
       refreshRecent();
+      if (aspectSelect) aspectSelect.value = '3:4';
       updateModelUiVisibility();
+      renderProgressDressOptions();
+      setProgressGarmentThumbnail(selectedDressType);
       renderStyleOptions();
+      syncAspectField('original');
+      syncBackgroundFields('original');
       updateSuggestionVisibility();
+      setProgressStep('model');
 
       const generateModel = async () => {
         const settings = {
@@ -870,6 +1239,8 @@
           output_format: 'jpg',
         };
 
+        if (modelReadyStatus) modelReadyStatus.hidden = true;
+        if (modelResultActions) modelResultActions.hidden = true;
         showLoader();
         try {
           const resp = await fetch('/api/generate-model', {
@@ -891,18 +1262,13 @@
           const first = saved[0] || output[0];
           if (first) {
             const full = first.startsWith('http') ? first : `${window.location.origin}/${String(first).replace(/^\/+/, '')}`;
-            selectedReadyModel = full;
-            readyCards.forEach((c) => c.classList.remove('active'));
-            if (genCard) {
-              genCard.dataset.modelSrc = full;
-              genCard.dataset.modelName = 'AI Model';
-              genCard.classList.add('active');
-            }
+            pendingGeneratedModelUrl = full;
             if (genPreview) {
               genPreview.innerHTML = `<img src="${full}" alt="Modella generata" class="studio-model-thumb">`;
             }
+            if (modelReadyStatus) modelReadyStatus.hidden = false;
+            if (modelResultActions) modelResultActions.hidden = false;
             lastImageUrl = full;
-            if (mainImg) mainImg.src = full;
             refreshRecent();
             chargeCredits(Math.max(saved.length || output.length || 1, 1));
           }
@@ -1179,4 +1545,6 @@
   </script>
 </body>
 </html>
+
+
 
