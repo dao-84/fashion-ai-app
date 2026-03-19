@@ -27,7 +27,7 @@
         <li><a href="gallery.html" class="nav-link">Gallery</a></li>
         <li><a href="studio.html" class="nav-link active">Studio</a></li>
         <li><a href="index.html#signup" class="nav-link" onclick="window.openBetaAccessModal && window.openBetaAccessModal(); return false;">Sign up / Log in</a></li>
-        <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Credito residuo">â‚¬50,00</span></li>
+        <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Remaining credit">â‚¬50,00</span></li>
       </ul>
     </nav>
   </header>
@@ -37,8 +37,8 @@
     <section class="studio-page-header">
       <div class="studio-page-header__content">
         <h1 class="studio-page-header__title">
-          <span>Create your product photoshoot</span>
-          <span class="studio-page-header__subtitle">Upload your garment, choose the visual direction, and generate ready-to-sell fashion images in seconds.</span>
+          <span>Create your fashion shoot</span>
+          <span class="studio-page-header__subtitle">Upload your garment, define the visual direction, and create ready-to-sell fashion images in seconds.</span>
         </h1>
       </div>
     </section>
@@ -49,14 +49,14 @@
         <div class="studio-panel studio-step-card studio-step-card--upload">
           <div class="studio-upload-grid">
             <label class="upload-dropzone" for="studioDressInput">
-              <div class="drop-label">Foto del capo</div>
-              <div class="drop-hint">Trascina o clicca</div>
+              <div class="drop-label">Garment image</div>
+              <div class="drop-hint">Drag or click</div>
               <div class="drop-preview" id="studioDressPreview"></div>
               <input type="file" id="studioDressInput" accept="image/*" hidden>
             </label>
             <label class="upload-dropzone" for="studioModelInput">
-              <div class="drop-label">Foto modella</div>
-              <div class="drop-hint">Trascina o clicca</div>
+              <div class="drop-label">Model image</div>
+              <div class="drop-hint">Drag or click</div>
               <div class="drop-preview" id="studioModelPreview"></div>
               <input type="file" id="studioModelInput" accept="image/*" hidden>
             </label>
@@ -76,22 +76,22 @@
                 <span class="studio-progress-step__label">Garment</span>
                 <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
-              <button type="button" class="studio-progress-step" data-step="style" aria-label="Look &amp; feel">
+              <button type="button" class="studio-progress-step" data-step="style" aria-label="Style">
                 <span class="studio-progress-step__thumb" aria-hidden="true"></span>
-                <span class="studio-progress-step__label">Look &amp; feel</span>
+                <span class="studio-progress-step__label">Style</span>
                 <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
-              <button type="button" class="studio-progress-step" data-step="background" aria-label="Background">
+              <button type="button" class="studio-progress-step" data-step="background" aria-label="Environment">
                 <span class="studio-progress-step__thumb" aria-hidden="true"></span>
-                <span class="studio-progress-step__label">Background</span>
+                <span class="studio-progress-step__label">Environment</span>
                 <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
             </div>
             <div class="studio-progress-content" id="studioProgressContent">
               <div class="studio-progress-panel is-active" data-step-panel="model">
                 <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title">Choose your model</h3>
-                  <p class="studio-progress-panel-helper">Select a ready model or generate a new one.</p>
+                  <h3 class="studio-progress-panel-title">Define your model</h3>
+                  <p class="studio-progress-panel-helper">Select a ready-made model or generate a new one.</p>
                 </div>
                 <div class="studio-ready">
                   <div class="studio-ready-grid">
@@ -120,75 +120,75 @@
                       <div class="studio-ready-name">Adrian</div>
                     </div>
                     <div class="studio-ready-card studio-generate-card">
-                      <div class="studio-generate-thumb" id="studioGenCardAnim" aria-label="Apri model builder"></div>
-                      <div class="studio-ready-name">Genera modella AI</div>
+                      <div class="studio-generate-thumb" id="studioGenCardAnim" aria-label="Open model builder"></div>
+                      <div class="studio-ready-name">Generate AI model</div>
                     </div>
                   </div>
                 </div>
                 <div class="studio-progress-panel-actions">
-                  <button type="button" class="studio-progress-confirm" data-next-step="garment">Next step</button>
+                  <button type="button" class="studio-progress-confirm" data-next-step="garment">Continue</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="garment" hidden>
                 <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title">Select the garment</h3>
-                  <p class="studio-progress-panel-helper">Choose the product category you want to render.</p>
+                  <h3 class="studio-progress-panel-title">Select garment type</h3>
+                  <p class="studio-progress-panel-helper">Choose the product category you want to create.</p>
                 </div>
                 <div class="studio-progress-control-wrap">
                   <div class="dress-type-options studio-progress-dress-options" id="studioProgressDressTypeOptions"></div>
                 </div>
                 <div class="studio-progress-panel-actions">
-                  <button type="button" class="studio-progress-confirm" data-next-step="style">Next step</button>
+                  <button type="button" class="studio-progress-confirm" data-next-step="style">Continue</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="style" hidden>
                 <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title">Define the look &amp; feel</h3>
-                  <p class="studio-progress-panel-helper">Pick the visual direction for your final product image.</p>
+                  <h3 class="studio-progress-panel-title">Set the style</h3>
+                  <p class="studio-progress-panel-helper">Choose the visual direction for your final result.</p>
                 </div>
                 <div class="studio-progress-control-wrap">
                   <div class="style-type-options studio-progress-style-options" id="studioProgressStyleOptions"></div>
                   <div class="prompt-suggestions studio-inline-suggestions studio-progress-suggestions" id="studioProgressSuggestions" hidden></div>
                 </div>
                 <div class="studio-progress-panel-actions">
-                  <button type="button" class="studio-progress-confirm" data-next-step="background">Next step</button>
+                  <button type="button" class="studio-progress-confirm" data-next-step="background">Continue</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="background" hidden>
                 <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title">Choose the background</h3>
-                  <p class="studio-progress-panel-helper">Set the final environment for your generated photoshoot.</p>
+                  <h3 class="studio-progress-panel-title">Choose the environment</h3>
+                  <p class="studio-progress-panel-helper">Set the final scene for your fashion shoot.</p>
                 </div>
                 <div class="studio-progress-background">
                   <label class="studio-progress-field">
-                    <span>Background</span>
+                    <span>Environment</span>
                     <select id="studioProgressBackground">
-                      <option value="lookbook-studio">Studio Neutro Lookbook</option>
-                      <option value="editorial-high-end">Editoriale Fashion High-End</option>
-                      <option value="runway-show">Passerella Runway</option>
-                      <option value="urban-street">Urban Street Style</option>
-                      <option value="retail-boutique">Retail Boutique Premium</option>
-                      <option value="lifestyle-indoor">Lifestyle Indoor Soft</option>
-                      <option value="outdoor-golden-hour">Outdoor Golden Hour</option>
-                      <option value="social-clean">Social Content Clean</option>
-                      <option value="luxury-hotel-resort">Luxury Hotel Resort</option>
-                      <option value="minimal-ecommerce">Minimal E-commerce Catalog</option>
-                      <option value="custom">Background personalizzato</option>
+                      <option value="lookbook-studio">Neutral lookbook studio</option>
+                      <option value="editorial-high-end">High-end fashion editorial</option>
+                      <option value="runway-show">Runway show</option>
+                      <option value="urban-street">Urban street style</option>
+                      <option value="retail-boutique">Premium retail boutique</option>
+                      <option value="lifestyle-indoor">Soft indoor lifestyle</option>
+                      <option value="outdoor-golden-hour">Outdoor golden hour</option>
+                      <option value="social-clean">Clean social content</option>
+                      <option value="luxury-hotel-resort">Luxury hotel resort</option>
+                      <option value="minimal-ecommerce">Minimal e-commerce catalog</option>
+                      <option value="custom">Custom environment</option>
                     </select>
                   </label>
                   <label class="studio-progress-field">
-                    <span>Background prompt</span>
-                    <textarea id="studioProgressBackgroundPrompt" rows="3" placeholder="Es: studio fashion con luci soffuse e neon dorati"></textarea>
+                    <span>Custom environment</span>
+                    <textarea id="studioProgressBackgroundPrompt" rows="3" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
                   </label>
                 </div>
                 <div class="studio-progress-panel-actions">
-                  <button type="button" class="studio-progress-confirm" data-next-step="generate">Next step</button>
+                  <button type="button" class="studio-progress-confirm" data-next-step="generate">Continue</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="generate" hidden>
                 <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title">Generate your result</h3>
-                  <p class="studio-progress-panel-helper">Review your setup and create your final product image.</p>
+                  <h3 class="studio-progress-panel-title">Create your result</h3>
+                  <p class="studio-progress-panel-helper">Review your setup and create your final fashion image.</p>
                 </div>
                 <div class="studio-progress-generate">
                   <div class="studio-progress-field">
@@ -201,7 +201,7 @@
                       <button type="button" class="studio-progress-aspect-btn" data-aspect="16:9">16:9</button>
                     </div>
                   </div>
-                  <button type="button" class="upload-action" id="studioProgressGenerate">Generate photoshoot</button>
+                  <button type="button" class="upload-action" id="studioProgressGenerate">Create your shoot</button>
                 </div>
               </div>
             </div>
@@ -211,24 +211,24 @@
         <div hidden aria-hidden="true">
           <div class="dress-type-options" id="studioDressTypeOptions">
             <button class="dress-type-btn active" data-type="dress">
-              <img src="images/icon/clothes.png" alt="Abito">
-              <span>Abito</span>
+              <img src="images/icon/clothes.png" alt="Dress">
+              <span>Dress</span>
             </button>
             <button class="dress-type-btn" data-type="top">
               <img src="images/icon/tshirt.png" alt="Top">
               <span>Top</span>
             </button>
             <button class="dress-type-btn" data-type="trousers">
-              <img src="images/icon/trousers.png" alt="Pantalone">
-              <span>Pantalone</span>
+              <img src="images/icon/trousers.png" alt="Trousers">
+              <span>Trousers</span>
             </button>
             <button class="dress-type-btn" data-type="skirt">
-              <img src="images/icon/skirt.png" alt="Gonna">
-              <span>Gonna</span>
+              <img src="images/icon/skirt.png" alt="Skirt">
+              <span>Skirt</span>
             </button>
             <button class="dress-type-btn" data-type="accessory">
-              <img src="images/icon/pendant.png" alt="Accessorio">
-              <span>Accessorio</span>
+              <img src="images/icon/pendant.png" alt="Accessory">
+              <span>Accessory</span>
             </button>
           </div>
           <div class="style-type-options" id="studioStyleOptions">
@@ -238,7 +238,7 @@
             <button class="style-type-btn" data-style="streetwear-editorial">Streetwear</button>
             <button class="style-type-btn" data-style="golden-hour">Golden hour</button>
           </div>
-          <button class="upload-action" id="studioGenerate">Genera</button>
+          <button class="upload-action" id="studioGenerate">Create</button>
           <button type="button" class="studio-advanced-settings__toggle" id="studioSettingsToggle" aria-expanded="false" aria-controls="studioSettingsBody"></button>
           <div class="studio-advanced-settings__body" id="studioSettingsBody" hidden>
             <select id="studioAspect">
@@ -249,19 +249,19 @@
               <option value="16:9">16:9</option>
             </select>
             <select id="studioBackground">
-              <option value="lookbook-studio">Studio Neutro Lookbook</option>
-              <option value="editorial-high-end">Editoriale Fashion High-End</option>
-              <option value="runway-show">Passerella Runway</option>
-              <option value="urban-street">Urban Street Style</option>
-              <option value="retail-boutique">Retail Boutique Premium</option>
-              <option value="lifestyle-indoor">Lifestyle Indoor Soft</option>
-              <option value="outdoor-golden-hour">Outdoor Golden Hour</option>
-              <option value="social-clean">Social Content Clean</option>
-              <option value="luxury-hotel-resort">Luxury Hotel Resort</option>
-              <option value="minimal-ecommerce">Minimal E-commerce Catalog</option>
-              <option value="custom">Background personalizzato</option>
+              <option value="lookbook-studio">Neutral lookbook studio</option>
+              <option value="editorial-high-end">High-end fashion editorial</option>
+              <option value="runway-show">Runway show</option>
+              <option value="urban-street">Urban street style</option>
+              <option value="retail-boutique">Premium retail boutique</option>
+              <option value="lifestyle-indoor">Soft indoor lifestyle</option>
+              <option value="outdoor-golden-hour">Outdoor golden hour</option>
+              <option value="social-clean">Clean social content</option>
+              <option value="luxury-hotel-resort">Luxury hotel resort</option>
+              <option value="minimal-ecommerce">Minimal e-commerce catalog</option>
+              <option value="custom">Custom environment</option>
             </select>
-            <textarea id="studioBackgroundPrompt" rows="2" placeholder="Es: studio fashion con luci soffuse e neon dorati"></textarea>
+            <textarea id="studioBackgroundPrompt" rows="2" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
             <div class="prompt-suggestions studio-inline-suggestions">
               <button class="prompt-suggestion-btn" type="button">Product detail shot (on model)</button>
               <button class="prompt-suggestion-btn" type="button">commercial photo</button>
@@ -276,16 +276,16 @@
         <div class="studio-viewer">
           <div class="studio-viewer-head">
             <div class="studio-viewer-head__copy">
-              <h3 class="studio-viewer-head__title">Generated result</h3>
-              <p class="studio-viewer-head__subtitle">Your latest product photoshoot output</p>
+              <h3 class="studio-viewer-head__title">Current result</h3>
+              <p class="studio-viewer-head__subtitle">Your latest fashion shoot result</p>
             </div>
-            <span class="studio-viewer-status">Result ready</span>
+            <span class="studio-viewer-status">Ready</span>
           </div>
           <div class="studio-viewer-body" id="studioViewerBody">
-            <img id="studioMainImg" alt="Immagine generata">
+            <img id="studioMainImg" alt="Generated fashion result">
             <div class="studio-viewer-empty">
               <div class="studio-viewer-empty__title">Your result will appear here</div>
-              <p class="studio-viewer-empty__subtitle">Complete the workflow and generate your photoshoot.</p>
+              <p class="studio-viewer-empty__subtitle">Complete the workflow to create your fashion shoot.</p>
             </div>
           </div>
           <div class="studio-actions">
@@ -302,7 +302,7 @@
       </section>
       <section class="studio-column studio-right studio-recent-panel">
         <div class="studio-panel">
-          <h3 class="studio-panel-title">Recent results</h3>
+          <h3 class="studio-panel-title">Your results</h3>
           <div class="studio-recent-list" id="studioRecent"></div>
         </div>
       </section>
@@ -317,37 +317,37 @@
           <div class="model-builder-controls">
             <div class="model-builder-head">
               <div>
-                <div class="model-builder-eyebrow">Genera modella AI</div>
-                <div class="model-builder-title" id="studioModelModalTitle">Configura le caratteristiche della modella</div>
+                <div class="model-builder-eyebrow">Generate AI model</div>
+                <div class="model-builder-title" id="studioModelModalTitle">Define your model</div>
               </div>
-              <button type="button" class="model-builder-close" id="studioModelClose" aria-label="Chiudi pannello">X</button>
+              <button type="button" class="model-builder-close" id="studioModelClose" aria-label="Close panel">X</button>
             </div>
 
             <div class="model-builder-section">
-              <div class="model-builder-label">Essenziali</div>
+              <div class="model-builder-label">Essentials</div>
               <div class="model-builder-grid">
                 <label class="model-field">
-                  <span>Genere</span>
+                  <span>Gender</span>
                   <select id="studioGenGender">
-                    <option value="female fashion model">Donna</option>
-                    <option value="male fashion model">Uomo</option>
-                    <option value="androgynous fashion model">Androgina</option>
+                    <option value="female fashion model">Female</option>
+                    <option value="male fashion model">Male</option>
+                    <option value="androgynous fashion model">Androgynous</option>
                   </select>
                 </label>
                 <label class="model-field">
-                  <span>Etnia</span>
+                  <span>Ethnicity</span>
                   <select id="studioGenEthnicity">
-                    <option value="European ethnicity">Europea</option>
-                    <option value="Mediterranean ethnicity">Mediterranea</option>
-                    <option value="African ethnicity">Afro</option>
-                    <option value="Middle Eastern ethnicity">Medio-orientale</option>
-                    <option value="Asian ethnicity">Asiatica</option>
+                    <option value="European ethnicity">European</option>
+                    <option value="Mediterranean ethnicity">Mediterranean</option>
+                    <option value="African ethnicity">African</option>
+                    <option value="Middle Eastern ethnicity">Middle Eastern</option>
+                    <option value="Asian ethnicity">Asian</option>
                     <option value="Latina ethnicity">Latina</option>
-                    <option value="mixed ethnicity">Mista</option>
+                    <option value="mixed ethnicity">Mixed</option>
                   </select>
                 </label>
                 <label class="model-field">
-                  <span>Fascia eta</span>
+                  <span>Age range</span>
                   <select id="studioGenAge">
                     <option value="age 18-25">18-25</option>
                     <option value="age 25-35">25-35</option>
@@ -361,40 +361,40 @@
             <div class="model-builder-section" id="studioAdvancedBody">
                 <div class="model-builder-grid">
                   <label class="model-field">
-                    <span>Corporatura</span>
+                    <span>Body type</span>
                     <select id="studioGenBody">
-                      <option value="very slim body type">Molto magra</option>
-                      <option value="slim body type">Snella</option>
-                      <option value="average body type">Normale</option>
+                      <option value="very slim body type">Very slim</option>
+                      <option value="slim body type">Slim</option>
+                      <option value="average body type">Average</option>
                       <option value="curvy body type">Curvy</option>
                       <option value="plus size body type">Plus size</option>
-                      <option value="athletic body type">Atletica</option>
+                      <option value="athletic body type">Athletic</option>
                     </select>
                   </label>
                   <label class="model-field">
-                    <span>Inquadratura</span>
+                    <span>Framing</span>
                     <select id="studioGenFrame">
                       <option value="full body shot">Full body</option>
                       <option value="three-quarter 3/4 shot">3/4</option>
-                      <option value="half body shot">Mezzo busto</option>
-                      <option value="portrait close-up">Ritratto</option>
+                      <option value="half body shot">Half body</option>
+                      <option value="portrait close-up">Portrait</option>
                     </select>
                   </label>
                   <label class="model-field">
                     <span>Mood</span>
                     <select id="studioGenMood">
-                      <option value="elegant mood">Elegante</option>
-                      <option value="natural mood">Naturale</option>
-                      <option value="bold decisive mood">Decisa</option>
+                      <option value="elegant mood">Elegant</option>
+                      <option value="natural mood">Natural</option>
+                      <option value="bold decisive mood">Bold</option>
                       <option value="soft gentle mood">Soft</option>
-                      <option value="editorial fashion mood">Editoriale</option>
+                      <option value="editorial fashion mood">Editorial</option>
                     </select>
                   </label>
                 </div>
             </div>
 
             <div class="model-builder-footer">
-              <button class="upload-action" type="button" id="studioGenerateModelBtn">Genera modella</button>
+              <button class="upload-action" type="button" id="studioGenerateModelBtn">Generate model</button>
             </div>
           </div>
 
@@ -403,7 +403,7 @@
               <span class="model-builder-preview__eyebrow">Preview</span>
               <div id="studioModelReadyStatus" class="model-builder-preview__status" hidden>Model ready</div>
             </div>
-            <div class="model-builder-preview__canvas" id="studioGenAnim" aria-label="Anteprima modella generata"></div>
+            <div class="model-builder-preview__canvas" id="studioGenAnim" aria-label="Generated model preview"></div>
             <div class="model-builder-preview__result" id="studioModelResultActions" hidden>
               <div class="model-builder-preview__actions">
                 <button type="button" class="upload-action model-builder-use-btn" id="studioUseGeneratedModel">Use this model</button>
@@ -418,13 +418,13 @@
 
   <div class="gen-loader" id="studioLoader">
     <div class="gen-loader-backdrop"></div>
-    <div class="gen-loader-content" aria-label="Generazione in corso">
+    <div class="gen-loader-content" aria-label="Generation in progress">
       <div class="loader-prism">
         <div class="prism-face"></div>
         <div class="prism-face"></div>
         <div class="prism-face"></div>
       </div>
-      <div style="margin-top:10px;color:var(--accent-purple);">Generazione...</div>
+      <div style="margin-top:10px;color:var(--accent-purple);">Creating your result...</div>
     </div>
   </div>
 
@@ -714,7 +714,7 @@
           genCard.classList.add('active');
         }
         if (modelPreview && modelDropzone) {
-          modelPreview.innerHTML = `<img src="${url}" alt="Modella generata" class="studio-upload-thumb">`;
+          modelPreview.innerHTML = `<img src="${url}" alt="Generated model" class="studio-upload-thumb">`;
           modelDropzone.classList.add('has-image');
         }
         setProgressModelThumbnail(url);
@@ -776,7 +776,7 @@
         if (input.files && input.files.length) {
           const file = input.files[0];
           const url = URL.createObjectURL(file);
-          previewEl.innerHTML = `<img src="${url}" alt="Anteprima" class="studio-upload-thumb">`;
+          previewEl.innerHTML = `<img src="${url}" alt="Preview" class="studio-upload-thumb">`;
           dropzone.classList.add('has-image');
         } else {
           previewEl.innerHTML = '';
@@ -988,7 +988,7 @@
       const updateModelUiVisibility = () => {
         const isAccessory = selectedDressType === 'accessory';
         if (dressDropLabel) {
-          dressDropLabel.textContent = isAccessory ? 'Foto accessorio' : 'Foto del capo';
+          dressDropLabel.textContent = isAccessory ? 'Accessory image' : 'Garment image';
         }
         if (modelDropzone) {
           modelDropzone.style.display = isAccessory ? 'none' : '';
@@ -1118,7 +1118,7 @@
           readyCards.forEach((c) => c.classList.remove('active'));
           card.classList.add('active');
           if (modelPreview && modelDropzone) {
-            modelPreview.innerHTML = `<img src="${src}" alt="${name || 'Modella'}" class="studio-upload-thumb">`;
+            modelPreview.innerHTML = `<img src="${src}" alt="${name || 'Model'}" class="studio-upload-thumb">`;
             modelDropzone.classList.add('has-image');
           }
           setProgressModelThumbnail(src);
@@ -1270,7 +1270,7 @@
             .slice(0, 8);
           recentList.innerHTML = '';
           if (!files.length) {
-            recentList.innerHTML = '<div class="studio-recent-empty">Nessuna immagine disponibile</div>';
+            recentList.innerHTML = '<div class="studio-recent-empty">No images available</div>';
             return;
           }
           files.forEach((f) => {
@@ -1282,13 +1282,13 @@
                 <img src="${url}" alt="${f.name}">
               </div>
               <div class="studio-recent-actions">
-                <button class="studio-recent-btn" data-action="open" title="Apri">
+                <button class="studio-recent-btn" data-action="open" title="Open">
                   <i class="fa fa-eye"></i>
                 </button>
-                <a class="studio-recent-btn" href="${url}" download="${f.name}" title="Scarica" onclick="event.stopPropagation()">
+                <a class="studio-recent-btn" href="${url}" download="${f.name}" title="Download" onclick="event.stopPropagation()">
                   <i class="fa fa-download"></i>
                 </a>
-                <button class="studio-recent-btn ghost" data-action="delete" title="Elimina">
+                <button class="studio-recent-btn ghost" data-action="delete" title="Delete">
                   <i class="fa fa-trash"></i>
                 </button>
               </div>`;
@@ -1301,7 +1301,7 @@
               if (action === 'delete') {
                 e.preventDefault();
                 e.stopPropagation();
-                const ok = confirm(`Vuoi eliminare l'immagine "${f.name}"?`);
+                const ok = confirm(`Do you want to delete "${f.name}"?`);
                 if (!ok) return;
                 fetch(`/api/gallery/${encodeURIComponent(f.name)}`, { method: 'DELETE' })
                   .then((resp) => {
@@ -1319,7 +1319,7 @@
           });
         } catch (err) {
           console.error('Recent load failed', err);
-          recentList.innerHTML = '<div class="studio-recent-empty">Errore nel caricamento</div>';
+          recentList.innerHTML = '<div class="studio-recent-empty">Unable to load results</div>';
         }
       };
 
@@ -1362,7 +1362,7 @@
             body: JSON.stringify({ input }),
           });
           if (resp.status === 429) {
-            alert('Limite di richieste raggiunto. Attendi e riprova.');
+            alert('Request limit reached. Please wait and try again.');
             return;
           }
           if (!resp.ok) {
@@ -1377,7 +1377,7 @@
             const full = first.startsWith('http') ? first : `${window.location.origin}/${String(first).replace(/^\/+/, '')}`;
             pendingGeneratedModelUrl = full;
             if (genPreview) {
-              genPreview.innerHTML = `<img src="${full}" alt="Modella generata" class="studio-model-thumb">`;
+              genPreview.innerHTML = `<img src="${full}" alt="Generated model" class="studio-model-thumb">`;
             }
             if (modelReadyStatus) modelReadyStatus.hidden = false;
             if (modelResultActions) modelResultActions.hidden = false;
@@ -1387,7 +1387,7 @@
           }
         } catch (err) {
           console.error('Generate model failed', err);
-          alert('Generazione modella fallita. Riprova.');
+          alert('Model generation failed. Please try again.');
         } finally {
           hideLoader();
         }
@@ -1401,15 +1401,15 @@
         const customBackgroundPrompt = backgroundPrompt?.value?.trim() || '';
 
         if (!hasDress) {
-          alert('Carica la foto del capo.');
+          alert('Upload a garment image.');
           return;
         }
         if (!isAccessory && !hasModel && !selectedReadyModel) {
-          alert('Carica la foto della modella.');
+          alert('Upload a model image.');
           return;
         }
         if (selectedBackground === 'custom' && !customBackgroundPrompt) {
-          alert('Inserisci un prompt background personalizzato o scegli un background predefinito.');
+          alert('Add a custom environment or choose a preset environment.');
           return;
         }
 
@@ -1451,7 +1451,7 @@
             body: JSON.stringify({ input }),
           });
           if (resp.status === 429) {
-            alert('Limite di richieste raggiunto. Attendi e riprova.');
+            alert('Request limit reached. Please wait and try again.');
             return;
           }
           if (!resp.ok) {
@@ -1468,7 +1468,7 @@
           }
         } catch (err) {
           console.error('Generate failed', err);
-          alert('Generazione fallita. Riprova.');
+          alert('Creation failed. Please try again.');
         } finally {
           hideLoader();
         }
@@ -1479,7 +1479,7 @@
 
       regenBtn?.addEventListener('click', async () => {
         if (!lastInput) {
-          alert('Nessuna generazione precedente.');
+          alert('No previous result available.');
           return;
         }
         showLoader();
@@ -1502,8 +1502,8 @@
             applyGeneratedResult(full, saved.length || output.length || 1);
           }
         } catch (err) {
-          console.error('Rigenerazione fallita', err);
-          alert('Rigenerazione fallita.');
+          console.error('Regeneration failed', err);
+          alert('Regeneration failed.');
         } finally {
           hideLoader();
         }
@@ -1511,7 +1511,7 @@
 
       poseBtn?.addEventListener('click', async () => {
         if (!lastImageUrl) {
-          alert('Nessuna immagine da usare per il cambio posa.');
+          alert('No result available for pose change.');
           return;
         }
         const FIXED_POSE_PROMPT =
@@ -1542,8 +1542,8 @@
             applyGeneratedResult(full, saved.length || output.length || 1);
           }
         } catch (err) {
-          console.error('Cambio posa fallito', err);
-          alert('Cambio posa fallito.');
+          console.error('Pose change failed', err);
+          alert('Pose change failed.');
         } finally {
           hideLoader();
         }
