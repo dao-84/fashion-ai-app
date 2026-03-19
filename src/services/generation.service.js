@@ -1,12 +1,41 @@
 const { saveOutputItem, normalizeImageInput } = require('../utils/imageHelpers');
 const { hasBannedKeyword, mentionsMinor } = require('../utils/promptGuards');
 const { cleanTextInput } = require('../utils/stringHelpers');
+const { retryAsync } = require('../utils/asyncRetry');
 
-function createServiceError(status, message, details) {
+function createServiceError(status, message, details, code) {
   const error = new Error(message);
   error.status = status;
   if (details !== undefined) error.details = details;
+  if (code !== undefined) error.code = code;
   return error;
+}
+
+const RETRYABLE_PROVIDER_MESSAGES = [
+  'too many requests',
+  'high demand',
+  'service is currently unavailable',
+  'temporarily unavailable',
+  'please try again later',
+  'e003',
+];
+
+function getErrorText(error) {
+  return [
+    error?.message,
+    typeof error?.details === 'string' ? error.details : '',
+    typeof error?.cause?.message === 'string' ? error.cause.message : '',
+  ]
+    .filter(Boolean)
+    .join(' | ')
+    .toLowerCase();
+}
+
+function isRetryableProviderOverload(error) {
+  if (!error) return false;
+  if (Number(error.status) === 429) return true;
+  const text = getErrorText(error);
+  return RETRYABLE_PROVIDER_MESSAGES.some((message) => text.includes(message));
 }
 
 function createGenerationService(deps) {
@@ -15,7 +44,6 @@ function createGenerationService(deps) {
     proxyIntegration,
     log,
     logEmoji,
-    REPLICATE_MODEL_VERSION_IDENTITY,
     REPLICATE_MODEL_VERSION,
     REPLICATE_UPSCALE_MODEL_VERSION,
     REPLICATE_REFINER_MODEL_VERSION,
@@ -77,8 +105,8 @@ function createGenerationService(deps) {
 
       try {
         log.info(logEmoji.generate, `[generate-model] prompt: ${finalPrompt}`);
-        log.info(logEmoji.generate, '[generate-model] richiesta a Replicate avviata (prunaai/z-image-turbo)');
-        const output = await replicateIntegration.runModel(REPLICATE_MODEL_VERSION_IDENTITY, inputPayload);
+        log.info(logEmoji.generate, `[generate-model] richiesta a Replicate avviata (${REPLICATE_MODEL_VERSION})`);
+        const output = await replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
         const saved = await collectSavedOutputs(output);
         log.info(logEmoji.generate, `[generate-model] completata. File salvati: ${saved.length}`);
         return { output, saved };
@@ -136,11 +164,42 @@ function createGenerationService(deps) {
 
           log.info(logEmoji.generate, `[generate] aspect_ratio: ${inputPayload.aspect_ratio}`);
 
-          const output = await replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
+          const output = await retryAsync(
+            () => replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload),
+            {
+              maxAttempts: 3,
+              delaysMs: [2000, 5000],
+              shouldRetry: (error) => isRetryableProviderOverload(error),
+              onRetry: async (error, attempt, delayMs) => {
+                const reason = error?.message || 'temporary provider overload';
+                const retryLog = typeof log.warn === 'function' ? log.warn.bind(log) : log.info.bind(log);
+                retryLog(
+                  logEmoji.warning || logEmoji.generate || logEmoji.error,
+                  `[generate] retry ${attempt + 1}/3 in ${delayMs}ms. Reason: ${reason}`
+                );
+              },
+              onGiveUp: async (error, attempt) => {
+                const classification = isRetryableProviderOverload(error) ? 'retryable' : 'non-retryable';
+                log.error(
+                  logEmoji.error,
+                  `[generate] retries exhausted after ${attempt} attempt(s). Final classification: ${classification}`,
+                  error
+                );
+              },
+            }
+          );
           const saved = await collectSavedOutputs(output);
           log.info(logEmoji.generate, `[generate] completata. File salvati: ${saved.length}`);
           return { type: 'json', status: 200, body: { output, saved } };
         } catch (error) {
+          if (isRetryableProviderOverload(error)) {
+            throw createServiceError(
+              503,
+              'The model is currently busy due to high demand. Please try again in a few seconds.',
+              undefined,
+              'MODEL_BUSY'
+            );
+          }
           if (error.status) throw error;
           log.error(logEmoji.error, 'Replicate dice no.', error);
           throw createServiceError(500, 'Replicate request failed', error.message);

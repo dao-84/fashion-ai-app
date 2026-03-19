@@ -22,6 +22,13 @@ function createGenerationController(deps) {
         }
         return res.status(result?.status || 200).json(result?.body ?? result);
       } catch (error) {
+        if (error.code === 'MODEL_BUSY') {
+          return res.status(error.status || 503).json({
+            error: error.message,
+            code: error.code,
+          });
+        }
+
         if (error.message === 'Upstream model error') {
           return res.status(error.status || 500).json({
             error: 'Upstream model error',

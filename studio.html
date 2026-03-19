@@ -34,7 +34,14 @@
 
   <main class="studio-shell">
     <!-- STUDIO HEADER -->
-    <section class="studio-page-header"></section>
+    <section class="studio-page-header">
+      <div class="studio-page-header__content">
+        <h1 class="studio-page-header__title">
+          <span>Create your product photoshoot</span>
+          <span class="studio-page-header__subtitle">Upload your garment, choose the visual direction, and generate ready-to-sell fashion images in seconds.</span>
+        </h1>
+      </div>
+    </section>
 
     <div class="studio-layout">
       <!-- STUDIO INPUT PANEL -->
@@ -62,22 +69,30 @@
               <button type="button" class="studio-progress-step is-active" data-step="model" aria-label="Model">
                 <span class="studio-progress-step__thumb" aria-hidden="true"></span>
                 <span class="studio-progress-step__label">Model</span>
+                <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
-              <button type="button" class="studio-progress-step" data-step="garment" aria-label="Garment type">
+              <button type="button" class="studio-progress-step" data-step="garment" aria-label="Garment">
                 <span class="studio-progress-step__thumb" aria-hidden="true"></span>
-                <span class="studio-progress-step__label">Garment type</span>
+                <span class="studio-progress-step__label">Garment</span>
+                <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
-              <button type="button" class="studio-progress-step" data-step="style" aria-label="Style">
+              <button type="button" class="studio-progress-step" data-step="style" aria-label="Look &amp; feel">
                 <span class="studio-progress-step__thumb" aria-hidden="true"></span>
-                <span class="studio-progress-step__label">Style</span>
+                <span class="studio-progress-step__label">Look &amp; feel</span>
+                <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
               <button type="button" class="studio-progress-step" data-step="background" aria-label="Background">
                 <span class="studio-progress-step__thumb" aria-hidden="true"></span>
                 <span class="studio-progress-step__label">Background</span>
+                <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
             </div>
             <div class="studio-progress-content" id="studioProgressContent">
               <div class="studio-progress-panel is-active" data-step-panel="model">
+                <div class="studio-progress-panel-head">
+                  <h3 class="studio-progress-panel-title">Choose your model</h3>
+                  <p class="studio-progress-panel-helper">Select a ready model or generate a new one.</p>
+                </div>
                 <div class="studio-ready">
                   <div class="studio-ready-grid">
                     <div class="studio-ready-card" data-model-src="images/models/Sofia.jpeg" data-model-name="Sofia">
@@ -111,27 +126,39 @@
                   </div>
                 </div>
                 <div class="studio-progress-panel-actions">
-                  <button type="button" class="studio-progress-confirm" data-next-step="garment">Confirm model</button>
+                  <button type="button" class="studio-progress-confirm" data-next-step="garment">Next step</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="garment" hidden>
+                <div class="studio-progress-panel-head">
+                  <h3 class="studio-progress-panel-title">Select the garment</h3>
+                  <p class="studio-progress-panel-helper">Choose the product category you want to render.</p>
+                </div>
                 <div class="studio-progress-control-wrap">
                   <div class="dress-type-options studio-progress-dress-options" id="studioProgressDressTypeOptions"></div>
                 </div>
                 <div class="studio-progress-panel-actions">
-                  <button type="button" class="studio-progress-confirm" data-next-step="style">Confirm garment type</button>
+                  <button type="button" class="studio-progress-confirm" data-next-step="style">Next step</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="style" hidden>
+                <div class="studio-progress-panel-head">
+                  <h3 class="studio-progress-panel-title">Define the look &amp; feel</h3>
+                  <p class="studio-progress-panel-helper">Pick the visual direction for your final product image.</p>
+                </div>
                 <div class="studio-progress-control-wrap">
                   <div class="style-type-options studio-progress-style-options" id="studioProgressStyleOptions"></div>
                   <div class="prompt-suggestions studio-inline-suggestions studio-progress-suggestions" id="studioProgressSuggestions" hidden></div>
                 </div>
                 <div class="studio-progress-panel-actions">
-                  <button type="button" class="studio-progress-confirm" data-next-step="background">Confirm style</button>
+                  <button type="button" class="studio-progress-confirm" data-next-step="background">Next step</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="background" hidden>
+                <div class="studio-progress-panel-head">
+                  <h3 class="studio-progress-panel-title">Choose the background</h3>
+                  <p class="studio-progress-panel-helper">Set the final environment for your generated photoshoot.</p>
+                </div>
                 <div class="studio-progress-background">
                   <label class="studio-progress-field">
                     <span>Background</span>
@@ -155,12 +182,15 @@
                   </label>
                 </div>
                 <div class="studio-progress-panel-actions">
-                  <button type="button" class="studio-progress-confirm" data-next-step="generate">Confirm background</button>
+                  <button type="button" class="studio-progress-confirm" data-next-step="generate">Next step</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="generate" hidden>
+                <div class="studio-progress-panel-head">
+                  <h3 class="studio-progress-panel-title">Generate your result</h3>
+                  <p class="studio-progress-panel-helper">Review your setup and create your final product image.</p>
+                </div>
                 <div class="studio-progress-generate">
-                  <p class="studio-progress-generate-copy">Review your selections and generate the result</p>
                   <div class="studio-progress-field">
                     <span>Aspect ratio</span>
                     <div class="studio-progress-aspect-options" id="studioProgressAspectOptions">
@@ -171,7 +201,7 @@
                       <button type="button" class="studio-progress-aspect-btn" data-aspect="16:9">16:9</button>
                     </div>
                   </div>
-                  <button type="button" class="upload-action" id="studioProgressGenerate">Genera</button>
+                  <button type="button" class="upload-action" id="studioProgressGenerate">Generate photoshoot</button>
                 </div>
               </div>
             </div>
@@ -244,24 +274,35 @@
       <!-- STUDIO OUTPUT PANEL -->
       <section class="studio-column studio-main">
         <div class="studio-viewer">
+          <div class="studio-viewer-head">
+            <div class="studio-viewer-head__copy">
+              <h3 class="studio-viewer-head__title">Generated result</h3>
+              <p class="studio-viewer-head__subtitle">Your latest product photoshoot output</p>
+            </div>
+            <span class="studio-viewer-status">Result ready</span>
+          </div>
           <div class="studio-viewer-body" id="studioViewerBody">
             <img id="studioMainImg" alt="Immagine generata">
+            <div class="studio-viewer-empty">
+              <div class="studio-viewer-empty__title">Your result will appear here</div>
+              <p class="studio-viewer-empty__subtitle">Complete the workflow and generate your photoshoot.</p>
+            </div>
           </div>
           <div class="studio-actions">
-            <button class="image-viewer-btn" id="studioOpen">Apri</button>
-            <button class="image-viewer-btn" id="studioSave">Salva in gallery</button>
-            <button class="image-viewer-btn" id="studioUpscale">Upscale</button>
-            <button class="image-viewer-btn" id="studioPose">Cambia posa</button>
-            <button class="image-viewer-btn" id="studioBg">Cambia background</button>
-            <button class="image-viewer-btn" id="studioRegen">Rigenera</button>
-            <button class="image-viewer-btn" id="studioRefiner">Refiner</button>
-            <a class="image-viewer-btn" id="studioDownload" href="#" download title="Scarica immagine"><i class="fa fa-download" style="margin-right:6px;"></i>Scarica</a>
+            <div class="studio-actions-group studio-actions-group--single">
+              <div class="studio-actions-group__buttons">
+                <button class="image-viewer-btn image-viewer-btn--utility" id="studioOpen">Open</button>
+                <button class="image-viewer-btn image-viewer-btn--utility" id="studioPose">Change pose</button>
+                <button class="image-viewer-btn image-viewer-btn--enhance" id="studioRegen">Regenerate</button>
+                <a class="image-viewer-btn image-viewer-btn--download" id="studioDownload" href="#" download title="Download image"><i class="fa fa-download" style="margin-right:6px;"></i>Download</a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
       <section class="studio-column studio-right studio-recent-panel">
         <div class="studio-panel">
-          <h3 class="studio-panel-title">Ultime immagini</h3>
+          <h3 class="studio-panel-title">Recent results</h3>
           <div class="studio-recent-list" id="studioRecent"></div>
         </div>
       </section>
@@ -401,6 +442,7 @@
       const backgroundSelect = document.getElementById('studioBackground');
       const backgroundPrompt = document.getElementById('studioBackgroundPrompt');
       const generateBtn = document.getElementById('studioGenerate');
+
       const progressAspectOptions = document.getElementById('studioProgressAspectOptions');
       const progressSteps = Array.from(document.querySelectorAll('#studioProgressSteps .studio-progress-step'));
       const progressPanels = Array.from(document.querySelectorAll('#studioProgressContent .studio-progress-panel'));
@@ -413,20 +455,20 @@
       const progressConfirmButtons = Array.from(document.querySelectorAll('.studio-progress-confirm'));
       const progressModelThumb = document.querySelector('.studio-progress-step[data-step="model"] .studio-progress-step__thumb');
       const progressGarmentThumb = document.querySelector('.studio-progress-step[data-step="garment"] .studio-progress-step__thumb');
+
       const dressDropzone = dressInput?.closest('.upload-dropzone');
       const dressDropLabel = dressDropzone?.querySelector('.drop-label');
       const modelDropzone = modelInput?.closest('.upload-dropzone');
       const readySection = document.querySelector('.studio-ready');
+
       const mainImg = document.getElementById('studioMainImg');
       const openBtn = document.getElementById('studioOpen');
-      const saveBtn = document.getElementById('studioSave');
-      const upscaleBtn = document.getElementById('studioUpscale');
       const poseBtn = document.getElementById('studioPose');
-      const bgBtn = document.getElementById('studioBg');
       const regenBtn = document.getElementById('studioRegen');
-      const refinerBtn = document.getElementById('studioRefiner');
+      const studioDownloadBtn = document.getElementById('studioDownload');
       const recentList = document.getElementById('studioRecent');
       const loader = document.getElementById('studioLoader');
+
       const readyCards = Array.from(document.querySelectorAll('.studio-ready-card'));
       const genCard = document.querySelector('.studio-generate-card');
       const genCardAnim = document.getElementById('studioGenCardAnim');
@@ -592,11 +634,12 @@
           'luxury handbag photography on model, focus on the bag silhouette and hand placement, premium leather texture, refined commercial fashion styling, high-end editorial accessory shot',
       };
 
-      let selectedDressType = 'dress';
-      let selectedStyle = 'vogue';
+      let selectedDressType = null;
+      let selectedStyle = null;
       let selectedAccessorySuggestion = null;
       let selectedReadyModel = null;
       let selectedAspect = '3:4';
+      let hasChosenBackground = false;
       let pendingGeneratedModelUrl = '';
       let lastInput = null;
       let lastImageUrl = '';
@@ -633,6 +676,21 @@
 
       loadCredit();
 
+      const setMainImage = (url) => {
+        if (!url) return;
+        lastImageUrl = url;
+        if (mainImg) {
+          mainImg.src = url;
+        }
+      };
+
+      const applyGeneratedResult = (url, imageCount = 1) => {
+        if (!url) return;
+        setMainImage(url);
+        refreshRecent();
+        chargeCredits(Math.max(imageCount, 1));
+      };
+
       const openModelBuilder = () => {
         if (modelReadyStatus) modelReadyStatus.hidden = true;
         if (modelResultActions) modelResultActions.hidden = true;
@@ -661,6 +719,7 @@
         }
         setProgressModelThumbnail(url);
         if (modelInput) modelInput.value = '';
+        setProgressStep(progressCurrentStep);
       };
 
       settingsToggle?.addEventListener('click', () => {
@@ -751,19 +810,59 @@
 
       const getProgressStepIndex = (stepName) => progressStepOrder.indexOf(stepName);
 
+      const hasSelectedModel = () =>
+        Boolean(selectedReadyModel || modelPreview?.querySelector('img')?.getAttribute('src'));
+
+      const isProgressStepReady = (stepName) => {
+        switch (stepName) {
+          case 'model':
+            return hasSelectedModel();
+          case 'garment':
+            return Boolean(selectedDressType);
+          case 'style':
+            return Boolean(selectedStyle);
+          case 'background':
+            return hasChosenBackground;
+          default:
+            return true;
+        }
+      };
+
+      const getProgressAccessibleIndex = () => {
+        let accessibleIndex = 0;
+        if (isProgressStepReady('model')) accessibleIndex = 1;
+        if (accessibleIndex >= 1 && isProgressStepReady('garment')) accessibleIndex = 2;
+        if (accessibleIndex >= 2 && isProgressStepReady('style')) accessibleIndex = 3;
+        if (accessibleIndex >= 3 && isProgressStepReady('background')) accessibleIndex = 4;
+        return accessibleIndex;
+      };
+
+      const updateProgressConfirmState = () => {
+        progressConfirmButtons.forEach((button) => {
+          const panel = button.closest('.studio-progress-panel');
+          const stepName = panel?.dataset.stepPanel || '';
+          const isReady = isProgressStepReady(stepName);
+          button.disabled = !isReady;
+          button.classList.toggle('is-ready', isReady);
+          button.setAttribute('aria-disabled', isReady ? 'false' : 'true');
+        });
+      };
+
       const setProgressStep = (stepName) => {
         const nextStep = stepName || 'model';
         const nextStepIndex = getProgressStepIndex(nextStep);
+        const visibleUntilIndex = Math.max(progressUnlockedIndex, nextStepIndex, getProgressAccessibleIndex());
         progressSteps.forEach((stepBtn) => {
           const stepIndex = getProgressStepIndex(stepBtn.dataset.step || '');
           const isActive = stepBtn.dataset.step === nextStep;
-          const isVisible = stepIndex > -1 && stepIndex <= progressUnlockedIndex;
+          const isLocked = stepIndex > visibleUntilIndex;
           stepBtn.classList.toggle('is-active', isActive);
-          stepBtn.classList.toggle('is-complete', stepIndex > -1 && stepIndex < nextStepIndex && stepIndex <= progressUnlockedIndex);
-          stepBtn.classList.toggle('is-locked', !isVisible);
-          stepBtn.hidden = !isVisible;
-          stepBtn.disabled = !isVisible;
-          stepBtn.setAttribute('aria-selected', isActive && isVisible ? 'true' : 'false');
+          stepBtn.classList.toggle('is-complete', stepIndex > -1 && stepIndex < nextStepIndex && stepIndex <= visibleUntilIndex);
+          stepBtn.classList.toggle('is-locked', isLocked);
+          stepBtn.hidden = false;
+          stepBtn.disabled = isLocked;
+          stepBtn.setAttribute('aria-disabled', isLocked ? 'true' : 'false');
+          stepBtn.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
         progressPanels.forEach((panel) => {
           const isActive = panel.dataset.stepPanel === nextStep;
@@ -773,6 +872,7 @@
         const progressStepsContainer = document.getElementById('studioProgressSteps');
         progressStepsContainer?.classList.toggle('is-empty', progressUnlockedIndex < 0);
         progressCurrentStep = nextStep;
+        updateProgressConfirmState();
       };
 
       const unlockProgressStep = (stepName) => {
@@ -859,10 +959,11 @@
         selectedReadyModel = null;
         readyCards.forEach((c) => c.classList.remove('active'));
         setProgressModelThumbnail(modelPreview?.querySelector('img')?.src || '');
+        setProgressStep(progressCurrentStep);
       });
 
       const setDressTypeValue = (type) => {
-        selectedDressType = type || 'dress';
+        selectedDressType = type || null;
         dressTypeOptions.forEach((b) => b.classList.toggle('active', b.dataset.type === selectedDressType));
         setProgressGarmentThumbnail(selectedDressType);
         if (selectedDressType !== 'accessory') {
@@ -872,6 +973,7 @@
         renderProgressDressOptions();
         renderStyleOptions();
         updateSuggestionVisibility();
+        setProgressStep(progressCurrentStep);
       };
 
       const setStyleValue = (style) => {
@@ -880,6 +982,7 @@
         progressStyleOptions?.querySelectorAll('.style-type-btn').forEach((b) => {
           b.classList.toggle('active', b.dataset.style === selectedStyle);
         });
+        setProgressStep(progressCurrentStep);
       };
 
       const updateModelUiVisibility = () => {
@@ -983,7 +1086,12 @@
         }
       });
 
-      progressBackgroundSelect?.addEventListener('change', () => syncBackgroundFields('progress'));
+      progressBackgroundSelect?.addEventListener('change', () => {
+        hasChosenBackground = true;
+        syncBackgroundFields('progress');
+        updateProgressConfirmState();
+        setProgressStep(progressCurrentStep);
+      });
       progressBackgroundPrompt?.addEventListener('input', () => syncBackgroundFields('progress'));
       progressAspectOptions?.addEventListener('click', (e) => {
         const btn = e.target.closest('.studio-progress-aspect-btn');
@@ -991,7 +1099,12 @@
         e.preventDefault();
         setAspectValue(btn.dataset.aspect || '3:4');
       });
-      backgroundSelect?.addEventListener('change', () => syncBackgroundFields('original'));
+      backgroundSelect?.addEventListener('change', () => {
+        hasChosenBackground = true;
+        syncBackgroundFields('original');
+        updateProgressConfirmState();
+        setProgressStep(progressCurrentStep);
+      });
       backgroundPrompt?.addEventListener('input', () => syncBackgroundFields('original'));
       aspectSelect?.addEventListener('change', () => syncAspectField('original'));
       progressGenerateBtn?.addEventListener('click', () => generateBtn?.click());
@@ -1012,6 +1125,7 @@
           if (modelInput) {
             modelInput.value = '';
           }
+          setProgressStep(progressCurrentStep);
         });
       });
 
@@ -1181,8 +1295,7 @@
             item.addEventListener('click', (e) => {
               const action = e.target.closest('.studio-recent-btn')?.dataset?.action;
               if (action === 'open') {
-                lastImageUrl = url;
-                if (mainImg) mainImg.src = url;
+                setMainImage(url);
                 return;
               }
               if (action === 'delete') {
@@ -1200,8 +1313,7 @@
                 return;
               }
               // default: set preview
-              lastImageUrl = url;
-              if (mainImg) mainImg.src = url;
+              setMainImage(url);
             });
             recentList.appendChild(item);
           });
@@ -1222,6 +1334,7 @@
       syncBackgroundFields('original');
       updateSuggestionVisibility();
       setProgressStep('model');
+      updateProgressConfirmState();
 
       const generateModel = async () => {
         const settings = {
@@ -1351,10 +1464,7 @@
           const first = saved[0] || output[0];
           if (first) {
             const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
-            lastImageUrl = full;
-            if (mainImg) mainImg.src = full;
-            refreshRecent();
-            chargeCredits(Math.max(saved.length || output.length || 1, 1));
+            applyGeneratedResult(full, saved.length || output.length || 1);
           }
         } catch (err) {
           console.error('Generate failed', err);
@@ -1389,51 +1499,11 @@
           const first = saved[0] || output[0];
           if (first) {
             const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
-            lastImageUrl = full;
-            if (mainImg) mainImg.src = full;
-            refreshRecent();
-            chargeCredits(Math.max(saved.length || output.length || 1, 1));
+            applyGeneratedResult(full, saved.length || output.length || 1);
           }
         } catch (err) {
           console.error('Rigenerazione fallita', err);
           alert('Rigenerazione fallita.');
-        } finally {
-          hideLoader();
-        }
-      });
-
-      refinerBtn?.addEventListener('click', async () => {
-        if (!lastImageUrl) {
-          alert('Nessuna immagine da rifinire.');
-          return;
-        }
-        const FIXED_REFINER_PROMPT =
-          'High-fidelity refinement of the original image. Preserve the exact same subject, materials, textures, fabric structure, colors and proportions. No changes to design, shape, stitching, pattern or surface. Enhance clarity, micro-detail and edge definition only. Photorealistic, neutral refinement.';
-        showLoader();
-        try {
-          const resp = await fetch('/api/refine', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: lastImageUrl, prompt: FIXED_REFINER_PROMPT }),
-          });
-          if (!resp.ok) {
-            const txt = await resp.text();
-            throw new Error(`Errore API (${resp.status}): ${txt}`);
-          }
-          const data = await resp.json();
-          const saved = data?.saved || [];
-          const output = data?.output || [];
-          const first = saved[0] || output[0];
-          if (first) {
-            const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
-            lastImageUrl = full;
-            if (mainImg) mainImg.src = full;
-            refreshRecent();
-            chargeCredits(Math.max(saved.length || output.length || 1, 1));
-          }
-        } catch (err) {
-          console.error('Refiner fallito', err);
-          alert('Refiner fallito.');
         } finally {
           hideLoader();
         }
@@ -1469,10 +1539,7 @@
           const first = saved[0] || output[0];
           if (first) {
             const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
-            lastImageUrl = full;
-            if (mainImg) mainImg.src = full;
-            refreshRecent();
-            chargeCredits(Math.max(saved.length || output.length || 1, 1));
+            applyGeneratedResult(full, saved.length || output.length || 1);
           }
         } catch (err) {
           console.error('Cambio posa fallito', err);
@@ -1482,50 +1549,10 @@
         }
       });
 
-      upscaleBtn?.addEventListener('click', async () => {
-        if (!lastImageUrl) {
-          alert('Nessuna immagine da usare per l\'upscale.');
-          return;
-        }
-        showLoader();
-        try {
-          const resp = await fetch('/api/upscale', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: lastImageUrl }),
-          });
-          if (!resp.ok) {
-            const txt = await resp.text();
-            throw new Error(`Errore API (${resp.status}): ${txt}`);
-          }
-          const data = await resp.json();
-          const saved = data?.saved || [];
-          const output = data?.output || [];
-          const first = saved[0] || output[0];
-          if (first) {
-            const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
-            lastImageUrl = full;
-            if (mainImg) mainImg.src = full;
-            refreshRecent();
-            chargeCredits(Math.max(saved.length || output.length || 1, 1));
-          }
-        } catch (err) {
-          console.error('Upscale fallito', err);
-          alert('Upscale fallito.');
-        } finally {
-          hideLoader();
-        }
-      });
-
-      bgBtn?.addEventListener('click', () => {
-        alert('Per cambiare background aggiorna il prompt e premi Genera.');
-      });
-
       openBtn?.addEventListener('click', () => {
         if (lastImageUrl) window.open(lastImageUrl, '_blank');
       });
 
-      const studioDownloadBtn = document.getElementById('studioDownload');
       const updateDownload = () => {
         if (studioDownloadBtn && lastImageUrl) {
           studioDownloadBtn.href = lastImageUrl;
@@ -1535,10 +1562,6 @@
       if (mainImg) {
         new MutationObserver(updateDownload).observe(mainImg, { attributes: true, attributeFilter: ['src'] });
       }
-
-      saveBtn?.addEventListener('click', () => {
-        if (lastImageUrl) window.open(lastImageUrl, '_blank');
-      });
 
       setTimeout(() => mountGenAnimation(0), 200);
     })();
