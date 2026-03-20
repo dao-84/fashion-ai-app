@@ -5069,6 +5069,15 @@ body::after {
 	text-align: center;
 }
 
+.studio-progress-style-options .style-type-btn__description {
+	display: block;
+	font-size: 10px;
+	line-height: 1.35;
+	color: var(--text-secondary);
+	text-align: center;
+	min-height: 28px;
+}
+
 .studio-progress-style-options .style-type-btn__fallback {
 	display: flex;
 	align-items: center;
@@ -5717,6 +5726,14 @@ body::after {
 	background: rgba(0, 0, 0, 0.2);
 }
 
+.studio-recent-thumb.is-loading {
+	background:
+		linear-gradient(110deg, rgba(255, 255, 255, 0.035) 8%, rgba(255, 255, 255, 0.11) 18%, rgba(255, 255, 255, 0.035) 33%),
+		rgba(0, 0, 0, 0.22);
+	background-size: 220% 100%;
+	animation: studioRecentShimmer 1.3s linear infinite;
+}
+
 .studio-recent-thumb img {
 	position: absolute;
 	inset: 0;
@@ -5724,6 +5741,12 @@ body::after {
 	height: 100%;
 	object-fit: cover;
 	display: block;
+	opacity: 1;
+	transition: opacity 0.22s ease;
+}
+
+.studio-recent-thumb.is-loading img {
+	opacity: 0;
 }
 
 .studio-recent-item:hover {
@@ -5774,6 +5797,15 @@ body::after {
 	color: var(--text-secondary);
 	font-size: 13px;
 	padding: 12px 6px;
+}
+
+@keyframes studioRecentShimmer {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
 }
 
 .studio-ready {
@@ -6508,6 +6540,15 @@ select option:checked {
 	color: var(--text-primary);
 	letter-spacing: 0.5px;
 	text-align: center;
+}
+
+.studio-settings .style-type-options .style-type-btn__description {
+	display: block;
+	font-size: 10px;
+	line-height: 1.35;
+	color: var(--text-secondary);
+	text-align: center;
+	min-height: 28px;
 }
 
 .studio-settings .style-type-options .style-type-btn__fallback {

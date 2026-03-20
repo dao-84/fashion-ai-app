@@ -771,8 +771,38 @@ https://templatemo.com/tm-600-prism-flux
         viewerClose?.addEventListener('click', hideImageViewer);
         viewerBackdrop?.addEventListener('click', hideImageViewer);
         viewerSave?.addEventListener('click', hideImageViewer);
-        const FIXED_POSE_PROMPT =
-            'Change the pose of the subject while preserving identity: full-body, fashion editorial, consistent face and outfit details, new dynamic pose with natural balance';
+        const FIXED_POSE_PROMPT = `Modify the pose and camera framing of the subject while preserving the original image identity, outfit, garment details, proportions, colors, and overall visual consistency.
+
+The garment must remain unchanged in shape, fit, texture, and structure.
+
+Generate a natural fashion pose, choosing randomly but realistically between:
+- standing relaxed pose (weight shifted, one leg slightly forward)
+- slight walking motion
+- subtle contrapposto pose
+- upper body fashion pose (hands near face or waist)
+- seated elegant pose (if composition allows)
+
+Camera framing: choose one:
+- full body shot
+- 3/4 shot
+- waist-up shot
+
+Camera angle: slightly vary between:
+- eye-level
+- slight low angle
+- slight high angle
+
+Pose must remain believable, balanced, and physically correct.
+
+Expression: neutral, confident, or softly natural (no exaggerated emotions).
+
+Lighting: keep consistent with the original image.
+
+Background: preserve original environment and perspective.
+
+Style: realistic fashion photography, clean, professional.
+
+Do not introduce distortions, extra elements, text, or changes to the clothing.`;
 
         viewerPose?.addEventListener('click', async () => {
             const currentSrc = viewerImg?.src;

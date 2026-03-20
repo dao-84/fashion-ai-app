@@ -87,19 +87,11 @@ function createGenerationService(deps) {
         throw createServiceError(400, 'Richiesta non consentita: il prompt contiene termini non ammessi.');
       }
 
-      const alreadyHasBase =
-        cleanedPrompt.toLowerCase().includes(DEFAULT_MODEL_BASE_PROMPT.toLowerCase());
-      const finalPrompt = alreadyHasBase
-        ? cleanedPrompt
-        : `${DEFAULT_MODEL_BASE_PROMPT} ${cleanedPrompt}`.trim();
-
-      if (finalPrompt.length > 500) {
-        throw createServiceError(400, 'Prompt troppo lungo dopo la normalizzazione. Limite massimo 500 caratteri.');
-      }
+      const finalPrompt = cleanedPrompt;
 
       const inputPayload = {
         prompt: finalPrompt,
-        aspect_ratio: '3:4',
+        aspect_ratio: input.aspect_ratio || '4:3',
         output_format: input.output_format || 'jpg',
       };
 

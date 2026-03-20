@@ -76,9 +76,9 @@
                 <span class="studio-progress-step__label">Style</span>
                 <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
-              <button type="button" class="studio-progress-step" data-step="background" aria-label="Scene">
+              <button type="button" class="studio-progress-step" data-step="background" aria-label="Custom Scene">
                 <span class="studio-progress-step__thumb" aria-hidden="true"></span>
-                <span class="studio-progress-step__label">Scene</span>
+                <span class="studio-progress-step__label">Custom Scene</span>
                 <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
             </div>
@@ -172,16 +172,12 @@
               </div>
               <div class="studio-progress-panel" data-step-panel="background" hidden>
                 <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title">Choose the scene</h3>
-                  <p class="studio-progress-panel-helper">Choose the background.</p>
+                  <h3 class="studio-progress-panel-title">Custom Scene (optional)</h3>
+                  <p class="studio-progress-panel-helper">Add a custom environment if you want to guide the background.</p>
                 </div>
-                <div class="studio-progress-control-wrap">
-                  <div class="style-type-options studio-progress-style-options" id="studioProgressBackgroundOptions"></div>
-                </div>
-                <input type="hidden" id="studioProgressBackground" value="lookbook-studio">
                 <div class="studio-progress-background">
                   <label class="studio-progress-field">
-                    <span>Custom scene</span>
+                    <span>Custom Scene (optional)</span>
                     <textarea id="studioProgressBackgroundPrompt" rows="3" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
                   </label>
                 </div>
@@ -243,33 +239,55 @@
             </button>
           </div>
           <div class="style-type-options" id="studioStyleOptions">
-            <button class="style-type-btn" data-style="vogue">
-              <img src="images/style/vogue.jpeg" alt="Vogue style">
-              <span class="style-type-btn__label">Vogue</span>
+            <button class="style-type-btn" data-style="ecommerce">
+              <img src="images/style/ecommerce.jpeg" alt="E-commerce Clean style">
+              <span class="style-type-btn__label">E-commerce Clean</span>
+              <span class="style-type-btn__description">Minimal, clean, commercial</span>
             </button>
-            <button class="style-type-btn" data-style="fashion-look-book">
-              <img src="images/style/lookbook.jpeg" alt="Lookbook style">
-              <span class="style-type-btn__label">Lookbook</span>
+            <button class="style-type-btn" data-style="minimal" aria-label="Scandinavian Minimal">
+              <img src="images/style/minimal.jpeg" alt="Scandinavian Minimal style">
+              <span class="style-type-btn__label">Scandinavian Minimal</span>
+              <span class="style-type-btn__description">Soft light, calm, neutral</span>
             </button>
-            <button class="style-type-btn" data-style="bw">
-              <img src="images/style/black_white.jpeg" alt="Black and white style">
-              <span class="style-type-btn__label">B&amp;W</span>
+            <button class="style-type-btn" data-style="dark" aria-label="Dark Luxury">
+              <img src="images/style/Dark_luxury.jpeg" alt="Dark Luxury style">
+              <span class="style-type-btn__label">Dark Luxury</span>
+              <span class="style-type-btn__description">Moody, elegant, evening campaign</span>
             </button>
-            <button class="style-type-btn" data-style="streetwear-editorial">
-              <img src="images/style/streetwear.jpeg" alt="Streetwear style">
-              <span class="style-type-btn__label">Streetwear</span>
+            <button class="style-type-btn" data-style="editorial">
+              <img src="images/style/editorial.jpeg" alt="Editorial style">
+              <span class="style-type-btn__label">Editorial</span>
+              <span class="style-type-btn__description">Refined, elevated, high-fashion</span>
             </button>
-            <button class="style-type-btn" data-style="grid" aria-label="Grid">
+            <button class="style-type-btn" data-style="luxury">
+              <img src="images/style/luxury_indoor.jpeg" alt="Luxury Indoor style">
+              <span class="style-type-btn__label">Luxury Indoor</span>
+              <span class="style-type-btn__description">Warm, premium, elegant interior</span>
+            </button>
+            <button class="style-type-btn" data-style="street" aria-label="Street Style">
+              <img src="images/style/street_style.jpeg" alt="Street Style">
+              <span class="style-type-btn__label">Street Style</span>
+              <span class="style-type-btn__description">Dynamic, spontaneous, modern</span>
+            </button>
+            <button class="style-type-btn" data-style="runway" aria-label="Grid">
               <img src="images/style/grid.jpeg" alt="Grid style">
               <span class="style-type-btn__label">Grid</span>
+              <span class="style-type-btn__description">Multi-panel, editorial collage</span>
             </button>
-            <button class="style-type-btn" data-style="social" aria-label="Social">
-              <img src="images/style/social.jpeg" alt="Social style">
-              <span class="style-type-btn__label">Social</span>
+            <button class="style-type-btn" data-style="urban">
+              <img src="images/style/urban_lifestyle.jpeg" alt="Urban Lifestyle style">
+              <span class="style-type-btn__label">Urban Lifestyle</span>
+              <span class="style-type-btn__description">Natural city mood, social-ready</span>
             </button>
-            <button class="style-type-btn" data-style="golden-hour">
-              <img src="images/style/golden_hour.jpeg" alt="Golden hour style">
-              <span class="style-type-btn__label">Golden hour</span>
+            <button class="style-type-btn" data-style="influencer" aria-label="Influencer">
+              <img src="images/style/influencer.jpeg" alt="Influencer style">
+              <span class="style-type-btn__label">Influencer</span>
+              <span class="style-type-btn__description">Authentic, casual, social aesthetic</span>
+            </button>
+            <button class="style-type-btn" data-style="outdoor" aria-label="Outdoor Editorial">
+              <img src="images/style/golden_hour.jpeg" alt="Outdoor Editorial style">
+              <span class="style-type-btn__label">Outdoor Editorial</span>
+              <span class="style-type-btn__description">Natural light, relaxed editorial</span>
             </button>
           </div>
           <button class="upload-action" id="studioGenerate">Create</button>
@@ -281,19 +299,6 @@
               <option value="4:3">4:3</option>
               <option value="9:16">9:16</option>
               <option value="16:9">16:9</option>
-            </select>
-            <select id="studioBackground">
-              <option value="lookbook-studio">Neutral lookbook studio</option>
-              <option value="editorial-high-end">High-end fashion editorial</option>
-              <option value="runway-show">Runway show</option>
-              <option value="urban-street">Urban street style</option>
-              <option value="retail-boutique">Premium retail boutique</option>
-              <option value="lifestyle-indoor">Soft indoor lifestyle</option>
-              <option value="outdoor-golden-hour">Outdoor golden hour</option>
-              <option value="social-clean">Clean social content</option>
-              <option value="luxury-hotel-resort">Luxury hotel resort</option>
-              <option value="minimal-ecommerce">Minimal e-commerce catalog</option>
-              <option value="custom">Custom scene</option>
             </select>
             <textarea id="studioBackgroundPrompt" rows="2" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
             <div class="prompt-suggestions studio-inline-suggestions">
@@ -392,39 +397,29 @@
               </div>
             </div>
 
-            <div class="model-builder-section" id="studioAdvancedBody">
-                <div class="model-builder-grid">
-                  <label class="model-field">
-                    <span>Body type</span>
-                    <select id="studioGenBody">
-                      <option value="very slim body type">Very slim</option>
-                      <option value="slim body type">Slim</option>
-                      <option value="average body type">Average</option>
-                      <option value="curvy body type">Curvy</option>
-                      <option value="plus size body type">Plus size</option>
-                      <option value="athletic body type">Athletic</option>
-                    </select>
-                  </label>
-                  <label class="model-field">
-                    <span>Framing</span>
-                    <select id="studioGenFrame">
-                      <option value="full body shot">Full body</option>
-                      <option value="three-quarter 3/4 shot">3/4</option>
-                      <option value="half body shot">Half body</option>
-                      <option value="portrait close-up">Portrait</option>
-                    </select>
-                  </label>
-                  <label class="model-field">
-                    <span>Mood</span>
-                    <select id="studioGenMood">
-                      <option value="elegant mood">Elegant</option>
-                      <option value="natural mood">Natural</option>
-                      <option value="bold decisive mood">Bold</option>
-                      <option value="soft gentle mood">Soft</option>
-                      <option value="editorial fashion mood">Editorial</option>
-                    </select>
-                  </label>
-                </div>
+            <div class="model-builder-section">
+              <div class="model-builder-label">Shoot</div>
+              <div class="model-builder-grid">
+                <label class="model-field">
+                  <span>Body type</span>
+                  <select id="studioGenBody">
+                    <option value="very slim body type">Very slim</option>
+                    <option value="slim body type" selected>Slim</option>
+                    <option value="average body type">Average</option>
+                    <option value="curvy body type">Curvy</option>
+                    <option value="plus size body type">Plus size</option>
+                    <option value="athletic body type">Athletic</option>
+                  </select>
+                </label>
+                <label class="model-field">
+                  <span>Shoot</span>
+                  <select id="studioGenShoot">
+                    <option value="close-up portrait shot">Close-up portrait</option>
+                    <option value="waist-up shot" selected>Waist-up</option>
+                    <option value="full body shot">Total body</option>
+                  </select>
+                </label>
+              </div>
             </div>
 
             <div class="model-builder-footer">
@@ -473,7 +468,6 @@
       const styleOptionsContainer = document.getElementById('studioStyleOptions');
       let styleOptions = Array.from(document.querySelectorAll('#studioStyleOptions .style-type-btn'));
       const aspectSelect = document.getElementById('studioAspect');
-      const backgroundSelect = document.getElementById('studioBackground');
       const backgroundPrompt = document.getElementById('studioBackgroundPrompt');
       const generateBtn = document.getElementById('studioGenerate');
 
@@ -483,8 +477,6 @@
       const progressDressTypeOptions = document.getElementById('studioProgressDressTypeOptions');
       const progressStyleOptions = document.getElementById('studioProgressStyleOptions');
       const progressSuggestions = document.getElementById('studioProgressSuggestions');
-      const progressBackgroundOptions = document.getElementById('studioProgressBackgroundOptions');
-      const progressBackgroundSelect = document.getElementById('studioProgressBackground');
       const progressBackgroundPrompt = document.getElementById('studioProgressBackgroundPrompt');
       const progressGenerateBtn = document.getElementById('studioProgressGenerate');
       const progressConfirmButtons = Array.from(document.querySelectorAll('.studio-progress-confirm'));
@@ -524,8 +516,7 @@
       const genEthnicity = document.getElementById('studioGenEthnicity');
       const genAge = document.getElementById('studioGenAge');
       const genBody = document.getElementById('studioGenBody');
-      const genFrame = document.getElementById('studioGenFrame');
-      const genMood = document.getElementById('studioGenMood');
+      const genShoot = document.getElementById('studioGenShoot');
       const genModelBtn = document.getElementById('studioGenerateModelBtn');
       const settingsToggle = document.getElementById('studioSettingsToggle');
       const settingsBody = document.getElementById('studioSettingsBody');
@@ -544,13 +535,6 @@
         'jewelry e-commerce',
         'luxury product photography',
       ];
-
-      const ACCESSORY_LABEL_MAP = {
-        orecchini: 'earrings',
-        bracciale: 'bracelet',
-        collana: 'necklace',
-        borsa: 'bag',
-      };
 
       const ACCESSORY_COMMERCIAL_PHOTO_PROMPT =
         'Create an ultra-realistic luxury commercial product photograph of the jewelry item shown in the reference images. ' +
@@ -580,159 +564,286 @@
         'Use premium cinematic lighting, elegant reflections, delicate shadows, and a sophisticated high-end advertising composition focused entirely on the product. ' +
         'Ensure crisp detail, photorealistic surfaces, premium materials rendering, and a polished luxury advertising look.';
 
-      const DEFAULT_STYLE_OPTIONS = [
-        { value: 'vogue', label: 'Vogue' },
-        { value: 'fashion-look-book', label: 'Lookbook' },
-        { value: 'bw', label: 'B&W' },
-        { value: 'streetwear-editorial', label: 'Streetwear' },
-        { value: 'grid', label: 'Grid' },
-        { value: 'social', label: 'Social' },
-        { value: 'golden-hour', label: 'Golden hour' },
-      ];
+      const STYLE_PRESETS = {
+        ecommerce: {
+          name: 'E-commerce Clean',
+          shortLabel: 'Clean product',
+          description: 'Minimal, clean, commercial',
+          image: 'images/style/ecommerce.jpeg',
+          prompt: `
+Apply a strong visual transformation according to the selected style while preserving the garment exactly.
 
-      const STYLE_CARD_IMAGES = {
-        vogue: 'images/style/vogue.jpeg',
-        'fashion-look-book': 'images/style/lookbook.jpeg',
-        bw: 'images/style/black_white.jpeg',
-        'streetwear-editorial': 'images/style/streetwear.jpeg',
-        grid: 'images/style/grid.jpeg',
-        social: 'images/style/social.jpeg',
-        'golden-hour': 'images/style/golden_hour.jpeg',
+Transform the image into strict e-commerce product photography.
+
+Subject:
+Preserve the exact garment, fabric, fit, proportions, and details without any modification.
+
+Pose:
+Model standing perfectly straight, front-facing, symmetrical posture, arms relaxed along the body.
+
+Environment:
+Pure white seamless studio background, completely clean, no depth or texture.
+
+Lighting:
+Flat high-key studio lighting, evenly distributed, shadowless, ultra clean.
+
+Camera:
+Eye-level, full body, centered composition, 50mm lens.
+
+Style:
+Commercial catalog photography, minimal, clinical, product-focused.
+
+Constraints:
+No distortion, no artistic interpretation, no added elements, no text.
+`,
+        },
+        editorial: {
+          name: 'Editorial',
+          shortLabel: 'Magazine',
+          description: 'Refined, elevated, high-fashion',
+          image: 'images/style/editorial.jpeg',
+          prompt: `
+realistic fashion editorial portrait, studio lighting, high contrast shadows, glossy skin highlights,
+dramatic posing, Vogue-style composition, medium format camera look, impeccable detail, sharp eyes,
+textured clothing, high-end modern fashion editorial background, luxury set design,
+dramatic sculpted lighting, refined textures, premium magazine-style art direction
+`,
+        },
+        urban: {
+          name: 'Urban Lifestyle',
+          shortLabel: 'Urban',
+          description: 'Natural city mood, social-ready',
+          image: 'images/style/urban_lifestyle.jpeg',
+          prompt: `
+Apply a strong visual transformation according to the selected style while preserving the garment exactly.
+
+Transform into urban lifestyle fashion photography.
+
+Subject:
+Garment must remain unchanged.
+
+Pose:
+Walking mid-step, natural movement, slightly candid posture.
+
+Environment:
+Real city street with buildings, depth, perspective, slight motion context.
+
+Lighting:
+Natural daylight, slightly harsh, realistic street shadows.
+
+Camera:
+Handheld feel, slightly off-center framing, 35mm lens.
+
+Style:
+Urban lifestyle, candid, real-life moment.
+
+Constraints:
+No distortion, no artificial styling.
+`,
+        },
+        luxury: {
+          name: 'Luxury Indoor',
+          shortLabel: 'Luxury',
+          description: 'Warm, premium, elegant interior',
+          image: 'images/style/luxury_indoor.jpeg',
+          prompt: `
+Apply a strong visual transformation according to the selected style while preserving the garment exactly.
+
+Transform into luxury indoor fashion campaign.
+
+Subject:
+Preserve garment perfectly.
+
+Pose:
+Relaxed but refined pose, seated or leaning, controlled movement.
+
+Environment:
+Elegant luxury interior with marble, velvet, gold accents.
+
+Lighting:
+Warm cinematic lighting, soft highlights, ambient glow.
+
+Camera:
+Medium shot, slightly compressed perspective, 85mm lens.
+
+Style:
+Luxury campaign, premium, sophisticated.
+
+Constraints:
+No distortion, no cheap aesthetic.
+`,
+        },
+        minimal: {
+          name: 'Scandinavian Minimal',
+          shortLabel: 'Minimal',
+          description: 'Soft light, calm, neutral',
+          image: 'images/style/minimal.jpeg',
+          prompt: `
+Apply a strong visual transformation according to the selected style while preserving the garment exactly.
+
+Transform into minimalist Scandinavian fashion photography.
+
+Subject:
+Garment unchanged.
+
+Pose:
+Very simple relaxed pose, minimal movement, natural posture.
+
+Environment:
+Neutral minimal space, soft tones, clean surfaces, empty background.
+
+Lighting:
+Soft diffused daylight, low contrast, desaturated tones.
+
+Camera:
+Static centered composition, 50mm lens.
+
+Style:
+Nordic minimalism, calm, understated elegance.
+
+Constraints:
+No strong shadows, no dramatic effects.
+`,
+        },
+        street: {
+          name: 'Street Style',
+          shortLabel: 'Street',
+          description: 'Dynamic, spontaneous, modern',
+          image: 'images/style/street_style.jpeg',
+          prompt: `
+'Editorial-print-ready, High-fashion streetwear editorial with extreme wide-angle perspective study. Glowing envoirment details Technical demonstration of foreshortening and forced perspective. Priority: physical perspective accuracy, material realism, Visual language: cinematic, bold, experimental editorial look. Strong use of extreme wide-angle perspective. Emphasis on depth, scale distortion, and spatial exaggeration. Forced perspective and foreshortening must be visually clear and physically coherent. Image quality: editorial print-ready quality. Very high realism. High detail fidelity. Accurate material and surface rendering. Clean, professional finish, no artifacts. Overall mood: high-impact, modern, fashion-forward, urban street wear, experimental, technically impressive, visually powerful. Randomly choose one of these four shot types: 1. top-down angle shot from slightly above eye level, subject reaching one hand toward the camera creating depth and interaction, hand partially covering the frame, direct eye contact, relaxed confident expression, urban environment, natural soft daylight, shallow depth of field, wide angle lens (28mm), dynamic composition, lifestyle influencer photography style. 2. low angle shot from ground level, camera positioned near the floor, one foot stepping forward very close to the lens creating strong foreground distortion, subject looking down at the camera, powerful and confident attitude, urban alley environment, natural daylight with soft shadows, wide angle lens (24mm), depth perspective exaggerated, cinematic streetwear photography, high realism. 3. extreme close-up portrait using fisheye lens, face very close to the camera with visible lens distortion, curved edges and circular framing, playful and confident expression, strong perspective exaggeration, urban background slightly visible, natural daylight, high contrast details, streetwear editorial style, ultra realistic texture. 4. low angle shot of subject sitting on the ground, one leg extended toward the camera creating depth, relaxed and confident pose, direct or slightly off-camera gaze, urban alley background, natural daylight with soft shadows, wide angle lens (28mm), cinematic street style photography, realistic textures and lighting.'
+`,
+        },
+        influencer: {
+          name: 'Influencer',
+          shortLabel: 'Influencer',
+          description: 'Authentic, casual, social aesthetic',
+          image: 'images/style/influencer.jpeg',
+          prompt: `
+Apply a strong visual transformation according to the selected style while preserving the garment exactly.
+
+Transform into social media influencer style image.
+
+Subject:
+Garment must remain unchanged.
+
+Pose:
+Casual selfie-like pose, relaxed posture, natural positioning.
+
+Environment:
+Real everyday setting (room, mirror, street corner).
+
+Lighting:
+Natural imperfect light, slightly uneven exposure.
+
+Camera:
+Close framing, handheld feel, slight lens distortion.
+
+Style:
+Instagram aesthetic, authentic, relatable.
+
+Constraints:
+No over-polishing, maintain realism.
+`,
+        },
+        runway: {
+          name: 'Grid',
+          shortLabel: 'Grid',
+          description: 'Multi-panel, editorial collage',
+          image: 'images/style/grid.jpeg',
+          prompt: `
+'Editorial-print-ready, high-fashion visual style with strong technical emphasis. Generation mode: multi-panel consistent. Strict visual coherence across all panels. Priority: physical perspective accuracy, material realism, environmental coherence. Intent: high-fashion editorial with extreme wide-angle perspective study. Secondary intent: technical demonstration of foreshortening and forced perspective. Designed for double-page spread, fashion magazine collage layout. Frame and layout: Aspect ratio 3:4. 2x2 grid collage layout. Uniform panel dimensions. Minimal white or seamless gutter between panels. Visual language: cinematic, bold, experimental editorial look. Strong use of extreme wide-angle perspective. Emphasis on depth, scale distortion, and spatial exaggeration. Forced perspective and foreshortening must be visually clear and physically coherent. Image quality: editorial print-ready quality. Very high realism. High detail fidelity. Accurate material and surface rendering. Clean, professional finish, no artifacts. Overall mood: high-impact, modern, fashion-forward, experimental, technically impressive, visually powerful.'"
+`,
+        },
+        outdoor: {
+          name: 'Outdoor Editorial',
+          shortLabel: 'Outdoor',
+          description: 'Natural light, relaxed editorial',
+          image: 'images/style/golden_hour.jpeg',
+          prompt: `
+Apply a strong visual transformation according to the selected style while preserving the garment exactly.
+
+Transform into outdoor fashion editorial.
+
+Subject:
+Garment unchanged.
+
+Pose:
+Relaxed flowing pose, interacting with environment, slight movement.
+
+Environment:
+Open natural landscape (field, coast, desert).
+
+Lighting:
+Golden hour sunlight, soft directional shadows.
+
+Camera:
+Wide cinematic framing, 50mm or 35mm.
+
+Style:
+Outdoor editorial, atmospheric, elegant.
+
+Constraints:
+No artificial studio look.
+`,
+        },
+        dark: {
+          name: 'Dark Luxury',
+          shortLabel: 'Dark luxury',
+          description: 'Moody, elegant, evening campaign',
+          image: 'images/style/Dark_luxury.jpeg',
+          prompt: `
+Apply a strong visual transformation according to the selected style while preserving the garment exactly.
+
+Transform into dark luxury fashion campaign.
+
+Subject:
+Preserve garment perfectly.
+
+Pose:
+Still, controlled, powerful pose, minimal movement.
+
+Environment:
+Dark refined environment, deep tones, minimal background.
+
+Lighting:
+Low-key lighting, strong contrast, light focused on subject only.
+
+Camera:
+Tight framing, 85mm lens.
+
+Style:
+Moody luxury, dramatic, high-end.
+
+Constraints:
+No noise, no distortion.
+`,
+        },
       };
 
-      const ACCESSORY_STYLE_OPTIONS = [
-        { value: 'orecchini', label: 'Orecchini' },
-        { value: 'bracciale', label: 'Bracciale' },
-        { value: 'collana', label: 'Collana' },
-        { value: 'borsa', label: 'Borsa' },
+      const STYLE_OPTION_ORDER = [
+        'ecommerce',
+        'minimal',
+        'dark',
+        'editorial',
+        'luxury',
+        'street',
+        'runway',
+        'urban',
+        'influencer',
+        'outdoor',
       ];
 
-      const DEFAULT_BACKGROUND_OPTIONS = [
-        { value: 'lookbook-studio', label: 'Neutral lookbook studio' },
-        { value: 'editorial-high-end', label: 'High-end fashion editorial' },
-        { value: 'runway-show', label: 'Runway show' },
-        { value: 'urban-street', label: 'Urban street style' },
-        { value: 'retail-boutique', label: 'Premium retail boutique' },
-        { value: 'lifestyle-indoor', label: 'Soft indoor lifestyle' },
-        { value: 'outdoor-golden-hour', label: 'Outdoor golden hour' },
-        { value: 'social-clean', label: 'Clean social content' },
-        { value: 'luxury-hotel-resort', label: 'Luxury hotel resort' },
-        { value: 'minimal-ecommerce', label: 'Minimal e-commerce catalog' },
-        { value: 'custom', label: 'Custom scene' },
-      ];
+      const DEFAULT_STYLE_OPTIONS = STYLE_OPTION_ORDER.map((key) => ({
+        value: key,
+        name: STYLE_PRESETS[key].name,
+        shortLabel: STYLE_PRESETS[key].shortLabel,
+        description: STYLE_PRESETS[key].description,
+      }));
 
-      const BACKGROUND_CARD_IMAGES = {
-        'lookbook-studio': 'images/scene/neutral lookbook.jpeg',
-        'editorial-high-end': 'images/scene/fashion_editorial.jpeg',
-        'runway-show': 'images/scene/runway.jpeg',
-        'urban-street': 'images/scene/urban.jpeg',
-        'retail-boutique': 'images/scene/premium_boutique.jpeg',
-        'lifestyle-indoor': 'images/scene/indoor.jpeg',
-        'outdoor-golden-hour': 'images/scene/golden_hour.jpeg',
-        'social-clean': 'images/scene/social_clean.jpeg',
-        'luxury-hotel-resort': 'images/scene/luxury_hotel.jpeg',
-        'minimal-ecommerce': 'images/scene/e_commerce.jpeg',
-      };
-
-      const STYLE_PROMPTS = {
-        vogue:
-          'realistic fashion editorial portrait, studio lighting, high contrast shadows, glossy skin highlights, dramatic posing, Vogue-style composition, medium format camera look, impeccable detail, sharp eyes, textured clothing',
-        'fashion-look-book':
-          'Ultra-realistic commercial fashion photography with strong editorial quality. ' +
-          'Clean, minimalist studio look, visually uncluttered and focused. ' +
-          'Lighting: soft, directional studio lighting coming slightly from the front-right. ' +
-          'Gentle highlights and soft, elongated shadows. ' +
-          'Subtle specular highlights and smooth light falloff, creating depth and dimension without harsh contrast. ' +
-          'Color grading: cool, slightly desaturated palette with emphasis on neutral greys and blues, balanced with subtle warm tones. ' +
-          'Overall look is clean, modern and refined. ' +
-          'Image quality: extremely sharp focus, high micro-contrast and exceptional detail rendition. ' +
-          'High-fidelity texture rendering, very clean image, no visible noise or grain. ' +
-          'Premium, high-end professional finish. ' +
-          'Camera look: implied medium format or high-end full-frame quality with very high dynamic range. ' +
-          'Prime lens look in the 85mm-135mm range, with natural compression and elegant depth separation. ' +
-          'Aperture around f/2.8 for a balanced depth of field. ' +
-          'Overall mood: sophisticated, modern, aspirational, high-end editorial.',
-        bw:
-          'Black-and-white, cinematic, high-fashion editorial style. ' +
-          'Controlled studio lighting, soft and sculpted, with defined shadows and strong light shaping. ' +
-          'Lighting must enhance volumes and textures, creating a sculptural, dramatic yet elegant look. ' +
-          'Color grading: pure black and white, high contrast. ' +
-          'Tonal range should feel elegant, timeless and cinematic, with deep blacks and clean highlights. ' +
-          'Composition: vertical 4:5 format, subject-centered framing. ' +
-          'Cinematic editorial portrait style, strong visual balance and visual presence. ' +
-          'Overall image quality: highly realistic, premium editorial look. ' +
-          'Very high level of detail, fine texture rendering, crisp and clean image. ' +
-          'No visible noise or artifacts, professional studio finish. ' +
-          'General mood: powerful, refined, elegant, timeless, minimalist, high-fashion editorial.',
-        'streetwear-editorial':
-          'Editorial-print-ready, high-fashion visual style with strong technical emphasis. . ' +
-          'Priority: physical perspective accuracy, material realism, environmental coherence. ' +
-          'Intent: high-fashion editorial with extreme wide-angle perspective study. ' +
-          'Secondary intent: technical demonstration of foreshortening and forced perspective. ' +
-          'Designed for fashion magazine. ' +
-          'Visual language: cinematic, bold, experimental editorial look. ' +
-          'Strong use of extreme wide-angle perspective. ' +
-          'Emphasis on depth, scale distortion, and spatial exaggeration. ' +
-          'Forced perspective and foreshortening must be visually clear and physically coherent. ' +
-          'Image quality: editorial print-ready quality. Very high realism. ' +
-          'High detail fidelity. Accurate material and surface rendering. ' +
-          'Clean, professional finish, no artifacts. ' +
-          'Overall mood: high-impact, modern, fashion-forward, experimental, technically impressive, visually powerful.',
-        grid:
-          'Editorial-print-ready, high-fashion visual style with strong technical emphasis. ' +
-          'Generation mode: multi-panel consistent. ' +
-          'Strict visual coherence across all panels. ' +
-          'Priority: physical perspective accuracy, material realism, environmental coherence. ' +
-          'Intent: high-fashion editorial with extreme wide-angle perspective study. ' +
-          'Secondary intent: technical demonstration of foreshortening and forced perspective. ' +
-          'Designed for double-page spread, fashion magazine collage layout. ' +
-          'Frame and layout: Aspect ratio 3:4. 2x2 grid collage layout. ' +
-          'Uniform panel dimensions. Minimal white or seamless gutter between panels. ' +
-          'Visual language: cinematic, bold, experimental editorial look. ' +
-          'Strong use of extreme wide-angle perspective. ' +
-          'Emphasis on depth, scale distortion, and spatial exaggeration. ' +
-          'Forced perspective and foreshortening must be visually clear and physically coherent. ' +
-          'Image quality: editorial print-ready quality. Very high realism. ' +
-          'High detail fidelity. Accurate material and surface rendering. ' +
-          'Clean, professional finish, no artifacts. ' +
-          'Overall mood: high-impact, modern, fashion-forward, experimental, technically impressive, visually powerful.',
-        social:
-          'Generate a photorealistic image in a casual influencer selfie style. ' +
-          'The photo should feel spontaneous and natural, like a real Instagram post. ' +
-          'Expression: relaxed and natural, slight smile or neutral face, soft confident vibe. ' +
-          'Pose: informal selfie posture, natural body position, not perfectly posed. ' +
-          'Lighting: soft natural light (window light or daylight), slightly imperfect but flattering. ' +
-          'Camera: shot as if taken with a modern smartphone (iPhone-style), subtle depth and natural sharpness. ' +
-          'Framing (vary naturally): close-up selfie (face dominant), half-body selfie (torso visible), mirror selfie (slightly imperfect angle). ' +
-          'Style: real-life, slightly imperfect, authentic social media aesthetic. Avoid overly polished or artificial look.',
-        'golden-hour':
-          'Cinematic, high-fashion editorial, ultra-realistic visual style. ' +
-          'Camera look: high-end modern full-frame digital photography. ' +
-          'Portrait lens look around 85mm with strong subject separation. ' +
-          'Film look inspired by Portra 800. ' +
-          'Subtle, natural film grain. ' +
-          'Color rendering: rich, warm golden tones. ' +
-          'Overall color palette is warm, luminous and elegant. ' +
-          'Lighting style: golden hour look. ' +
-          'Soft, diffused natural light. ' +
-          'Painterly glow, smooth light falloff, elongated and elegant shadows. ' +
-          'Creamy background bokeh. ' +
-          'Soft, directional light shaping with gentle contrast. ' +
-          'Image rendering: hyper-realistic, photorealistic. ' +
-          'Natural texture preservation, no artificial smoothing. ' +
-          'High dynamic range, very clean tonal transitions. ' +
-          'Image quality: ultra-high resolution, magazine-cover editorial quality. ' +
-          'Very high detail fidelity, premium professional finish, no visible artifacts. ' +
-          'Overall mood: cinematic, warm, elegant, refined, high-end, emotional and atmospheric.',
-        orecchini:
-          'luxury earring photography on model, focus on the ears and face line, refined jewelry styling, sharp metal reflections, premium editorial beauty look',
-        bracciale:
-          'luxury bracelet photography on model, focus on wrist and hand pose, elegant jewelry presentation, clean premium reflections, high-end commercial detail',
-        collana:
-          'luxury necklace photography on model, focus on neck and decollete area, elegant jewelry styling, premium metal shine, refined editorial close framing',
-        borsa:
-          'luxury handbag photography on model, focus on the bag silhouette and hand placement, premium leather texture, refined commercial fashion styling, high-end editorial accessory shot',
-      };
+      const STYLE_CARD_IMAGES = Object.fromEntries(
+        STYLE_OPTION_ORDER.map((key) => [key, STYLE_PRESETS[key].image])
+      );
 
       let selectedDressType = null;
       let selectedStyle = null;
@@ -747,9 +858,14 @@
       let lastImageUrl = '';
       let suggestionContainer = document.querySelector('.studio-inline-suggestions');
       let genAnimMounted = false;
+      const RECENT_BATCH_SIZE = 8;
       const progressStepOrder = ['model', 'garment', 'style', 'background', 'generate'];
       let progressUnlockedIndex = -1;
       let progressCurrentStep = 'model';
+      let recentGalleryItems = [];
+      let recentRenderedCount = 0;
+      let recentGallerySignature = '';
+      let recentImageObserver = null;
 
       const showLoader = () => loader?.classList.add('active');
       const hideLoader = () => loader?.classList.remove('active');
@@ -783,6 +899,114 @@
         lastImageUrl = url;
         if (mainImg) {
           mainImg.src = url;
+        }
+      };
+
+      const ensureRecentImageObserver = () => {
+        if (recentImageObserver || !('IntersectionObserver' in window) || !recentList) return recentImageObserver;
+        recentImageObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const img = entry.target;
+              const nextSrc = img.dataset.src;
+              if (nextSrc && img.src !== nextSrc) {
+                img.src = nextSrc;
+              }
+              recentImageObserver.unobserve(img);
+            });
+          },
+          {
+            root: recentList,
+            rootMargin: '0px 220px 0px 220px',
+            threshold: 0.01,
+          }
+        );
+        return recentImageObserver;
+      };
+
+      const createRecentItem = (file) => {
+        const item = document.createElement('div');
+        item.className = 'studio-recent-item';
+
+        const url = file.url?.startsWith('http') ? file.url : `${window.location.origin}${file.url}`;
+        item.innerHTML = `
+          <div class="studio-recent-thumb is-loading">
+            <img alt="${file.name}" loading="lazy" decoding="async" data-src="${url}">
+          </div>
+          <div class="studio-recent-actions">
+            <button class="studio-recent-btn" data-action="open" title="Open">
+              <i class="fa fa-eye"></i>
+            </button>
+            <a class="studio-recent-btn" href="${url}" download="${file.name}" title="Download" onclick="event.stopPropagation()">
+              <i class="fa fa-download"></i>
+            </a>
+            <button class="studio-recent-btn ghost" data-action="delete" title="Delete">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>`;
+
+        const thumb = item.querySelector('.studio-recent-thumb');
+        const img = item.querySelector('img');
+        img?.addEventListener('load', () => thumb?.classList.remove('is-loading'), { once: true });
+        img?.addEventListener('error', () => thumb?.classList.remove('is-loading'), { once: true });
+
+        const observer = ensureRecentImageObserver();
+        if (img) {
+          if (observer) {
+            observer.observe(img);
+          } else {
+            img.src = img.dataset.src || '';
+          }
+        }
+
+        item.addEventListener('click', (e) => {
+          const action = e.target.closest('.studio-recent-btn')?.dataset?.action;
+          if (action === 'open') {
+            setMainImage(url);
+            return;
+          }
+          if (action === 'delete') {
+            e.preventDefault();
+            e.stopPropagation();
+            const ok = confirm(`Do you want to delete "${file.name}"?`);
+            if (!ok) return;
+            fetch(`/api/gallery/${encodeURIComponent(file.name)}`, { method: 'DELETE' })
+              .then((resp) => {
+                if (!resp.ok) throw new Error('Delete failed');
+                item.remove();
+                refreshRecent();
+              })
+              .catch((err) => console.error('Delete failed', err));
+            return;
+          }
+          setMainImage(url);
+        });
+
+        return item;
+      };
+
+      const appendRecentBatch = (batchSize = RECENT_BATCH_SIZE) => {
+        if (!recentList || recentRenderedCount >= recentGalleryItems.length) return;
+        const nextItems = recentGalleryItems.slice(recentRenderedCount, recentRenderedCount + batchSize);
+        const fragment = document.createDocumentFragment();
+        nextItems.forEach((file) => fragment.appendChild(createRecentItem(file)));
+        recentList.appendChild(fragment);
+        recentRenderedCount += nextItems.length;
+
+        if (recentRenderedCount < recentGalleryItems.length) {
+          requestAnimationFrame(() => {
+            const needsMoreToFillViewport = recentList.scrollWidth <= recentList.clientWidth + 40;
+            if (needsMoreToFillViewport) appendRecentBatch(batchSize);
+          });
+        }
+      };
+
+      const handleRecentScrollLoad = () => {
+        if (!recentList || recentRenderedCount >= recentGalleryItems.length) return;
+        const remaining = recentList.scrollWidth - recentList.clientWidth - recentList.scrollLeft;
+        if (remaining < 280) {
+          appendRecentBatch();
         }
       };
 
@@ -926,21 +1150,9 @@
 
       const setProgressBackgroundThumbnail = () => {
         if (!progressBackgroundThumb) return;
-        const selectedValue = progressBackgroundSelect?.value || '';
-        const image = BACKGROUND_CARD_IMAGES[selectedValue];
-        if (hasChosenBackground && image) {
-          progressBackgroundThumb.style.backgroundImage = `url("${image}")`;
-          progressBackgroundThumb.classList.add('has-image');
-          progressBackgroundThumb.classList.remove('has-icon');
-        } else if (hasChosenBackground && selectedValue) {
-          progressBackgroundThumb.style.backgroundImage = '';
-          progressBackgroundThumb.classList.remove('has-image');
-          progressBackgroundThumb.classList.add('has-icon');
-        } else {
-          progressBackgroundThumb.style.backgroundImage = '';
-          progressBackgroundThumb.classList.remove('has-image');
-          progressBackgroundThumb.classList.remove('has-icon');
-        }
+        progressBackgroundThumb.style.backgroundImage = '';
+        progressBackgroundThumb.classList.remove('has-image');
+        progressBackgroundThumb.classList.toggle('has-icon', hasChosenBackground);
       };
 
       const setProgressStepLabel = (stepName, label) => {
@@ -965,35 +1177,15 @@
         return sourceBtn?.querySelector('span')?.textContent?.trim() || 'Garment';
       };
 
-      const getSelectedStyleLabel = () => {
-        const allOptions = [...DEFAULT_STYLE_OPTIONS, ...ACCESSORY_STYLE_OPTIONS];
-        return allOptions.find((option) => option.value === selectedStyle)?.label || 'Style';
-      };
+      const getSelectedStyleLabel = () => STYLE_PRESETS[selectedStyle]?.name || 'Style';
 
-      const getSelectedBackgroundLabel = () => {
-        if (!hasChosenBackground) return 'Scene';
-        const value = progressBackgroundSelect?.value || '';
-        const shortLabels = {
-          'lookbook-studio': 'Lookbook',
-          'editorial-high-end': 'Editorial',
-          'runway-show': 'Runway',
-          'urban-street': 'Street',
-          'retail-boutique': 'Retail',
-          'lifestyle-indoor': 'Lifestyle',
-          'outdoor-golden-hour': 'Golden hour',
-          'social-clean': 'Social',
-          'luxury-hotel-resort': 'Resort',
-          'minimal-ecommerce': 'Catalog',
-          custom: 'Custom scene',
-        };
-        return shortLabels[value] || progressBackgroundSelect?.selectedOptions?.[0]?.textContent?.trim() || 'Scene';
-      };
+      const getSelectedBackgroundLabel = () => 'Custom Scene';
 
       const updateProgressStepSummaries = () => {
         setProgressStepLabel('model', hasSelectedModel() ? getSelectedModelLabel() : 'Model');
         setProgressStepLabel('garment', selectedDressType ? getSelectedGarmentLabel() : 'Garment');
         setProgressStepLabel('style', selectedStyle ? getSelectedStyleLabel() : 'Style');
-        setProgressStepLabel('background', hasChosenBackground ? getSelectedBackgroundLabel() : 'Scene');
+        setProgressStepLabel('background', getSelectedBackgroundLabel());
         setProgressStyleThumbnail(selectedStyle);
         setProgressBackgroundThumbnail();
       };
@@ -1012,7 +1204,7 @@
           case 'style':
             return Boolean(selectedStyle);
           case 'background':
-            return hasChosenBackground;
+            return true;
           default:
             return true;
         }
@@ -1031,7 +1223,6 @@
         hasSelectedModel() &&
         Boolean(selectedDressType) &&
         Boolean(selectedStyle) &&
-        hasChosenBackground &&
         Boolean(selectedAspect);
 
       const updateProgressConfirmState = () => {
@@ -1118,73 +1309,35 @@
         const image = STYLE_CARD_IMAGES[option.value];
         const activeClass = option.value === selectedStyle ? ' active' : '';
         if (image) {
-          return `<button class="style-type-btn${activeClass}" data-style="${option.value}" aria-label="${option.label}">
-              <img src="${image}" alt="${option.label} style">
-              <span class="style-type-btn__label">${option.label}</span>
+          return `<button class="style-type-btn${activeClass}" data-style="${option.value}" aria-label="${option.name}">
+              <img src="${image}" alt="${option.name} style">
+              <span class="style-type-btn__label">${option.name}</span>
+              <span class="style-type-btn__description">${option.description}</span>
             </button>`;
         }
-        return `<button class="style-type-btn style-type-btn--text${activeClass}" data-style="${option.value}" aria-label="${option.label}">
-            <span class="style-type-btn__fallback" aria-hidden="true">${option.label.slice(0, 1)}</span>
-            <span class="style-type-btn__label">${option.label}</span>
+        return `<button class="style-type-btn style-type-btn--text${activeClass}" data-style="${option.value}" aria-label="${option.name}">
+            <span class="style-type-btn__fallback" aria-hidden="true">${option.shortLabel.slice(0, 1)}</span>
+            <span class="style-type-btn__label">${option.name}</span>
+            <span class="style-type-btn__description">${option.description}</span>
           </button>`;
-      };
-
-      const renderBackgroundOptionMarkup = (option) => {
-        const image = BACKGROUND_CARD_IMAGES[option.value];
-        const activeClass =
-          hasChosenBackground && option.value === (progressBackgroundSelect?.value || '') ? ' active' : '';
-        if (image) {
-          return `<button class="style-type-btn${activeClass}" data-background="${option.value}" aria-label="${option.label}">
-              <img src="${image}" alt="${option.label} scene">
-              <span class="style-type-btn__label">${option.label}</span>
-            </button>`;
-        }
-        return `<button class="style-type-btn style-type-btn--text${activeClass}" data-background="${option.value}" aria-label="${option.label}">
-            <span class="style-type-btn__fallback" aria-hidden="true">${option.label.slice(0, 1)}</span>
-            <span class="style-type-btn__label">${option.label}</span>
-          </button>`;
-      };
-
-      const renderProgressBackgroundOptions = () => {
-        if (!progressBackgroundOptions) return;
-        progressBackgroundOptions.innerHTML = DEFAULT_BACKGROUND_OPTIONS
-          .map((option) => renderBackgroundOptionMarkup(option))
-          .join('');
-      };
-
-      const setBackgroundValue = (value, source = 'progress') => {
-        const nextValue = value || 'lookbook-studio';
-        if (progressBackgroundSelect) {
-          progressBackgroundSelect.value = nextValue;
-        }
-        if (backgroundSelect) {
-          backgroundSelect.value = nextValue;
-        }
-        progressBackgroundOptions?.querySelectorAll('.style-type-btn').forEach((button) => {
-          button.classList.toggle('active', button.dataset.background === nextValue);
-        });
-        hasChosenBackground = true;
-        syncBackgroundFields(source);
-        updateProgressConfirmState();
-        setProgressStep(progressCurrentStep);
       };
 
       const syncBackgroundFields = (source = 'original') => {
         if (source === 'progress') {
-          if (backgroundSelect && progressBackgroundSelect) {
-            backgroundSelect.value = progressBackgroundSelect.value;
-          }
           if (backgroundPrompt && progressBackgroundPrompt) {
             backgroundPrompt.value = progressBackgroundPrompt.value;
           }
+          hasChosenBackground = Boolean((progressBackgroundPrompt?.value || '').trim());
+          updateProgressConfirmState();
+          setProgressStep(progressCurrentStep);
           return;
-        }
-        if (progressBackgroundSelect && backgroundSelect) {
-          progressBackgroundSelect.value = backgroundSelect.value;
         }
         if (progressBackgroundPrompt && backgroundPrompt) {
           progressBackgroundPrompt.value = backgroundPrompt.value;
         }
+        hasChosenBackground = Boolean((backgroundPrompt?.value || '').trim());
+        updateProgressConfirmState();
+        setProgressStep(progressCurrentStep);
       };
 
       const syncAspectField = (source = 'original') => {
@@ -1275,8 +1428,7 @@
 
       const renderStyleOptions = () => {
         if (!styleOptionsContainer) return;
-        const nextOptions =
-          selectedDressType === 'accessory' ? ACCESSORY_STYLE_OPTIONS : DEFAULT_STYLE_OPTIONS;
+        const nextOptions = DEFAULT_STYLE_OPTIONS;
         const validValues = new Set(nextOptions.map((option) => option.value));
         if (!validValues.has(selectedStyle)) {
           selectedStyle = null;
@@ -1342,14 +1494,6 @@
         setStyleValue(selectedStyle === style ? null : style);
       });
 
-      progressBackgroundOptions?.addEventListener('click', (e) => {
-        const btn = e.target.closest('.style-type-btn');
-        if (!btn) return;
-        e.preventDefault();
-        const background = btn.dataset.background || 'lookbook-studio';
-        setBackgroundValue(background, 'progress');
-      });
-
       progressSuggestions?.addEventListener('click', (e) => {
         const btn = e.target.closest('.prompt-suggestion-btn');
         if (!btn) return;
@@ -1370,9 +1514,6 @@
         }
       });
 
-      progressBackgroundSelect?.addEventListener('change', () =>
-        setBackgroundValue(progressBackgroundSelect.value, 'progress')
-      );
       progressBackgroundPrompt?.addEventListener('input', () => syncBackgroundFields('progress'));
       progressAspectOptions?.addEventListener('click', (e) => {
         const btn = e.target.closest('.studio-progress-aspect-btn');
@@ -1385,9 +1526,6 @@
           setAspectValue(select.value || '3:4');
         });
       });
-      backgroundSelect?.addEventListener('change', () =>
-        setBackgroundValue(backgroundSelect.value, 'original')
-      );
       backgroundPrompt?.addEventListener('input', () => syncBackgroundFields('original'));
       aspectSelect?.addEventListener('change', () => {
         hasChosenAspect = Boolean(aspectSelect.value);
@@ -1461,7 +1599,7 @@
       };
 
       const MODEL_BASE_PROMPT =
-        'fashion model portfolio photo, full body studio shot, neutral grey background, fair skin, minimal makeup, wearing simple blue jeans and plain white t-shirt, confident relaxed pose, soft studio lighting, professional fashion photography, casting portfolio style, ultra realistic, clean studio lighting, fashion casting sheet style, 85mm lens, fashion editorial photography, high detail skin texture';
+        'A hyper-realistic, hight-end fashion editorial, aspect ratio 4:3';
 
       const buildModelPrompt = (settings) => {
         const clothing = 'wearing a white t-shirt and fitted blue jeans';
@@ -1470,69 +1608,39 @@
           settings.gender || 'female fashion model',
           settings.ethnicity || 'European ethnicity',
           settings.age || 'age 25-35',
-          clothing,
           settings.body || 'slim body type',
-          settings.frame || 'portrait framing',
-          settings.mood || 'elegant mood',
-          'high-end fashion editorial photo, studio lighting, detailed skin texture, cinematic depth of field, realistic eyes, 3:4 aspect ratio',
+          settings.shoot || 'waist-up shot',
+          clothing,
+          'high-end fashion editorial photo, studio lighting, detailed skin texture, cinematic depth of field, realistic eyes, 4:3 aspect ratio',
         ];
         const prompt = bits.filter(Boolean).join(', ');
         return prompt.length > 500 ? prompt.slice(0, 500) : prompt;
       };
 
       const buildPrompt = (settings) => {
-        const bgChoice = settings.background || 'studio';
         const bgCustom = settings.backgroundPrompt || '';
-        const backgroundMap = {
-          'lookbook-studio':
-            'clean neutral fashion lookbook background, seamless light grey studio backdrop, soft diffused studio lighting, minimal shadows, premium commercial fashion photography',
-          'editorial-high-end':
-            'high-end fashion editorial background, luxury set design, dramatic sculpted lighting, refined textures, premium magazine-style art direction',
-          'runway-show':
-            'luxury fashion runway background, catwalk, blurred audience, spotlights, dramatic show lighting, backstage fashion week atmosphere',
-          'urban-street':
-            'urban street style background, modern city setting, editorial streetwear mood, reflective surfaces, subtle neon accents, fashionable metropolitan energy',
-          'retail-boutique':
-            'premium retail boutique interior, elegant fashion store, polished materials, curated displays, luxury shopping atmosphere, sophisticated commercial lighting',
-          'lifestyle-indoor':
-            'soft lifestyle interior, natural daylight, refined modern apartment, warm neutral tones, aspirational living atmosphere, relaxed fashion campaign look',
-          'outdoor-golden-hour':
-            'outdoor golden hour background, warm sunset light, soft glow, elegant natural shadows, cinematic fashion campaign atmosphere',
-          'social-clean':
-            'clean social media content background, bright modern set, minimal styling, contemporary creator aesthetic, polished and scroll-stopping fashion image',
-          'luxury-hotel-resort':
-            'luxury hotel resort background, elegant architecture, refined travel setting, premium leisure atmosphere, soft natural light, luxury fashion campaign mood',
-          'minimal-ecommerce':
-            'minimal e-commerce catalog background, plain seamless backdrop, clean even lighting, distraction-free commercial presentation, product-focused fashion image',
-        };
-        const bgText =
-          bgChoice === 'custom'
-            ? (bgCustom || backgroundMap['lookbook-studio'])
-            : (backgroundMap[bgChoice] || backgroundMap['lookbook-studio']);
+        const baseStylePrompt = (STYLE_PRESETS[settings.style]?.prompt || '').trim();
         const garmentType = settings.dressType || 'dress';
         let garmentTemplate = garmentTemplates[garmentType] || garmentTemplates.dress;
+        let accessoryModeText = '';
         if (
           garmentType === 'accessory' &&
           selectedAccessorySuggestion === 'Product detail shot (on model)'
         ) {
-          const accessoryLabel = ACCESSORY_LABEL_MAP[settings.style] || 'accessory';
-          garmentTemplate = `the model in the image wearing the "${accessoryLabel}"`;
+          garmentTemplate = 'the model in the image wearing the accessory from the reference image';
         }
-        let styleText = (settings.style && STYLE_PROMPTS[settings.style]) || '';
         if (garmentType === 'accessory') {
           if (selectedAccessorySuggestion === 'commercial photo') {
-            styleText = ACCESSORY_COMMERCIAL_PHOTO_PROMPT;
+            accessoryModeText = ACCESSORY_COMMERCIAL_PHOTO_PROMPT;
           } else if (selectedAccessorySuggestion === 'jewelry e-commerce') {
-            styleText = ACCESSORY_ECOMMERCE_PROMPT;
+            accessoryModeText = ACCESSORY_ECOMMERCE_PROMPT;
           } else if (selectedAccessorySuggestion === 'luxury product photography') {
-            styleText = ACCESSORY_LUXURY_PRODUCT_PROMPT;
+            accessoryModeText = ACCESSORY_LUXURY_PRODUCT_PROMPT;
           }
         }
         const untuckedControlMap = {
           top:
             'top worn untucked, outside the trousers or skirt, hem clearly visible, no tuck',
-          dress:
-            'outfit worn fully outside the trousers, hem clearly visible, no tuck',
         };
         const framingTextMap = {
           top: 'three-quarter 3/4 shot, half body shot, upper body framing focused on the top',
@@ -1543,7 +1651,17 @@
         };
         const framingText = framingTextMap[garmentType] || '';
         const garmentControlText = untuckedControlMap[garmentType] || '';
-        return `${garmentTemplate}${styleText ? `, style: ${styleText}` : ''}, background: ${bgText}${framingText ? `, ${framingText}` : ''}${bgChoice !== 'custom' && bgCustom ? `, background details: ${bgCustom}` : ''}${garmentControlText ? `, ${garmentControlText}` : ''}`;
+        const additionalContext = [
+          baseStylePrompt,
+          accessoryModeText,
+          framingText ? `${framingText}.` : '',
+          garmentControlText ? `${garmentControlText}.` : '',
+          bgCustom ? `Custom background: ${bgCustom}.` : '',
+        ]
+          .filter(Boolean)
+          .join(' ');
+        const finalPrompt = `${garmentTemplate}. ${additionalContext}`.trim();
+        return finalPrompt;
       };
 
       const refreshRecent = async () => {
@@ -1551,57 +1669,24 @@
         try {
           const resp = await fetch('/api/gallery');
           const data = await resp.json();
-          const files = (data?.files || [])
-            .sort((a, b) => new Date(b.mtime || 0) - new Date(a.mtime || 0))
-            .slice(0, 8);
+          const files = (data?.files || []).sort((a, b) => new Date(b.mtime || 0) - new Date(a.mtime || 0));
+          const nextSignature = files.map((f) => `${f.name}:${f.mtime || 0}`).join('|');
+          if (nextSignature === recentGallerySignature) return;
+
+          const prevScrollLeft = recentList.scrollLeft;
+          recentGallerySignature = nextSignature;
+          recentGalleryItems = files;
+          recentRenderedCount = 0;
           recentList.innerHTML = '';
+
           if (!files.length) {
             recentList.innerHTML = '<div class="studio-recent-empty">No images available</div>';
             return;
           }
-          files.forEach((f) => {
-            const item = document.createElement('div');
-            item.className = 'studio-recent-item';
-            const url = f.url?.startsWith('http') ? f.url : `${window.location.origin}${f.url}`;
-            item.innerHTML = `
-              <div class="studio-recent-thumb">
-                <img src="${url}" alt="${f.name}">
-              </div>
-              <div class="studio-recent-actions">
-                <button class="studio-recent-btn" data-action="open" title="Open">
-                  <i class="fa fa-eye"></i>
-                </button>
-                <a class="studio-recent-btn" href="${url}" download="${f.name}" title="Download" onclick="event.stopPropagation()">
-                  <i class="fa fa-download"></i>
-                </a>
-                <button class="studio-recent-btn ghost" data-action="delete" title="Delete">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </div>`;
-            item.addEventListener('click', (e) => {
-              const action = e.target.closest('.studio-recent-btn')?.dataset?.action;
-              if (action === 'open') {
-                setMainImage(url);
-                return;
-              }
-              if (action === 'delete') {
-                e.preventDefault();
-                e.stopPropagation();
-                const ok = confirm(`Do you want to delete "${f.name}"?`);
-                if (!ok) return;
-                fetch(`/api/gallery/${encodeURIComponent(f.name)}`, { method: 'DELETE' })
-                  .then((resp) => {
-                    if (!resp.ok) throw new Error('Delete failed');
-                    item.remove();
-                    refreshRecent();
-                  })
-                  .catch((err) => console.error('Delete failed', err));
-                return;
-              }
-              // default: set preview
-              setMainImage(url);
-            });
-            recentList.appendChild(item);
+          appendRecentBatch();
+          requestAnimationFrame(() => {
+            recentList.scrollLeft = Math.min(prevScrollLeft, Math.max(0, recentList.scrollWidth - recentList.clientWidth));
+            handleRecentScrollLoad();
           });
         } catch (err) {
           console.error('Recent load failed', err);
@@ -1609,6 +1694,7 @@
         }
       };
 
+      recentList?.addEventListener('scroll', handleRecentScrollLoad, { passive: true });
       setInterval(refreshRecent, 20000);
       refreshRecent();
       if (aspectSelect) {
@@ -1618,7 +1704,6 @@
       renderProgressDressOptions();
       setProgressGarmentThumbnail(selectedDressType);
       renderStyleOptions();
-      renderProgressBackgroundOptions();
       syncAspectField('original');
       syncBackgroundFields('original');
       updateSuggestionVisibility();
@@ -1631,13 +1716,12 @@
           ethnicity: genEthnicity?.value,
           age: genAge?.value,
           body: genBody?.value,
-          frame: genFrame?.value,
-          mood: genMood?.value,
+          shoot: genShoot?.value,
         };
         const prompt = buildModelPrompt(settings);
         const input = {
           prompt,
-          aspect_ratio: '3:4',
+          aspect_ratio: '4:3',
           output_format: 'jpg',
         };
 
@@ -1686,7 +1770,6 @@
         const isAccessory = selectedDressType === 'accessory';
         const hasDress = !!dressInput?.files?.length;
         const hasModel = !!modelInput?.files?.length;
-        const selectedBackground = backgroundSelect?.value || 'studio';
         const customBackgroundPrompt = backgroundPrompt?.value?.trim() || '';
 
         if (!hasDress) {
@@ -1697,11 +1780,6 @@
           alert('Upload a model image.');
           return;
         }
-        if (selectedBackground === 'custom' && !customBackgroundPrompt) {
-          alert('Add a custom environment or choose a preset environment.');
-          return;
-        }
-
         const dressFile = dressInput.files[0];
         const dressDataUrl = await fileToDataUrl(dressFile);
 
@@ -1718,7 +1796,6 @@
           dressType: selectedDressType,
           style: selectedStyle,
           aspect: aspectSelect?.value || '1:1',
-          background: selectedBackground,
           backgroundPrompt: customBackgroundPrompt,
         };
 
@@ -1803,8 +1880,38 @@
           alert('No result available for pose change.');
           return;
         }
-        const FIXED_POSE_PROMPT =
-          'Change the pose of the subject while preserving identity: fashion editorial, consistent face and outfit details, new dynamic pose with natural balance';
+        const FIXED_POSE_PROMPT = `Modify the pose and camera framing of the subject while preserving the original image identity, outfit, garment details, proportions, colors, and overall visual consistency.
+
+The garment must remain unchanged in shape, fit, texture, and structure.
+
+Generate a natural fashion pose, choosing randomly but realistically between:
+- standing relaxed pose (weight shifted, one leg slightly forward)
+- slight walking motion
+- subtle contrapposto pose
+- upper body fashion pose (hands near face or waist)
+- seated elegant pose (if composition allows)
+
+Camera framing: choose one:
+- full body shot
+- 3/4 shot
+- waist-up shot
+
+Camera angle: slightly vary between:
+- eye-level
+- slight low angle
+- slight high angle
+
+Pose must remain believable, balanced, and physically correct.
+
+Expression: neutral, confident, or softly natural (no exaggerated emotions).
+
+Lighting: keep consistent with the original image.
+
+Background: preserve original environment and perspective.
+
+Style: realistic fashion photography, clean, professional.
+
+Do not introduce distortions, extra elements, text, or changes to the clothing.`;
         const input = {
           prompt: FIXED_POSE_PROMPT,
           image_input: [lastImageUrl],
