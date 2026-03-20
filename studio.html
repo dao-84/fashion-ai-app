@@ -27,22 +27,12 @@
         <li><a href="gallery.html" class="nav-link">Gallery</a></li>
         <li><a href="studio.html" class="nav-link active">Studio</a></li>
         <li><a href="index.html#signup" class="nav-link" onclick="window.openBetaAccessModal && window.openBetaAccessModal(); return false;">Sign up / Log in</a></li>
-        <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Remaining credit">â‚¬50,00</span></li>
+        <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Remaining credit">€50,00</span></li>
       </ul>
     </nav>
   </header>
 
   <main class="studio-shell">
-    <!-- STUDIO HEADER -->
-    <section class="studio-page-header">
-      <div class="studio-page-header__content">
-        <h1 class="studio-page-header__title">
-          <span>Create your fashion shoot</span>
-          <span class="studio-page-header__subtitle">Upload your garment, define the visual direction, and create ready-to-sell fashion images in seconds.</span>
-        </h1>
-      </div>
-    </section>
-
     <div class="studio-layout">
       <!-- STUDIO INPUT PANEL -->
       <section class="studio-column studio-left">
@@ -81,17 +71,17 @@
                 <span class="studio-progress-step__label">Style</span>
                 <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
-              <button type="button" class="studio-progress-step" data-step="background" aria-label="Environment">
+              <button type="button" class="studio-progress-step" data-step="background" aria-label="Scene">
                 <span class="studio-progress-step__thumb" aria-hidden="true"></span>
-                <span class="studio-progress-step__label">Environment</span>
+                <span class="studio-progress-step__label">Scene</span>
                 <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
             </div>
             <div class="studio-progress-content" id="studioProgressContent">
               <div class="studio-progress-panel is-active" data-step-panel="model">
                 <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title">Define your model</h3>
-                  <p class="studio-progress-panel-helper">Select a ready-made model or generate a new one.</p>
+                  <h3 class="studio-progress-panel-title">Choose a model</h3>
+                  <p class="studio-progress-panel-helper">Select a model or generate a new one.</p>
                 </div>
                 <div class="studio-ready">
                   <div class="studio-ready-grid">
@@ -126,69 +116,85 @@
                   </div>
                 </div>
                 <div class="studio-progress-panel-actions">
+                  <select class="studio-progress-aspect-mini" aria-label="Aspect ratio">
+                    <option value="1:1">1:1</option>
+                    <option value="3:4" selected>3:4</option>
+                    <option value="4:3">4:3</option>
+                    <option value="9:16">9:16</option>
+                    <option value="16:9">16:9</option>
+                  </select>
                   <button type="button" class="studio-progress-confirm" data-next-step="garment">Continue</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="garment" hidden>
                 <div class="studio-progress-panel-head">
                   <h3 class="studio-progress-panel-title">Select garment type</h3>
-                  <p class="studio-progress-panel-helper">Choose the product category you want to create.</p>
+                  <p class="studio-progress-panel-helper">Choose the product category.</p>
                 </div>
                 <div class="studio-progress-control-wrap">
                   <div class="dress-type-options studio-progress-dress-options" id="studioProgressDressTypeOptions"></div>
                 </div>
                 <div class="studio-progress-panel-actions">
+                  <select class="studio-progress-aspect-mini" aria-label="Aspect ratio">
+                    <option value="1:1">1:1</option>
+                    <option value="3:4" selected>3:4</option>
+                    <option value="4:3">4:3</option>
+                    <option value="9:16">9:16</option>
+                    <option value="16:9">16:9</option>
+                  </select>
                   <button type="button" class="studio-progress-confirm" data-next-step="style">Continue</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="style" hidden>
                 <div class="studio-progress-panel-head">
                   <h3 class="studio-progress-panel-title">Set the style</h3>
-                  <p class="studio-progress-panel-helper">Choose the visual direction for your final result.</p>
+                  <p class="studio-progress-panel-helper">Set the visual style for your final image.</p>
                 </div>
                 <div class="studio-progress-control-wrap">
                   <div class="style-type-options studio-progress-style-options" id="studioProgressStyleOptions"></div>
                   <div class="prompt-suggestions studio-inline-suggestions studio-progress-suggestions" id="studioProgressSuggestions" hidden></div>
                 </div>
                 <div class="studio-progress-panel-actions">
+                  <select class="studio-progress-aspect-mini" aria-label="Aspect ratio">
+                    <option value="1:1">1:1</option>
+                    <option value="3:4" selected>3:4</option>
+                    <option value="4:3">4:3</option>
+                    <option value="9:16">9:16</option>
+                    <option value="16:9">16:9</option>
+                  </select>
                   <button type="button" class="studio-progress-confirm" data-next-step="background">Continue</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="background" hidden>
                 <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title">Choose the environment</h3>
-                  <p class="studio-progress-panel-helper">Set the final scene for your fashion shoot.</p>
+                  <h3 class="studio-progress-panel-title">Choose the scene</h3>
+                  <p class="studio-progress-panel-helper">Choose the background.</p>
                 </div>
+                <div class="studio-progress-control-wrap">
+                  <div class="style-type-options studio-progress-style-options" id="studioProgressBackgroundOptions"></div>
+                </div>
+                <input type="hidden" id="studioProgressBackground" value="lookbook-studio">
                 <div class="studio-progress-background">
                   <label class="studio-progress-field">
-                    <span>Environment</span>
-                    <select id="studioProgressBackground">
-                      <option value="lookbook-studio">Neutral lookbook studio</option>
-                      <option value="editorial-high-end">High-end fashion editorial</option>
-                      <option value="runway-show">Runway show</option>
-                      <option value="urban-street">Urban street style</option>
-                      <option value="retail-boutique">Premium retail boutique</option>
-                      <option value="lifestyle-indoor">Soft indoor lifestyle</option>
-                      <option value="outdoor-golden-hour">Outdoor golden hour</option>
-                      <option value="social-clean">Clean social content</option>
-                      <option value="luxury-hotel-resort">Luxury hotel resort</option>
-                      <option value="minimal-ecommerce">Minimal e-commerce catalog</option>
-                      <option value="custom">Custom environment</option>
-                    </select>
-                  </label>
-                  <label class="studio-progress-field">
-                    <span>Custom environment</span>
+                    <span>Custom scene</span>
                     <textarea id="studioProgressBackgroundPrompt" rows="3" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
                   </label>
                 </div>
                 <div class="studio-progress-panel-actions">
+                  <select class="studio-progress-aspect-mini" aria-label="Aspect ratio">
+                    <option value="1:1">1:1</option>
+                    <option value="3:4" selected>3:4</option>
+                    <option value="4:3">4:3</option>
+                    <option value="9:16">9:16</option>
+                    <option value="16:9">16:9</option>
+                  </select>
                   <button type="button" class="studio-progress-confirm" data-next-step="generate">Continue</button>
                 </div>
               </div>
               <div class="studio-progress-panel" data-step-panel="generate" hidden>
                 <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title">Create your result</h3>
-                  <p class="studio-progress-panel-helper">Review your setup and create your final fashion image.</p>
+                  <h3 class="studio-progress-panel-title">Create your shoot</h3>
+                  <p class="studio-progress-panel-helper">Review your setup and create the final result.</p>
                 </div>
                 <div class="studio-progress-generate">
                   <div class="studio-progress-field">
@@ -232,18 +238,41 @@
             </button>
           </div>
           <div class="style-type-options" id="studioStyleOptions">
-            <button class="style-type-btn" data-style="vogue">Vogue</button>
-            <button class="style-type-btn" data-style="fashion-look-book">Lookbook</button>
-            <button class="style-type-btn" data-style="bw">B&amp;W</button>
-            <button class="style-type-btn" data-style="streetwear-editorial">Streetwear</button>
-            <button class="style-type-btn" data-style="golden-hour">Golden hour</button>
+            <button class="style-type-btn" data-style="vogue">
+              <img src="images/style/vogue.jpeg" alt="Vogue style">
+              <span class="style-type-btn__label">Vogue</span>
+            </button>
+            <button class="style-type-btn" data-style="fashion-look-book">
+              <img src="images/style/lookbook.jpeg" alt="Lookbook style">
+              <span class="style-type-btn__label">Lookbook</span>
+            </button>
+            <button class="style-type-btn" data-style="bw">
+              <img src="images/style/black_white.jpeg" alt="Black and white style">
+              <span class="style-type-btn__label">B&amp;W</span>
+            </button>
+            <button class="style-type-btn" data-style="streetwear-editorial">
+              <img src="images/style/streetwear.jpeg" alt="Streetwear style">
+              <span class="style-type-btn__label">Streetwear</span>
+            </button>
+            <button class="style-type-btn" data-style="grid" aria-label="Grid">
+              <img src="images/style/grid.jpeg" alt="Grid style">
+              <span class="style-type-btn__label">Grid</span>
+            </button>
+            <button class="style-type-btn" data-style="social" aria-label="Social">
+              <img src="images/style/social.jpeg" alt="Social style">
+              <span class="style-type-btn__label">Social</span>
+            </button>
+            <button class="style-type-btn" data-style="golden-hour">
+              <img src="images/style/golden_hour.jpeg" alt="Golden hour style">
+              <span class="style-type-btn__label">Golden hour</span>
+            </button>
           </div>
           <button class="upload-action" id="studioGenerate">Create</button>
           <button type="button" class="studio-advanced-settings__toggle" id="studioSettingsToggle" aria-expanded="false" aria-controls="studioSettingsBody"></button>
           <div class="studio-advanced-settings__body" id="studioSettingsBody" hidden>
             <select id="studioAspect">
               <option value="1:1">1:1</option>
-              <option value="3:4">3:4</option>
+              <option value="3:4" selected>3:4</option>
               <option value="4:3">4:3</option>
               <option value="9:16">9:16</option>
               <option value="16:9">16:9</option>
@@ -259,7 +288,7 @@
               <option value="social-clean">Clean social content</option>
               <option value="luxury-hotel-resort">Luxury hotel resort</option>
               <option value="minimal-ecommerce">Minimal e-commerce catalog</option>
-              <option value="custom">Custom environment</option>
+              <option value="custom">Custom scene</option>
             </select>
             <textarea id="studioBackgroundPrompt" rows="2" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
             <div class="prompt-suggestions studio-inline-suggestions">
@@ -449,12 +478,16 @@
       const progressDressTypeOptions = document.getElementById('studioProgressDressTypeOptions');
       const progressStyleOptions = document.getElementById('studioProgressStyleOptions');
       const progressSuggestions = document.getElementById('studioProgressSuggestions');
+      const progressBackgroundOptions = document.getElementById('studioProgressBackgroundOptions');
       const progressBackgroundSelect = document.getElementById('studioProgressBackground');
       const progressBackgroundPrompt = document.getElementById('studioProgressBackgroundPrompt');
       const progressGenerateBtn = document.getElementById('studioProgressGenerate');
       const progressConfirmButtons = Array.from(document.querySelectorAll('.studio-progress-confirm'));
+      const progressMiniAspectControls = Array.from(document.querySelectorAll('.studio-progress-aspect-mini'));
       const progressModelThumb = document.querySelector('.studio-progress-step[data-step="model"] .studio-progress-step__thumb');
       const progressGarmentThumb = document.querySelector('.studio-progress-step[data-step="garment"] .studio-progress-step__thumb');
+      const progressStyleThumb = document.querySelector('.studio-progress-step[data-step="style"] .studio-progress-step__thumb');
+      const progressBackgroundThumb = document.querySelector('.studio-progress-step[data-step="background"] .studio-progress-step__thumb');
 
       const dressDropzone = dressInput?.closest('.upload-dropzone');
       const dressDropLabel = dressDropzone?.querySelector('.drop-label');
@@ -547,8 +580,20 @@
         { value: 'fashion-look-book', label: 'Lookbook' },
         { value: 'bw', label: 'B&W' },
         { value: 'streetwear-editorial', label: 'Streetwear' },
+        { value: 'grid', label: 'Grid' },
+        { value: 'social', label: 'Social' },
         { value: 'golden-hour', label: 'Golden hour' },
       ];
+
+      const STYLE_CARD_IMAGES = {
+        vogue: 'images/style/vogue.jpeg',
+        'fashion-look-book': 'images/style/lookbook.jpeg',
+        bw: 'images/style/black_white.jpeg',
+        'streetwear-editorial': 'images/style/streetwear.jpeg',
+        grid: 'images/style/grid.jpeg',
+        social: 'images/style/social.jpeg',
+        'golden-hour': 'images/style/golden_hour.jpeg',
+      };
 
       const ACCESSORY_STYLE_OPTIONS = [
         { value: 'orecchini', label: 'Orecchini' },
@@ -556,6 +601,33 @@
         { value: 'collana', label: 'Collana' },
         { value: 'borsa', label: 'Borsa' },
       ];
+
+      const DEFAULT_BACKGROUND_OPTIONS = [
+        { value: 'lookbook-studio', label: 'Neutral lookbook studio' },
+        { value: 'editorial-high-end', label: 'High-end fashion editorial' },
+        { value: 'runway-show', label: 'Runway show' },
+        { value: 'urban-street', label: 'Urban street style' },
+        { value: 'retail-boutique', label: 'Premium retail boutique' },
+        { value: 'lifestyle-indoor', label: 'Soft indoor lifestyle' },
+        { value: 'outdoor-golden-hour', label: 'Outdoor golden hour' },
+        { value: 'social-clean', label: 'Clean social content' },
+        { value: 'luxury-hotel-resort', label: 'Luxury hotel resort' },
+        { value: 'minimal-ecommerce', label: 'Minimal e-commerce catalog' },
+        { value: 'custom', label: 'Custom scene' },
+      ];
+
+      const BACKGROUND_CARD_IMAGES = {
+        'lookbook-studio': 'images/scene/neutral lookbook.jpeg',
+        'editorial-high-end': 'images/scene/fashion_editorial.jpeg',
+        'runway-show': 'images/scene/runway.jpeg',
+        'urban-street': 'images/scene/urban.jpeg',
+        'retail-boutique': 'images/scene/premium_boutique.jpeg',
+        'lifestyle-indoor': 'images/scene/indoor.jpeg',
+        'outdoor-golden-hour': 'images/scene/golden_hour.jpeg',
+        'social-clean': 'images/scene/social_clean.jpeg',
+        'luxury-hotel-resort': 'images/scene/luxury_hotel.jpeg',
+        'minimal-ecommerce': 'images/scene/e_commerce.jpeg',
+      };
 
       const STYLE_PROMPTS = {
         vogue:
@@ -572,7 +644,7 @@
           'High-fidelity texture rendering, very clean image, no visible noise or grain. ' +
           'Premium, high-end professional finish. ' +
           'Camera look: implied medium format or high-end full-frame quality with very high dynamic range. ' +
-          'Prime lens look in the 85mmâ€“135mm range, with natural compression and elegant depth separation. ' +
+          'Prime lens look in the 85mm-135mm range, with natural compression and elegant depth separation. ' +
           'Aperture around f/2.8 for a balanced depth of field. ' +
           'Overall mood: sophisticated, modern, aspirational, high-end editorial.',
         bw:
@@ -588,6 +660,20 @@
           'No visible noise or artifacts, professional studio finish. ' +
           'General mood: powerful, refined, elegant, timeless, minimalist, high-fashion editorial.',
         'streetwear-editorial':
+          'Editorial-print-ready, high-fashion visual style with strong technical emphasis. . ' +
+          'Priority: physical perspective accuracy, material realism, environmental coherence. ' +
+          'Intent: high-fashion editorial with extreme wide-angle perspective study. ' +
+          'Secondary intent: technical demonstration of foreshortening and forced perspective. ' +
+          'Designed for fashion magazine. ' +
+          'Visual language: cinematic, bold, experimental editorial look. ' +
+          'Strong use of extreme wide-angle perspective. ' +
+          'Emphasis on depth, scale distortion, and spatial exaggeration. ' +
+          'Forced perspective and foreshortening must be visually clear and physically coherent. ' +
+          'Image quality: editorial print-ready quality. Very high realism. ' +
+          'High detail fidelity. Accurate material and surface rendering. ' +
+          'Clean, professional finish, no artifacts. ' +
+          'Overall mood: high-impact, modern, fashion-forward, experimental, technically impressive, visually powerful.',
+        grid:
           'Editorial-print-ready, high-fashion visual style with strong technical emphasis. ' +
           'Generation mode: multi-panel consistent. ' +
           'Strict visual coherence across all panels. ' +
@@ -605,6 +691,15 @@
           'High detail fidelity. Accurate material and surface rendering. ' +
           'Clean, professional finish, no artifacts. ' +
           'Overall mood: high-impact, modern, fashion-forward, experimental, technically impressive, visually powerful.',
+        social:
+          'Generate a photorealistic image in a casual influencer selfie style. ' +
+          'The photo should feel spontaneous and natural, like a real Instagram post. ' +
+          'Expression: relaxed and natural, slight smile or neutral face, soft confident vibe. ' +
+          'Pose: informal selfie posture, natural body position, not perfectly posed. ' +
+          'Lighting: soft natural light (window light or daylight), slightly imperfect but flattering. ' +
+          'Camera: shot as if taken with a modern smartphone (iPhone-style), subtle depth and natural sharpness. ' +
+          'Framing (vary naturally): close-up selfie (face dominant), half-body selfie (torso visible), mirror selfie (slightly imperfect angle). ' +
+          'Style: real-life, slightly imperfect, authentic social media aesthetic. Avoid overly polished or artificial look.',
         'golden-hour':
           'Cinematic, high-fashion editorial, ultra-realistic visual style. ' +
           'Camera look: high-end modern full-frame digital photography. ' +
@@ -639,7 +734,9 @@
       let selectedAccessorySuggestion = null;
       let selectedReadyModel = null;
       let selectedAspect = '3:4';
+      let hasChosenAspect = true;
       let hasChosenBackground = false;
+      let hasCompletedProgressFlow = false;
       let pendingGeneratedModelUrl = '';
       let lastInput = null;
       let lastImageUrl = '';
@@ -808,6 +905,94 @@
         }
       };
 
+      const setProgressStyleThumbnail = (style = '') => {
+        if (!progressStyleThumb) return;
+        const image = STYLE_CARD_IMAGES[style];
+        if (image) {
+          progressStyleThumb.style.backgroundImage = `url("${image}")`;
+          progressStyleThumb.classList.add('has-image');
+          progressStyleThumb.classList.remove('has-icon');
+        } else {
+          progressStyleThumb.style.backgroundImage = '';
+          progressStyleThumb.classList.remove('has-image');
+          progressStyleThumb.classList.remove('has-icon');
+        }
+      };
+
+      const setProgressBackgroundThumbnail = () => {
+        if (!progressBackgroundThumb) return;
+        const selectedValue = progressBackgroundSelect?.value || '';
+        const image = BACKGROUND_CARD_IMAGES[selectedValue];
+        if (hasChosenBackground && image) {
+          progressBackgroundThumb.style.backgroundImage = `url("${image}")`;
+          progressBackgroundThumb.classList.add('has-image');
+          progressBackgroundThumb.classList.remove('has-icon');
+        } else if (hasChosenBackground && selectedValue) {
+          progressBackgroundThumb.style.backgroundImage = '';
+          progressBackgroundThumb.classList.remove('has-image');
+          progressBackgroundThumb.classList.add('has-icon');
+        } else {
+          progressBackgroundThumb.style.backgroundImage = '';
+          progressBackgroundThumb.classList.remove('has-image');
+          progressBackgroundThumb.classList.remove('has-icon');
+        }
+      };
+
+      const setProgressStepLabel = (stepName, label) => {
+        const stepBtn = progressSteps.find((step) => step.dataset.step === stepName);
+        const labelEl = stepBtn?.querySelector('.studio-progress-step__label');
+        if (!stepBtn || !labelEl) return;
+        labelEl.textContent = label;
+        stepBtn.setAttribute('aria-label', label);
+      };
+
+      const getSelectedModelLabel = () => {
+        const activeReadyCard = readyCards.find((card) => card.classList.contains('active'));
+        const visibleName = activeReadyCard?.querySelector('.studio-ready-name')?.textContent?.trim();
+        if (visibleName) return visibleName;
+        if (activeReadyCard?.dataset.modelName) return activeReadyCard.dataset.modelName;
+        if (modelPreview?.querySelector('img')) return 'Custom model';
+        return 'Model';
+      };
+
+      const getSelectedGarmentLabel = () => {
+        const sourceBtn = dressTypeOptions.find((btn) => (btn.dataset.type || '') === selectedDressType);
+        return sourceBtn?.querySelector('span')?.textContent?.trim() || 'Garment';
+      };
+
+      const getSelectedStyleLabel = () => {
+        const allOptions = [...DEFAULT_STYLE_OPTIONS, ...ACCESSORY_STYLE_OPTIONS];
+        return allOptions.find((option) => option.value === selectedStyle)?.label || 'Style';
+      };
+
+      const getSelectedBackgroundLabel = () => {
+        if (!hasChosenBackground) return 'Scene';
+        const value = progressBackgroundSelect?.value || '';
+        const shortLabels = {
+          'lookbook-studio': 'Lookbook',
+          'editorial-high-end': 'Editorial',
+          'runway-show': 'Runway',
+          'urban-street': 'Street',
+          'retail-boutique': 'Retail',
+          'lifestyle-indoor': 'Lifestyle',
+          'outdoor-golden-hour': 'Golden hour',
+          'social-clean': 'Social',
+          'luxury-hotel-resort': 'Resort',
+          'minimal-ecommerce': 'Catalog',
+          custom: 'Custom scene',
+        };
+        return shortLabels[value] || progressBackgroundSelect?.selectedOptions?.[0]?.textContent?.trim() || 'Scene';
+      };
+
+      const updateProgressStepSummaries = () => {
+        setProgressStepLabel('model', hasSelectedModel() ? getSelectedModelLabel() : 'Model');
+        setProgressStepLabel('garment', selectedDressType ? getSelectedGarmentLabel() : 'Garment');
+        setProgressStepLabel('style', selectedStyle ? getSelectedStyleLabel() : 'Style');
+        setProgressStepLabel('background', hasChosenBackground ? getSelectedBackgroundLabel() : 'Scene');
+        setProgressStyleThumbnail(selectedStyle);
+        setProgressBackgroundThumbnail();
+      };
+
       const getProgressStepIndex = (stepName) => progressStepOrder.indexOf(stepName);
 
       const hasSelectedModel = () =>
@@ -837,14 +1022,30 @@
         return accessibleIndex;
       };
 
+      const isProgressFlowComplete = () =>
+        hasSelectedModel() &&
+        Boolean(selectedDressType) &&
+        Boolean(selectedStyle) &&
+        hasChosenBackground &&
+        Boolean(selectedAspect);
+
       const updateProgressConfirmState = () => {
+        hasCompletedProgressFlow = isProgressFlowComplete();
         progressConfirmButtons.forEach((button) => {
           const panel = button.closest('.studio-progress-panel');
           const stepName = panel?.dataset.stepPanel || '';
           const isReady = isProgressStepReady(stepName);
+          const isGenerateMode = hasCompletedProgressFlow && stepName !== 'generate';
+          const miniAspectControl = panel?.querySelector('.studio-progress-aspect-mini');
+          if (miniAspectControl) {
+            miniAspectControl.value = selectedAspect || '3:4';
+          }
+          button.textContent = isGenerateMode ? 'Generate' : 'Continue';
+          button.dataset.mode = isGenerateMode ? 'generate' : 'continue';
           button.disabled = !isReady;
           button.classList.toggle('is-ready', isReady);
           button.setAttribute('aria-disabled', isReady ? 'false' : 'true');
+          button.setAttribute('aria-label', isGenerateMode ? 'Generate' : 'Continue');
         });
       };
 
@@ -856,7 +1057,9 @@
           const stepIndex = getProgressStepIndex(stepBtn.dataset.step || '');
           const isActive = stepBtn.dataset.step === nextStep;
           const isLocked = stepIndex > visibleUntilIndex;
+          const isReady = !isLocked && isProgressStepReady(stepBtn.dataset.step || '');
           stepBtn.classList.toggle('is-active', isActive);
+          stepBtn.classList.toggle('is-ready', isReady);
           stepBtn.classList.toggle('is-complete', stepIndex > -1 && stepIndex < nextStepIndex && stepIndex <= visibleUntilIndex);
           stepBtn.classList.toggle('is-locked', isLocked);
           stepBtn.hidden = false;
@@ -872,12 +1075,16 @@
         const progressStepsContainer = document.getElementById('studioProgressSteps');
         progressStepsContainer?.classList.toggle('is-empty', progressUnlockedIndex < 0);
         progressCurrentStep = nextStep;
+        updateProgressStepSummaries();
         updateProgressConfirmState();
       };
 
       const unlockProgressStep = (stepName) => {
         const stepIndex = getProgressStepIndex(stepName);
         if (stepIndex === -1) return;
+        if (stepName === 'generate' && hasChosenAspect && selectedAspect) {
+          hasCompletedProgressFlow = true;
+        }
         progressUnlockedIndex = Math.max(progressUnlockedIndex, stepIndex);
         setProgressStep(stepName);
       };
@@ -897,9 +1104,64 @@
         progressStyleOptions.innerHTML = options
           .map(
             (option) =>
-              `<button class="style-type-btn${option.value === selectedStyle ? ' active' : ''}" data-style="${option.value}">${option.label}</button>`
+              renderStyleOptionMarkup(option)
           )
           .join('');
+      };
+
+      const renderStyleOptionMarkup = (option) => {
+        const image = STYLE_CARD_IMAGES[option.value];
+        const activeClass = option.value === selectedStyle ? ' active' : '';
+        if (image) {
+          return `<button class="style-type-btn${activeClass}" data-style="${option.value}" aria-label="${option.label}">
+              <img src="${image}" alt="${option.label} style">
+              <span class="style-type-btn__label">${option.label}</span>
+            </button>`;
+        }
+        return `<button class="style-type-btn style-type-btn--text${activeClass}" data-style="${option.value}" aria-label="${option.label}">
+            <span class="style-type-btn__fallback" aria-hidden="true">${option.label.slice(0, 1)}</span>
+            <span class="style-type-btn__label">${option.label}</span>
+          </button>`;
+      };
+
+      const renderBackgroundOptionMarkup = (option) => {
+        const image = BACKGROUND_CARD_IMAGES[option.value];
+        const activeClass =
+          hasChosenBackground && option.value === (progressBackgroundSelect?.value || '') ? ' active' : '';
+        if (image) {
+          return `<button class="style-type-btn${activeClass}" data-background="${option.value}" aria-label="${option.label}">
+              <img src="${image}" alt="${option.label} scene">
+              <span class="style-type-btn__label">${option.label}</span>
+            </button>`;
+        }
+        return `<button class="style-type-btn style-type-btn--text${activeClass}" data-background="${option.value}" aria-label="${option.label}">
+            <span class="style-type-btn__fallback" aria-hidden="true">${option.label.slice(0, 1)}</span>
+            <span class="style-type-btn__label">${option.label}</span>
+          </button>`;
+      };
+
+      const renderProgressBackgroundOptions = () => {
+        if (!progressBackgroundOptions) return;
+        progressBackgroundOptions.innerHTML = DEFAULT_BACKGROUND_OPTIONS
+          .map((option) => renderBackgroundOptionMarkup(option))
+          .join('');
+      };
+
+      const setBackgroundValue = (value, source = 'progress') => {
+        const nextValue = value || 'lookbook-studio';
+        if (progressBackgroundSelect) {
+          progressBackgroundSelect.value = nextValue;
+        }
+        if (backgroundSelect) {
+          backgroundSelect.value = nextValue;
+        }
+        progressBackgroundOptions?.querySelectorAll('.style-type-btn').forEach((button) => {
+          button.classList.toggle('active', button.dataset.background === nextValue);
+        });
+        hasChosenBackground = true;
+        syncBackgroundFields(source);
+        updateProgressConfirmState();
+        setProgressStep(progressCurrentStep);
       };
 
       const syncBackgroundFields = (source = 'original') => {
@@ -926,15 +1188,19 @@
             aspectSelect.value = selectedAspect;
           }
         } else if (aspectSelect) {
-          selectedAspect = aspectSelect.value || '3:4';
+          selectedAspect = aspectSelect.value || '';
         }
+        progressMiniAspectControls.forEach((select) => {
+          select.value = selectedAspect || '3:4';
+        });
         progressAspectOptions?.querySelectorAll('.studio-progress-aspect-btn').forEach((btn) => {
           btn.classList.toggle('active', btn.dataset.aspect === selectedAspect);
         });
       };
 
       const setAspectValue = (value) => {
-        selectedAspect = value || '3:4';
+        selectedAspect = value || '';
+        hasChosenAspect = Boolean(selectedAspect);
         syncAspectField('progress');
         if (aspectSelect) {
           aspectSelect.value = selectedAspect;
@@ -1013,7 +1279,7 @@
         styleOptionsContainer.innerHTML = nextOptions
           .map(
             (option) =>
-              `<button class="style-type-btn${option.value === selectedStyle ? ' active' : ''}" data-style="${option.value}">${option.label}</button>`
+              renderStyleOptionMarkup(option)
           )
           .join('');
         styleOptions = Array.from(styleOptionsContainer.querySelectorAll('.style-type-btn'));
@@ -1046,6 +1312,11 @@
 
       progressConfirmButtons.forEach((button) => {
         button.addEventListener('click', () => {
+          if (button.dataset.mode === 'generate') {
+            hasCompletedProgressFlow = true;
+            generateBtn?.click();
+            return;
+          }
           const nextStep = button.dataset.nextStep || 'model';
           unlockProgressStep(nextStep);
         });
@@ -1064,6 +1335,14 @@
         e.preventDefault();
         const style = btn.dataset.style || null;
         setStyleValue(selectedStyle === style ? null : style);
+      });
+
+      progressBackgroundOptions?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.style-type-btn');
+        if (!btn) return;
+        e.preventDefault();
+        const background = btn.dataset.background || 'lookbook-studio';
+        setBackgroundValue(background, 'progress');
       });
 
       progressSuggestions?.addEventListener('click', (e) => {
@@ -1086,12 +1365,9 @@
         }
       });
 
-      progressBackgroundSelect?.addEventListener('change', () => {
-        hasChosenBackground = true;
-        syncBackgroundFields('progress');
-        updateProgressConfirmState();
-        setProgressStep(progressCurrentStep);
-      });
+      progressBackgroundSelect?.addEventListener('change', () =>
+        setBackgroundValue(progressBackgroundSelect.value, 'progress')
+      );
       progressBackgroundPrompt?.addEventListener('input', () => syncBackgroundFields('progress'));
       progressAspectOptions?.addEventListener('click', (e) => {
         const btn = e.target.closest('.studio-progress-aspect-btn');
@@ -1099,14 +1375,19 @@
         e.preventDefault();
         setAspectValue(btn.dataset.aspect || '3:4');
       });
-      backgroundSelect?.addEventListener('change', () => {
-        hasChosenBackground = true;
-        syncBackgroundFields('original');
-        updateProgressConfirmState();
-        setProgressStep(progressCurrentStep);
+      progressMiniAspectControls.forEach((select) => {
+        select.addEventListener('change', () => {
+          setAspectValue(select.value || '3:4');
+        });
       });
+      backgroundSelect?.addEventListener('change', () =>
+        setBackgroundValue(backgroundSelect.value, 'original')
+      );
       backgroundPrompt?.addEventListener('input', () => syncBackgroundFields('original'));
-      aspectSelect?.addEventListener('change', () => syncAspectField('original'));
+      aspectSelect?.addEventListener('change', () => {
+        hasChosenAspect = Boolean(aspectSelect.value);
+        syncAspectField('original');
+      });
       progressGenerateBtn?.addEventListener('click', () => generateBtn?.click());
 
       readyCards.forEach((card) => {
@@ -1325,11 +1606,14 @@
 
       setInterval(refreshRecent, 20000);
       refreshRecent();
-      if (aspectSelect) aspectSelect.value = '3:4';
+      if (aspectSelect) {
+        aspectSelect.value = '3:4';
+      }
       updateModelUiVisibility();
       renderProgressDressOptions();
       setProgressGarmentThumbnail(selectedDressType);
       renderStyleOptions();
+      renderProgressBackgroundOptions();
       syncAspectField('original');
       syncBackgroundFields('original');
       updateSuggestionVisibility();
@@ -1468,7 +1752,7 @@
           }
         } catch (err) {
           console.error('Generate failed', err);
-          alert('Creation failed. Please try again.');
+          alert('Unable to create your result. Please try again.');
         } finally {
           hideLoader();
         }

@@ -1161,7 +1161,8 @@ body::after {
 }
 
 .visual-demo__header {
-	max-width: 860px;
+	max-width: none;
+	width: 100%;
 	margin-bottom: 26px;
 }
 
@@ -1202,7 +1203,7 @@ body::after {
 }
 
 .visual-demo__description {
-	max-width: 760px;
+	max-width: none;
 	color: var(--text-secondary);
 	font-family: 'Rajdhani', sans-serif;
 	font-size: 18px;
@@ -1384,7 +1385,8 @@ body::after {
 }
 
 .how-it-works__header {
-	max-width: 760px;
+	max-width: none;
+	width: 100%;
 	margin-bottom: 32px;
 }
 
@@ -1425,7 +1427,7 @@ body::after {
 }
 
 .how-it-works__description {
-	max-width: 700px;
+	max-width: none;
 	color: var(--text-secondary);
 	font-family: 'Rajdhani', sans-serif;
 	font-size: 18px;
@@ -1566,7 +1568,8 @@ body::after {
 }
 
 .problem-solution__header {
-	max-width: 760px;
+	max-width: none;
+	width: 100%;
 	margin: 0 auto 34px;
 	text-align: center;
 }
@@ -4631,6 +4634,12 @@ body::after {
 	background-color: rgba(255, 255, 255, 0.03);
 }
 
+.studio-progress-step[data-step="background"] .studio-progress-step__thumb.has-image {
+	background-size: contain;
+	background-position: center center;
+	background-color: rgba(255, 255, 255, 0.03);
+}
+
 .studio-progress-step__thumb.has-icon {
 	border-style: solid;
 	border-color: rgba(212, 175, 55, 0.34);
@@ -4806,6 +4815,8 @@ body::after {
 
 .studio-progress-panel-actions {
 	display: flex;
+	align-items: center;
+	gap: 10px;
 	justify-content: flex-end;
 	padding-top: 0;
 	margin-top: 0;
@@ -4813,6 +4824,30 @@ body::after {
 	position: absolute;
 	top: 0;
 	right: 0;
+}
+
+.studio-progress-aspect-mini {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 72px;
+	min-width: 72px;
+	max-width: 72px;
+	padding: 8px 24px 8px 8px;
+	border-radius: 12px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02));
+	color: rgba(255, 245, 214, 0.82);
+	font-size: 10px;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.studio-progress-aspect-mini:hover {
+	border-color: rgba(212, 175, 55, 0.4);
+	background: linear-gradient(180deg, rgba(212, 175, 55, 0.1), rgba(255, 255, 255, 0.03));
 }
 
 .studio-progress-confirm {
@@ -4959,6 +4994,12 @@ body::after {
 	display: block;
 }
 
+#studioProgressBackgroundOptions .style-type-btn img {
+	aspect-ratio: 16 / 10;
+	object-fit: contain;
+	background: rgba(0, 0, 0, 0.18);
+}
+
 .studio-progress-style-options .style-type-btn__label {
 	display: block;
 	font-size: 12px;
@@ -5063,9 +5104,10 @@ body::after {
 }
 
 .studio-progress-field textarea {
-	min-height: 44px;
-	height: 44px;
-	resize: vertical;
+	min-height: 88px;
+	height: 88px;
+	overflow-y: hidden;
+	resize: none;
 }
 
 .studio-progress-generate {
