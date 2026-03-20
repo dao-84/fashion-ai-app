@@ -152,7 +152,7 @@ https://templatemo.com/tm-600-prism-flux
             const PRESET_BACKGROUND_PROMPT = 'high-end fashion editorial background, luxury set design, dramatic sculpted lighting, refined textures, premium magazine-style art direction';
             const PRESET_ASPECT_RATIO = '4:3';
             const loadingMessages = [
-                'Waiting imput image',
+                'Waiting input image',
                 'Applying style...',
                 'Finalizing details...',
             ];
