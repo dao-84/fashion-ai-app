@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Studio - AI Photoshoot</title>
+  <title>Fashion AI - Studio</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js" defer></script>
   <link rel="stylesheet" href="templatemo-prism-flux.css">
 </head>
 <body class="studio-body">
-  <header class="header">
+  <header class="header" id="header">
     <nav class="nav-container">
       <a href="index.html#home" class="logo">
         <div class="logo-icon">
@@ -22,13 +22,18 @@
           <span class="flux">AI</span>
         </span>
       </a>
-      <ul class="nav-menu">
+      <ul class="nav-menu" id="navMenu">
         <li><a href="index.html#home" class="nav-link">Home</a></li>
         <li><a href="gallery.html" class="nav-link">Gallery</a></li>
         <li><a href="studio.html" class="nav-link active">Studio</a></li>
         <li><a href="index.html#signup" class="nav-link" onclick="window.openBetaAccessModal && window.openBetaAccessModal(); return false;">Sign up / Log in</a></li>
         <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Remaining credit">€50,00</span></li>
       </ul>
+      <div class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-controls="navMenu" aria-expanded="false" role="button" tabindex="0">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </nav>
   </header>
 
@@ -1848,6 +1853,44 @@
       }
 
       setTimeout(() => mountGenAnimation(0), 200);
+    })();
+  </script>
+  <script>
+    (() => {
+      const menuToggle = document.getElementById('menuToggle');
+      const navMenu = document.getElementById('navMenu');
+      const header = document.getElementById('header');
+
+      if (!menuToggle || !navMenu || !header) return;
+
+      const toggleMenu = () => {
+        const isActive = navMenu.classList.toggle('active');
+        menuToggle.classList.toggle('active', isActive);
+        menuToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+      };
+
+      menuToggle.addEventListener('click', toggleMenu);
+      menuToggle.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toggleMenu();
+        }
+      });
+
+      navMenu.querySelectorAll('.nav-link').forEach((link) => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('active');
+          menuToggle.classList.remove('active');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      const syncHeaderState = () => {
+        header.classList.toggle('scrolled', window.scrollY > 12);
+      };
+
+      window.addEventListener('scroll', syncHeaderState, { passive: true });
+      syncHeaderState();
     })();
   </script>
 </body>
