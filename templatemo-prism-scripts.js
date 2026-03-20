@@ -123,6 +123,251 @@ https://templatemo.com/tm-600-prism-flux
             }, 3200);
         }
 
+        function initInstantPreviewSection() {
+            const input = document.getElementById('instantPreviewInput');
+            const dropzone = document.getElementById('instantPreviewDropzone');
+            const uploadState = document.getElementById('instantPreviewUploadState');
+            const garmentPreview = document.getElementById('instantPreviewGarmentPreview');
+            const garmentImage = document.getElementById('instantPreviewGarmentImage');
+            const emptyState = document.getElementById('instantPreviewEmptyState');
+            const loadingState = document.getElementById('instantPreviewLoading');
+            const loadingText = document.getElementById('instantPreviewLoadingText');
+            const resultContent = document.getElementById('instantPreviewResultContent');
+            const resultImage = document.getElementById('instantPreviewResultImage');
+            const variations = document.getElementById('instantPreviewVariations');
+            const variationOne = document.getElementById('instantPreviewVariationOne');
+            const variationTwo = document.getElementById('instantPreviewVariationTwo');
+            const cta = document.getElementById('instantPreviewCta');
+            const generateButton = document.getElementById('instantPreviewGenerateButton');
+            const variationOneCard = variationOne?.parentElement;
+            const variationTwoCard = variationTwo?.parentElement;
+
+            if (!input || !dropzone || !uploadState || !garmentPreview || !garmentImage || !emptyState || !loadingState || !loadingText || !resultContent || !resultImage || !variations || !variationOne || !variationTwo || !cta || !generateButton || !variationOneCard || !variationTwoCard) {
+                return;
+            }
+
+            const PRESET_MODEL_SRC = 'images/models/Nicole.jpeg';
+            const PRESET_PROMPT = 'the model in the image 1 wearing the outfit in the image 2';
+            const PRESET_STYLE_PROMPT = 'realistic fashion editorial portrait, studio lighting, high contrast shadows, glossy skin highlights, dramatic posing, Vogue-style composition, medium format camera look, impeccable detail, sharp eyes, textured clothing';
+            const PRESET_BACKGROUND_PROMPT = 'high-end fashion editorial background, luxury set design, dramatic sculpted lighting, refined textures, premium magazine-style art direction';
+            const PRESET_ASPECT_RATIO = '4:3';
+            const loadingMessages = [
+                'Waiting imput image',
+                'Applying style...',
+                'Finalizing details...',
+            ];
+            let previewUrl = null;
+            let generationToken = 0;
+            let selectedGarmentFile = null;
+            let hasGeneratedOnce = false;
+
+            const resetResultVisibility = () => {
+                emptyState.hidden = true;
+                loadingState.hidden = true;
+                resultContent.hidden = true;
+                variations.hidden = true;
+                cta.hidden = true;
+                generateButton.disabled = hasGeneratedOnce || !selectedGarmentFile;
+            };
+
+            const showEmptyState = () => {
+                emptyState.hidden = false;
+                loadingState.hidden = true;
+                resultContent.hidden = true;
+                variations.hidden = true;
+                cta.hidden = true;
+                variationOne.removeAttribute('src');
+                variationTwo.removeAttribute('src');
+                variationOneCard.hidden = true;
+                variationTwoCard.hidden = true;
+                generateButton.hidden = hasGeneratedOnce;
+                generateButton.disabled = hasGeneratedOnce || !selectedGarmentFile;
+            };
+
+            const setGarmentPreview = (file) => {
+                if (previewUrl) {
+                    URL.revokeObjectURL(previewUrl);
+                    previewUrl = null;
+                }
+
+                if (!file) {
+                    selectedGarmentFile = null;
+                    garmentPreview.hidden = true;
+                    uploadState.hidden = false;
+                    garmentImage.removeAttribute('src');
+                    showEmptyState();
+                    return;
+                }
+
+                selectedGarmentFile = file;
+                previewUrl = URL.createObjectURL(file);
+                garmentImage.src = previewUrl;
+                garmentPreview.hidden = false;
+                uploadState.hidden = true;
+                generateButton.hidden = hasGeneratedOnce;
+                generateButton.disabled = hasGeneratedOnce || !selectedGarmentFile;
+            };
+
+            const normalizeGeneratedUrl = (value) => {
+                if (!value || typeof value !== 'string') return '';
+                return value.startsWith('http')
+                    ? value
+                    : `${window.location.origin}/${value.replace(/^\/+/, '')}`;
+            };
+
+            const fileToDataUrl = (file) =>
+                new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = () => reject(reader.error);
+                    reader.readAsDataURL(file);
+                });
+
+            const buildPresetPrompt = () =>
+                `${PRESET_PROMPT}, style: ${PRESET_STYLE_PROMPT}, background: ${PRESET_BACKGROUND_PROMPT}`;
+
+            const runGeneration = async (file) => {
+                generationToken += 1;
+                const currentToken = generationToken;
+                resetResultVisibility();
+                generateButton.disabled = true;
+                loadingState.hidden = false;
+                loadingText.textContent = loadingMessages[0];
+
+                const start = Date.now();
+                let messageIndex = 0;
+                const intervalId = window.setInterval(() => {
+                    messageIndex = (messageIndex + 1) % loadingMessages.length;
+                    loadingText.textContent = loadingMessages[messageIndex];
+                }, 1700);
+
+                try {
+                    const dressDataUrl = await fileToDataUrl(file);
+                    const modelImage = `${window.location.origin}/${PRESET_MODEL_SRC.replace(/^\/+/, '')}`;
+                    const prompt = buildPresetPrompt();
+                    const inputPayload = {
+                        prompt,
+                        image_input: [modelImage, dressDataUrl],
+                        output_format: 'jpg',
+                        aspect_ratio: PRESET_ASPECT_RATIO,
+                    };
+                    const [response] = await Promise.all([
+                        requestVirtualShoot({ input: inputPayload }),
+                        new Promise((resolve) => setTimeout(resolve, 1650)),
+                    ]);
+
+                    window.clearInterval(intervalId);
+
+                    if (currentToken !== generationToken) {
+                        return;
+                    }
+
+                    const saved = Array.isArray(response?.saved) ? response.saved : [];
+                    const output = Array.isArray(response?.output) ? response.output : [];
+                    const generated = [...saved, ...output]
+                        .map(normalizeGeneratedUrl)
+                        .filter(Boolean);
+
+                    if (!generated.length) {
+                        throw new Error('No generated images returned');
+                    }
+
+                    const elapsed = Date.now() - start;
+                    if (elapsed < 1500) {
+                        await new Promise((resolve) => setTimeout(resolve, 1500 - elapsed));
+                    }
+
+                    resultImage.src = generated[0];
+                    resultImage.alt = 'Generated preview result';
+                    resultContent.hidden = false;
+                    hasGeneratedOnce = true;
+                    generateButton.hidden = true;
+                    generateButton.disabled = true;
+
+                    if (generated[1]) {
+                        variationOne.src = generated[1];
+                        variationOne.alt = 'Result variation 1';
+                        variationOneCard.hidden = false;
+                    }
+                    if (generated[2]) {
+                        variationTwo.src = generated[2];
+                        variationTwo.alt = 'Result variation 2';
+                        variationTwoCard.hidden = false;
+                    }
+                    variations.hidden = !(generated[1] || generated[2]);
+                    cta.hidden = false;
+                    loadingState.hidden = true;
+                    generateButton.disabled = false;
+                } catch (error) {
+                    window.clearInterval(intervalId);
+                    if (currentToken !== generationToken) {
+                        return;
+                    }
+
+                    console.error('Instant preview generation failed', error);
+                    loadingState.hidden = true;
+                    emptyState.hidden = false;
+                    emptyState.innerHTML = `
+                        <p class="instant-preview__result-empty-title">Unable to generate preview</p>
+                        <p class="instant-preview__result-empty-copy">Try another garment image in JPG or PNG format.</p>
+                    `;
+                    generateButton.disabled = !selectedGarmentFile;
+                }
+            };
+
+            const handleFileSelection = (file) => {
+                if (!file || !file.type.startsWith('image/')) {
+                    return;
+                }
+
+                setGarmentPreview(file);
+                emptyState.innerHTML = `
+                    <p class="instant-preview__result-empty-title">Your preview will appear here</p>
+                    <p class="instant-preview__result-empty-copy">Your garment is ready. Click "Create your shoot" to start the preview.</p>
+                `;
+                showEmptyState();
+            };
+
+            input.addEventListener('change', (event) => {
+                const file = event.target.files && event.target.files[0];
+                handleFileSelection(file);
+            });
+
+            ['dragenter', 'dragover'].forEach((eventName) => {
+                dropzone.addEventListener(eventName, (event) => {
+                    event.preventDefault();
+                    dropzone.classList.add('is-dragover');
+                });
+            });
+
+            ['dragleave', 'dragend', 'drop'].forEach((eventName) => {
+                dropzone.addEventListener(eventName, (event) => {
+                    event.preventDefault();
+                    dropzone.classList.remove('is-dragover');
+                });
+            });
+
+            dropzone.addEventListener('drop', (event) => {
+                const file = event.dataTransfer?.files && event.dataTransfer.files[0];
+                if (!file) return;
+
+                const transfer = new DataTransfer();
+                transfer.items.add(file);
+                input.files = transfer.files;
+                handleFileSelection(file);
+            });
+
+            generateButton.addEventListener('click', async () => {
+                if (!selectedGarmentFile || generateButton.disabled) {
+                    return;
+                }
+
+                await runGeneration(selectedGarmentFile);
+            });
+
+            showEmptyState();
+        }
+
         function initProblemSolutionReveal() {
             const section = document.querySelector('.problem-solution-section');
             if (!section) return;
@@ -784,6 +1029,7 @@ https://templatemo.com/tm-600-prism-flux
 
         // Initialize on load
         initHeroSlideshow();
+        initInstantPreviewSection();
         initGallery();
         initProblemSolutionReveal();
         initFaqAccordion();
