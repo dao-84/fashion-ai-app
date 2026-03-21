@@ -110,6 +110,39 @@ https://templatemo.com/tm-600-prism-flux
             return contentType.includes('application/json') ? response.json() : response.text();
         }
 
+        const TRACKING_SESSION_KEY = 'fashion-ai.session-id';
+
+        function getTrackingSessionId() {
+            try {
+                const existing = window.sessionStorage.getItem(TRACKING_SESSION_KEY);
+                if (existing) return existing;
+                const nextId = `sess_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+                window.sessionStorage.setItem(TRACKING_SESSION_KEY, nextId);
+                return nextId;
+            } catch (_error) {
+                return `sess_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+            }
+        }
+
+        async function trackEvent(eventName, metadata = {}) {
+            try {
+                await fetch('/api/track-event', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sessionId: getTrackingSessionId(),
+                        eventName,
+                        timestamp: new Date().toISOString(),
+                        page: 'home',
+                        metadata,
+                    }),
+                    keepalive: true,
+                });
+            } catch (_error) {
+                // Ignore tracking failures.
+            }
+        }
+
         function initHeroSlideshow() {
             const slides = document.querySelectorAll('.saas-hero__slide');
             if (slides.length < 2) return;
@@ -161,6 +194,7 @@ https://templatemo.com/tm-600-prism-flux
             let generationToken = 0;
             let selectedGarmentFile = null;
             let hasGeneratedOnce = false;
+            let hasTrackedUploadStart = false;
             const defaultEmptyMarkup = `
                     <p class="instant-preview__result-empty-title">Your preview will appear here</p>
                     <p class="instant-preview__result-empty-copy">Upload one garment image, then create a polished fashion visual instantly.</p>
@@ -354,6 +388,11 @@ https://templatemo.com/tm-600-prism-flux
                     }
 
                     applyGeneratedState(generated);
+                    trackEvent('image_generated_success', {
+                        entryPoint: 'home_instant_preview',
+                        imageUrl: generated[0],
+                        imageCount: generated.length,
+                    });
                     writeSessionState({
                         hasGeneratedOnce: true,
                         garmentPreviewUrl: dressDataUrl,
@@ -366,6 +405,10 @@ https://templatemo.com/tm-600-prism-flux
                     }
 
                     console.error('Instant preview generation failed', error);
+                    trackEvent('image_generated_failed', {
+                        entryPoint: 'home_instant_preview',
+                        errorMessage: error?.message || 'instant preview failed',
+                    });
                     loadingState.hidden = true;
                     emptyState.hidden = false;
                     emptyState.innerHTML = `
@@ -391,7 +434,18 @@ https://templatemo.com/tm-600-prism-flux
 
             input.addEventListener('change', (event) => {
                 const file = event.target.files && event.target.files[0];
+                if (file) {
+                    hasTrackedUploadStart = false;
+                    trackEvent('garment_upload_completed', { fileName: file.name });
+                }
                 handleFileSelection(file);
+            });
+
+            input.addEventListener('click', () => {
+                if (!hasTrackedUploadStart) {
+                    hasTrackedUploadStart = true;
+                    trackEvent('garment_upload_started');
+                }
             });
 
             ['dragenter', 'dragover'].forEach((eventName) => {
@@ -423,6 +477,10 @@ https://templatemo.com/tm-600-prism-flux
                     return;
                 }
 
+                trackEvent('generate_clicked', {
+                    entryPoint: 'home_instant_preview',
+                    garmentFileName: selectedGarmentFile.name || '',
+                });
                 await runGeneration(selectedGarmentFile);
             });
 
@@ -1094,6 +1152,11 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
             const guideline = publishGuideline?.value;
             const tone = publishTone?.value;
             if (!filename) return;
+            trackEvent('publish_generate_clicked', {
+                filename,
+                hasGuideline: Boolean(guideline),
+                tone: tone || '',
+            });
             showGenLoader();
             try {
                 const resp = await fetch('/api/publish/describe', {
@@ -1133,6 +1196,7 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
         });
 
         // Initialize on load
+        trackEvent('page_view_home');
         initHeroSlideshow();
         initInstantPreviewSection();
         initGallery();

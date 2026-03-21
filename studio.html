@@ -514,6 +514,42 @@
       const genModelBtn = document.getElementById('studioGenerateModelBtn');
       const settingsToggle = document.getElementById('studioSettingsToggle');
       const settingsBody = document.getElementById('studioSettingsBody');
+      const TRACKING_SESSION_KEY = 'fashion-ai.session-id';
+      const trackingPage = 'studio';
+
+      const getTrackingSessionId = () => {
+        try {
+          const existing = window.sessionStorage.getItem(TRACKING_SESSION_KEY);
+          if (existing) return existing;
+          const nextId = `sess_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+          window.sessionStorage.setItem(TRACKING_SESSION_KEY, nextId);
+          return nextId;
+        } catch (_error) {
+          return `sess_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+        }
+      };
+
+      const trackEvent = async (eventName, metadata = {}) => {
+        try {
+          await fetch('/api/track-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              sessionId: getTrackingSessionId(),
+              eventName,
+              timestamp: new Date().toISOString(),
+              page: trackingPage,
+              metadata,
+            }),
+            keepalive: true,
+          });
+        } catch (_error) {
+          // Tracking failures must not affect UX.
+        }
+      };
+
+      let lastTrackedBackgroundValue = '';
+      let hasTrackedGarmentUploadStart = false;
 
       const garmentTemplates = {
         dress: 'the model in the image 1 wearing the outfit in the image 2, full body shoot',
@@ -1187,6 +1223,13 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       const getSelectedStyleLabel = () => STYLE_PRESETS[selectedStyle]?.name || 'Style';
 
       const getSelectedBackgroundLabel = () => 'Custom Scene';
+      const getTrackingMetadata = (extra = {}) => ({
+        garmentType: selectedDressType || '',
+        selectedModel: selectedStyle === 'ghostMannequin' ? '' : getSelectedModelLabel(),
+        selectedStyle: selectedStyle || '',
+        selectedBackground: Boolean((backgroundPrompt?.value || progressBackgroundPrompt?.value || '').trim()),
+        ...extra,
+      });
 
       const updateProgressStepSummaries = () => {
         setProgressStepLabel('model', hasSelectedModel() ? getSelectedModelLabel() : 'Model');
@@ -1346,6 +1389,14 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             backgroundPrompt.value = progressBackgroundPrompt.value;
           }
           hasChosenBackground = Boolean((progressBackgroundPrompt?.value || '').trim());
+          const trackedValue = (progressBackgroundPrompt?.value || '').trim();
+          if (trackedValue && trackedValue !== lastTrackedBackgroundValue) {
+            lastTrackedBackgroundValue = trackedValue;
+            trackEvent('background_selected', getTrackingMetadata({ valueLength: trackedValue.length }));
+          }
+          if (!trackedValue) {
+            lastTrackedBackgroundValue = '';
+          }
           updateProgressConfirmState();
           setProgressStep(progressCurrentStep);
           return;
@@ -1354,6 +1405,14 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           progressBackgroundPrompt.value = backgroundPrompt.value;
         }
         hasChosenBackground = Boolean((backgroundPrompt?.value || '').trim());
+        const trackedValue = (backgroundPrompt?.value || '').trim();
+        if (trackedValue && trackedValue !== lastTrackedBackgroundValue) {
+          lastTrackedBackgroundValue = trackedValue;
+          trackEvent('background_selected', getTrackingMetadata({ valueLength: trackedValue.length }));
+        }
+        if (!trackedValue) {
+          lastTrackedBackgroundValue = '';
+        }
         updateProgressConfirmState();
         setProgressStep(progressCurrentStep);
       };
@@ -1395,12 +1454,32 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         progressSuggestions.style.display = selectedDressType === 'accessory' ? 'flex' : 'none';
       };
 
-      dressInput?.addEventListener('change', () => setPreview(dressInput, dressPreview, dressDropzone));
+      dressInput?.addEventListener('click', () => {
+        if (!hasTrackedGarmentUploadStart) {
+          hasTrackedGarmentUploadStart = true;
+          trackEvent('garment_upload_started', getTrackingMetadata());
+        }
+      });
+      dressInput?.addEventListener('change', () => {
+        setPreview(dressInput, dressPreview, dressDropzone);
+        if (dressInput?.files?.length) {
+          hasTrackedGarmentUploadStart = false;
+          trackEvent('garment_upload_completed', getTrackingMetadata({
+            fileName: dressInput.files[0]?.name || '',
+          }));
+        }
+      });
       modelInput?.addEventListener('change', () => {
         setPreview(modelInput, modelPreview, modelDropzone);
         selectedReadyModel = null;
         readyCards.forEach((c) => c.classList.remove('active'));
         setProgressModelThumbnail(modelPreview?.querySelector('img')?.src || '');
+        if (modelInput?.files?.length) {
+          trackEvent('model_selected', getTrackingMetadata({
+            source: 'upload',
+            fileName: modelInput.files[0]?.name || '',
+          }));
+        }
         setProgressStep(progressCurrentStep);
       });
 
@@ -1411,6 +1490,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         if (selectedDressType !== 'accessory') {
           selectedAccessorySuggestion = null;
         }
+        trackEvent('garment_type_selected', getTrackingMetadata({ garmentType: selectedDressType || '' }));
         updateModelUiVisibility();
         renderProgressDressOptions();
         renderStyleOptions();
@@ -1424,6 +1504,9 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         progressStyleOptions?.querySelectorAll('.style-type-btn').forEach((b) => {
           b.classList.toggle('active', b.dataset.style === selectedStyle);
         });
+        if (selectedStyle) {
+          trackEvent('style_selected', getTrackingMetadata());
+        }
         updateModelUiVisibility();
         setProgressStep(progressCurrentStep);
       };
@@ -1572,6 +1655,10 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           if (modelInput) {
             modelInput.value = '';
           }
+          trackEvent('model_selected', getTrackingMetadata({
+            source: 'preset',
+            selectedModel: name || 'Model',
+          }));
           setProgressStep(progressCurrentStep);
         });
       });
@@ -1724,6 +1811,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       if (aspectSelect) {
         aspectSelect.value = '3:4';
       }
+      trackEvent('page_view_studio');
       updateModelUiVisibility();
       renderProgressDressOptions();
       setProgressGarmentThumbnail(selectedDressType);
@@ -1833,6 +1921,10 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           aspect_ratio: settings.aspect || '1:1',
         };
         lastInput = input;
+        trackEvent('generate_clicked', getTrackingMetadata({
+          imageInputCount: imageInput.length,
+          hasCustomBackground: Boolean(customBackgroundPrompt),
+        }));
 
         showLoader();
         try {
@@ -1855,10 +1947,17 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           const first = saved[0] || output[0];
           if (first) {
             const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+            trackEvent('image_generated_success', getTrackingMetadata({
+              imageUrl: full,
+              imageCount: saved.length || output.length || 1,
+            }));
             applyGeneratedResult(full, saved.length || output.length || 1);
           }
         } catch (err) {
           console.error('Generate failed', err);
+          trackEvent('image_generated_failed', getTrackingMetadata({
+            errorMessage: err?.message || 'generate failed',
+          }));
           alert('Unable to create your result. Please try again.');
         } finally {
           hideLoader();
@@ -1873,6 +1972,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           alert('No previous result available.');
           return;
         }
+        trackEvent('regenerate_clicked', getTrackingMetadata());
         showLoader();
         try {
           const resp = await fetch('/api/generate', {
@@ -1890,10 +1990,18 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           const first = saved[0] || output[0];
           if (first) {
             const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+            trackEvent('image_generated_success', getTrackingMetadata({
+              action: 'regenerate',
+              imageUrl: full,
+            }));
             applyGeneratedResult(full, saved.length || output.length || 1);
           }
         } catch (err) {
           console.error('Regeneration failed', err);
+          trackEvent('image_generated_failed', getTrackingMetadata({
+            action: 'regenerate',
+            errorMessage: err?.message || 'regeneration failed',
+          }));
           alert('Regeneration failed.');
         } finally {
           hideLoader();
@@ -1905,6 +2013,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           alert('No result available for pose change.');
           return;
         }
+        trackEvent('change_pose_clicked', getTrackingMetadata({ imageUrl: lastImageUrl }));
         const FIXED_POSE_PROMPT = `Modify the pose and camera framing of the subject while preserving the original image identity, outfit, garment details, proportions, colors, and overall visual consistency.
 
 The garment must remain unchanged in shape, fit, texture, and structure.
@@ -1960,10 +2069,18 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
           const first = saved[0] || output[0];
           if (first) {
             const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+            trackEvent('image_generated_success', getTrackingMetadata({
+              action: 'change_pose',
+              imageUrl: full,
+            }));
             applyGeneratedResult(full, saved.length || output.length || 1);
           }
         } catch (err) {
           console.error('Pose change failed', err);
+          trackEvent('image_generated_failed', getTrackingMetadata({
+            action: 'change_pose',
+            errorMessage: err?.message || 'pose change failed',
+          }));
           alert('Pose change failed.');
         } finally {
           hideLoader();
@@ -1972,6 +2089,12 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
 
       openBtn?.addEventListener('click', () => {
         if (lastImageUrl) window.open(lastImageUrl, '_blank');
+      });
+      backgroundPrompt?.addEventListener('focus', () => trackEvent('change_scene_clicked', getTrackingMetadata({ source: 'background_input' })));
+      progressBackgroundPrompt?.addEventListener('focus', () => trackEvent('change_scene_clicked', getTrackingMetadata({ source: 'progress_background_input' })));
+      studioDownloadBtn?.addEventListener('click', () => {
+        if (!lastImageUrl) return;
+        trackEvent('save_to_gallery_clicked', getTrackingMetadata({ imageUrl: lastImageUrl }));
       });
 
       const updateDownload = () => {
