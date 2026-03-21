@@ -218,20 +218,16 @@
         <div hidden aria-hidden="true">
           <div class="dress-type-options" id="studioDressTypeOptions">
             <button class="dress-type-btn active" data-type="dress">
-              <img src="images/icon/clothes.png" alt="Dress">
-              <span>Dress</span>
+              <img src="images/icon/clothes.png" alt="Total look">
+              <span>Total look</span>
             </button>
             <button class="dress-type-btn" data-type="top">
-              <img src="images/icon/tshirt.png" alt="Top">
-              <span>Top</span>
+              <img src="images/icon/tshirt.png" alt="Upper">
+              <span>Upper</span>
             </button>
-            <button class="dress-type-btn" data-type="trousers">
-              <img src="images/icon/trousers.png" alt="Trousers">
-              <span>Trousers</span>
-            </button>
-            <button class="dress-type-btn" data-type="skirt">
-              <img src="images/icon/skirt.png" alt="Skirt">
-              <span>Skirt</span>
+            <button class="dress-type-btn" data-type="lower">
+              <img src="images/icon/trousers.png" alt="Lower">
+              <span>Lower</span>
             </button>
             <button class="dress-type-btn" data-type="accessory">
               <img src="images/icon/pendant.png" alt="Accessory">
@@ -318,7 +314,6 @@
               <h3 class="studio-viewer-head__title">Current result</h3>
               <p class="studio-viewer-head__subtitle">Your latest fashion shoot result</p>
             </div>
-            <span class="studio-viewer-status">Ready</span>
           </div>
           <div class="studio-viewer-body" id="studioViewerBody">
             <img id="studioMainImg" alt="Generated fashion result">
@@ -522,10 +517,9 @@
       const settingsBody = document.getElementById('studioSettingsBody');
 
       const garmentTemplates = {
-        dress: 'the model in the image 1 wearing the outfit in the image 2',
-        top: 'the model in the image 1 wearing the top in the image 2',
-        trousers: 'the model in the image 1 wearing the trousers in the image 2',
-        skirt: 'the model in the image 1 wearing the skirt in the image 2',
+        dress: 'the model in the image 1 wearing the outfit in the image 2, full body shoot',
+        top: 'the model in the image 1 wearing the upper garment in the image 2, waist-up shoot',
+        lower: 'the model in the image 1 wearing the lower garment in the image 2, hip to feet shoot',
         accessory: 'luxury product photography',
       };
 
@@ -606,7 +600,8 @@ No distortion, no artistic interpretation, no added elements, no text.
 realistic fashion editorial portrait, studio lighting, high contrast shadows, glossy skin highlights,
 dramatic posing, Vogue-style composition, medium format camera look, impeccable detail, sharp eyes,
 textured clothing, high-end modern fashion editorial background, luxury set design,
-dramatic sculpted lighting, refined textures, premium magazine-style art direction
+dramatic sculpted lighting, refined textures, premium magazine-style art direction,
+No text, letters, logos, captions, typography, or written elements anywhere in the image.
 `,
         },
         urban: {
@@ -1640,14 +1635,12 @@ No noise, no distortion.
         }
         const untuckedControlMap = {
           top:
-            'top worn untucked, outside the trousers or skirt, hem clearly visible, no tuck',
+            'upper garment worn untucked, hem clearly visible, no tuck',
         };
         const framingTextMap = {
-          top: 'three-quarter 3/4 shot, half body shot, upper body framing focused on the top',
-          trousers:
-            'waist-down fashion shot, lower body framing, focus on the trousers fit and silhouette, legs fully visible, cropped from the waist down',
-          skirt:
-            'waist-down fashion shot, lower body framing, focus on the skirt shape and movement, legs visible, cropped from the waist down',
+          top: 'three-quarter 3/4 shot, half body shot, upper body framing focused on the upper garment',
+          lower:
+            'waist-down fashion shot, lower body framing, focus on the lower garment fit and silhouette, legs visible, cropped from the waist down',
         };
         const framingText = framingTextMap[garmentType] || '';
         const garmentControlText = untuckedControlMap[garmentType] || '';

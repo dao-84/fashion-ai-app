@@ -148,9 +148,10 @@ https://templatemo.com/tm-600-prism-flux
 
             const PRESET_MODEL_SRC = 'images/models/Nicole.jpeg';
             const PRESET_PROMPT = 'the model in the image 1 wearing the outfit in the image 2';
-            const PRESET_STYLE_PROMPT = 'realistic fashion editorial portrait, studio lighting, high contrast shadows, glossy skin highlights, dramatic posing, Vogue-style composition, medium format camera look, impeccable detail, sharp eyes, textured clothing';
+            const PRESET_STYLE_PROMPT = 'realistic fashion editorial portrait, studio lighting, high contrast shadows, glossy skin highlights, dramatic posing, Vogue-style composition, medium format camera look, impeccable detail, sharp eyes, textured clothing, No text, letters, logos, captions, typography, or written elements anywhere in the image.';
             const PRESET_BACKGROUND_PROMPT = 'high-end fashion editorial background, luxury set design, dramatic sculpted lighting, refined textures, premium magazine-style art direction';
             const PRESET_ASPECT_RATIO = '4:3';
+            const SESSION_STORAGE_KEY = 'fashion-ai.instant-preview.session';
             const loadingMessages = [
                 'Waiting input image',
                 'Applying style...',
@@ -160,6 +161,40 @@ https://templatemo.com/tm-600-prism-flux
             let generationToken = 0;
             let selectedGarmentFile = null;
             let hasGeneratedOnce = false;
+            const defaultEmptyMarkup = `
+                    <p class="instant-preview__result-empty-title">Your preview will appear here</p>
+                    <p class="instant-preview__result-empty-copy">Upload one garment image, then create a polished fashion visual instantly.</p>
+                `;
+            const readyEmptyMarkup = `
+                    <p class="instant-preview__result-empty-title">Your preview will appear here</p>
+                    <p class="instant-preview__result-empty-copy">Your garment is ready. Click "Create your shoot" to start the preview.</p>
+                `;
+
+            const readSessionState = () => {
+                try {
+                    const raw = window.sessionStorage.getItem(SESSION_STORAGE_KEY);
+                    return raw ? JSON.parse(raw) : null;
+                } catch (_error) {
+                    return null;
+                }
+            };
+
+            const writeSessionState = (state) => {
+                try {
+                    window.sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(state));
+                } catch (_error) {
+                    // Ignore storage failures silently.
+                }
+            };
+
+            const setInstantPreviewLocked = (isLocked) => {
+                hasGeneratedOnce = Boolean(isLocked);
+                input.disabled = hasGeneratedOnce;
+                dropzone.classList.toggle('is-disabled', hasGeneratedOnce);
+                dropzone.setAttribute('aria-disabled', hasGeneratedOnce ? 'true' : 'false');
+                generateButton.hidden = hasGeneratedOnce;
+                generateButton.disabled = hasGeneratedOnce || !selectedGarmentFile;
+            };
 
             const resetResultVisibility = () => {
                 emptyState.hidden = true;
@@ -180,8 +215,7 @@ https://templatemo.com/tm-600-prism-flux
                 variationTwo.removeAttribute('src');
                 variationOneCard.hidden = true;
                 variationTwoCard.hidden = true;
-                generateButton.hidden = hasGeneratedOnce;
-                generateButton.disabled = hasGeneratedOnce || !selectedGarmentFile;
+                setInstantPreviewLocked(hasGeneratedOnce);
             };
 
             const setGarmentPreview = (file) => {
@@ -204,8 +238,50 @@ https://templatemo.com/tm-600-prism-flux
                 garmentImage.src = previewUrl;
                 garmentPreview.hidden = false;
                 uploadState.hidden = true;
-                generateButton.hidden = hasGeneratedOnce;
-                generateButton.disabled = hasGeneratedOnce || !selectedGarmentFile;
+                setInstantPreviewLocked(hasGeneratedOnce);
+            };
+
+            const setGarmentPreviewFromUrl = (url) => {
+                if (!url) return;
+                if (previewUrl) {
+                    URL.revokeObjectURL(previewUrl);
+                    previewUrl = null;
+                }
+                garmentImage.src = url;
+                garmentPreview.hidden = false;
+                uploadState.hidden = true;
+            };
+
+            const applyGeneratedState = (generated = []) => {
+                if (!generated.length) return;
+
+                resultImage.src = generated[0];
+                resultImage.alt = 'Generated preview result';
+                resultContent.hidden = false;
+
+                if (generated[1]) {
+                    variationOne.src = generated[1];
+                    variationOne.alt = 'Result variation 1';
+                    variationOneCard.hidden = false;
+                } else {
+                    variationOne.removeAttribute('src');
+                    variationOneCard.hidden = true;
+                }
+
+                if (generated[2]) {
+                    variationTwo.src = generated[2];
+                    variationTwo.alt = 'Result variation 2';
+                    variationTwoCard.hidden = false;
+                } else {
+                    variationTwo.removeAttribute('src');
+                    variationTwoCard.hidden = true;
+                }
+
+                variations.hidden = !(generated[1] || generated[2]);
+                cta.hidden = false;
+                loadingState.hidden = true;
+                emptyState.hidden = true;
+                setInstantPreviewLocked(true);
             };
 
             const normalizeGeneratedUrl = (value) => {
@@ -277,27 +353,12 @@ https://templatemo.com/tm-600-prism-flux
                         await new Promise((resolve) => setTimeout(resolve, 1500 - elapsed));
                     }
 
-                    resultImage.src = generated[0];
-                    resultImage.alt = 'Generated preview result';
-                    resultContent.hidden = false;
-                    hasGeneratedOnce = true;
-                    generateButton.hidden = true;
-                    generateButton.disabled = true;
-
-                    if (generated[1]) {
-                        variationOne.src = generated[1];
-                        variationOne.alt = 'Result variation 1';
-                        variationOneCard.hidden = false;
-                    }
-                    if (generated[2]) {
-                        variationTwo.src = generated[2];
-                        variationTwo.alt = 'Result variation 2';
-                        variationTwoCard.hidden = false;
-                    }
-                    variations.hidden = !(generated[1] || generated[2]);
-                    cta.hidden = false;
-                    loadingState.hidden = true;
-                    generateButton.disabled = false;
+                    applyGeneratedState(generated);
+                    writeSessionState({
+                        hasGeneratedOnce: true,
+                        garmentPreviewUrl: dressDataUrl,
+                        generated,
+                    });
                 } catch (error) {
                     window.clearInterval(intervalId);
                     if (currentToken !== generationToken) {
@@ -311,20 +372,20 @@ https://templatemo.com/tm-600-prism-flux
                         <p class="instant-preview__result-empty-title">Unable to generate preview</p>
                         <p class="instant-preview__result-empty-copy">Try another garment image in JPG or PNG format.</p>
                     `;
-                    generateButton.disabled = !selectedGarmentFile;
+                    generateButton.disabled = hasGeneratedOnce || !selectedGarmentFile;
                 }
             };
 
             const handleFileSelection = (file) => {
+                if (hasGeneratedOnce) {
+                    return;
+                }
                 if (!file || !file.type.startsWith('image/')) {
                     return;
                 }
 
                 setGarmentPreview(file);
-                emptyState.innerHTML = `
-                    <p class="instant-preview__result-empty-title">Your preview will appear here</p>
-                    <p class="instant-preview__result-empty-copy">Your garment is ready. Click "Create your shoot" to start the preview.</p>
-                `;
+                emptyState.innerHTML = readyEmptyMarkup;
                 showEmptyState();
             };
 
@@ -364,6 +425,21 @@ https://templatemo.com/tm-600-prism-flux
 
                 await runGeneration(selectedGarmentFile);
             });
+
+            const storedState = readSessionState();
+            if (storedState?.hasGeneratedOnce) {
+                emptyState.innerHTML = defaultEmptyMarkup;
+                if (storedState.garmentPreviewUrl) {
+                    setGarmentPreviewFromUrl(storedState.garmentPreviewUrl);
+                }
+                if (Array.isArray(storedState.generated) && storedState.generated.length) {
+                    applyGeneratedState(storedState.generated);
+                } else {
+                    showEmptyState();
+                    setInstantPreviewLocked(true);
+                }
+                return;
+            }
 
             showEmptyState();
         }
@@ -456,10 +532,9 @@ https://templatemo.com/tm-600-prism-flux
 
         async function generateLook(settings = {}) {
             const garmentTemplates = {
-                dress: 'the model in the image 1 wearing the outfit in the image 2',
-                top: 'the model in the image 1 wearing the top in the image 2',
-                trousers: 'the model in the image 1 wearing the trousers in the image 2',
-                skirt: 'the model in the image 1 wearing the skirt in the image 2',
+                dress: 'the model in the image 1 wearing the outfit in the image 2, full body shoot',
+                top: 'the model in the image 1 wearing the upper garment in the image 2, waist-up shoot',
+                lower: 'the model in the image 1 wearing the lower garment in the image 2, hip to feet shoot',
                 accessory: 'luxury product photography',
             };
 
