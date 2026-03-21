@@ -177,7 +177,6 @@
                 </div>
                 <div class="studio-progress-background">
                   <label class="studio-progress-field">
-                    <span>Custom Scene (optional)</span>
                     <textarea id="studioProgressBackgroundPrompt" rows="3" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
                   </label>
                 </div>
@@ -229,7 +228,7 @@
               <img src="images/icon/trousers.png" alt="Lower">
               <span>Lower</span>
             </button>
-            <button class="dress-type-btn" data-type="accessory">
+            <button class="dress-type-btn" data-type="accessory" disabled aria-disabled="true">
               <img src="images/icon/pendant.png" alt="Accessory">
               <span>Accessory</span>
             </button>
@@ -751,35 +750,28 @@ No over-polishing, maintain realism.
 `,
         },
         outdoor: {
-          name: 'Outdoor Editorial',
-          shortLabel: 'Outdoor',
-          description: 'Natural light, relaxed editorial',
+          name: 'Golden Hour',
+          shortLabel: 'Minimalist',
+          description: 'Warm minimalist glow',
           image: 'images/style/golden_hour.jpeg',
           prompt: `
-Apply a strong visual transformation according to the selected style while preserving the garment exactly.
-
-Transform into outdoor fashion editorial.
-
-Subject:
-Garment unchanged.
-
-Pose:
-Relaxed flowing pose, interacting with environment, slight movement.
-
+photorealistic minimalist fashion studio portrait.
+The face should be natural and realistic, with well-balanced proportions and subtle skin texture. Avoid over-beautification or artificial features - maintain a believable, editorial look.
+Pose: Calm, confident, slightly introspective expression, looking toward the camera.
+Natural fabric flow and realistic textures should be visible.
 Environment:
-Open natural landscape (field, coast, desert).
-
+Background: Soft neutral seamless backdrop (light gray, warm beige, or subtle gradient).
+Props: Minimal and clean, matching the aesthetic.
 Lighting:
-Golden hour sunlight, soft directional shadows.
-
-Camera:
-Wide cinematic framing, 50mm or 35mm.
-
+hard golden hour sunlight, low-angle warm sun creating sharp shadow shapes, natural skin tones, smooth highlight falloff, and subtle depth. No harsh contrasts.
+Composition:
+Editorial framing, centered subject, strong negative space, clean minimalist composition.
 Style:
-Outdoor editorial, atmospheric, elegant.
-
-Constraints:
-No artificial studio look.
+Modern fashion editorial
+Minimal, elegant, contemporary
+Neutral and cohesive color palette
+Subtle film grain
+Realistic fabric folds and textures
 `,
         },
         dark: {
@@ -810,14 +802,24 @@ Tight framing, 85mm lens.
 Style:
 Moody luxury, dramatic, high-end.
 
-Constraints:
+          Constraints:
 No noise, no distortion.
+`,
+        },
+        ghostMannequin: {
+          name: 'Ghost Mannequin',
+          shortLabel: 'Ghost',
+          description: 'Clean ghost mannequin',
+          image: 'images/style/Ghos_mannequin.jpeg',
+          prompt: `
+Extract the clothing from [Image1] and present it as a clean ghost mannequin e-commerce product photo. Keep the outfit in natural 3D shape, with realistic fabric folds, seams, and textures. Display the garment as if photographed on a ghost mannequin e-commerce style, centered on a pure white or transparent background. High-resolution, professional lighting, suitable for online fashion catalog.
 `,
         },
       };
 
       const STYLE_OPTION_ORDER = [
         'ecommerce',
+        'ghostMannequin',
         'minimal',
         'dark',
         'editorial',
@@ -1121,10 +1123,20 @@ No noise, no distortion.
         const sourceBtn = dressTypeOptions.find((btn) => (btn.dataset.type || '') === type);
         const icon = sourceBtn?.querySelector('img');
         if (icon?.getAttribute('src')) {
-          progressGarmentThumb.style.backgroundImage = `url("${icon.getAttribute('src')}")`;
+          const iconSrc = icon.getAttribute('src');
+          const customMaskSize = type === 'dress' || type === 'accessory' ? '54%' : '62%';
+          progressGarmentThumb.style.backgroundImage = 'none';
+          progressGarmentThumb.style.webkitMaskImage = `url("${iconSrc}")`;
+          progressGarmentThumb.style.maskImage = `url("${iconSrc}")`;
+          progressGarmentThumb.style.webkitMaskSize = customMaskSize;
+          progressGarmentThumb.style.maskSize = customMaskSize;
           progressGarmentThumb.classList.add('has-icon');
         } else {
           progressGarmentThumb.style.backgroundImage = '';
+          progressGarmentThumb.style.webkitMaskImage = '';
+          progressGarmentThumb.style.maskImage = '';
+          progressGarmentThumb.style.webkitMaskSize = '';
+          progressGarmentThumb.style.maskSize = '';
           progressGarmentThumb.classList.remove('has-icon');
         }
       };
@@ -1188,6 +1200,7 @@ No noise, no distortion.
       const getProgressStepIndex = (stepName) => progressStepOrder.indexOf(stepName);
 
       const hasSelectedModel = () =>
+        selectedStyle === 'ghostMannequin' ||
         Boolean(selectedReadyModel || modelPreview?.querySelector('img')?.getAttribute('src'));
 
       const isProgressStepReady = (stepName) => {
@@ -1202,6 +1215,15 @@ No noise, no distortion.
             return true;
           default:
             return true;
+        }
+      };
+
+      const hasProgressStepSelection = (stepName) => {
+        switch (stepName) {
+          case 'background':
+            return hasChosenBackground;
+          default:
+            return isProgressStepReady(stepName);
         }
       };
 
@@ -1248,7 +1270,7 @@ No noise, no distortion.
           const stepIndex = getProgressStepIndex(stepBtn.dataset.step || '');
           const isActive = stepBtn.dataset.step === nextStep;
           const isLocked = stepIndex > visibleUntilIndex;
-          const isReady = !isLocked && isProgressStepReady(stepBtn.dataset.step || '');
+          const isReady = !isLocked && hasProgressStepSelection(stepBtn.dataset.step || '');
           stepBtn.classList.toggle('is-active', isActive);
           stepBtn.classList.toggle('is-ready', isReady);
           stepBtn.classList.toggle('is-complete', stepIndex > -1 && stepIndex < nextStepIndex && stepIndex <= visibleUntilIndex);
@@ -1285,7 +1307,8 @@ No noise, no distortion.
         progressDressTypeOptions.innerHTML = dressTypeOptions
           .map((btn) => {
             const type = btn.dataset.type || 'dress';
-            return `<button class="dress-type-btn${type === selectedDressType ? ' active' : ''}" data-type="${type}">${btn.innerHTML}</button>`;
+            const isDisabled = btn.disabled ? ' disabled aria-disabled="true"' : '';
+            return `<button class="dress-type-btn${type === selectedDressType ? ' active' : ''}" data-type="${type}"${isDisabled}>${btn.innerHTML}</button>`;
           })
           .join('');
       };
@@ -1401,22 +1424,25 @@ No noise, no distortion.
         progressStyleOptions?.querySelectorAll('.style-type-btn').forEach((b) => {
           b.classList.toggle('active', b.dataset.style === selectedStyle);
         });
+        updateModelUiVisibility();
         setProgressStep(progressCurrentStep);
       };
 
       const updateModelUiVisibility = () => {
         const isAccessory = selectedDressType === 'accessory';
+        const isGhostMannequin = selectedStyle === 'ghostMannequin';
+        const shouldHideModelUi = isAccessory || isGhostMannequin;
         if (dressDropLabel) {
           dressDropLabel.textContent = isAccessory ? 'Accessory image' : 'Garment image';
         }
         if (modelDropzone) {
-          modelDropzone.style.display = isAccessory ? 'none' : '';
+          modelDropzone.style.display = shouldHideModelUi ? 'none' : '';
         }
         if (readySection) {
-          readySection.style.display = isAccessory ? 'none' : '';
+          readySection.style.display = shouldHideModelUi ? 'none' : '';
         }
         if (modelBuilder) {
-          modelBuilder.style.display = isAccessory ? 'none' : '';
+          modelBuilder.style.display = shouldHideModelUi ? 'none' : '';
         }
       };
 
@@ -1439,6 +1465,7 @@ No noise, no distortion.
       };
       dressTypeOptions.forEach((btn) => {
         btn.addEventListener('click', (e) => {
+          if (btn.disabled) return;
           e.preventDefault();
           setDressTypeValue(btn.dataset.type || 'dress');
           if (selectedDressType !== 'accessory' && modelInput) {
@@ -1477,6 +1504,7 @@ No noise, no distortion.
       progressDressTypeOptions?.addEventListener('click', (e) => {
         const btn = e.target.closest('.dress-type-btn');
         if (!btn) return;
+        if (btn.disabled) return;
         e.preventDefault();
         setDressTypeValue(btn.dataset.type || 'dress');
       });
@@ -1615,6 +1643,9 @@ No noise, no distortion.
       const buildPrompt = (settings) => {
         const bgCustom = settings.backgroundPrompt || '';
         const baseStylePrompt = (STYLE_PRESETS[settings.style]?.prompt || '').trim();
+        if (settings.style === 'ghostMannequin') {
+          return baseStylePrompt;
+        }
         const garmentType = settings.dressType || 'dress';
         let garmentTemplate = garmentTemplates[garmentType] || garmentTemplates.dress;
         let accessoryModeText = '';
@@ -1761,6 +1792,7 @@ No noise, no distortion.
 
       const generate = async () => {
         const isAccessory = selectedDressType === 'accessory';
+        const isGhostMannequin = selectedStyle === 'ghostMannequin';
         const hasDress = !!dressInput?.files?.length;
         const hasModel = !!modelInput?.files?.length;
         const customBackgroundPrompt = backgroundPrompt?.value?.trim() || '';
@@ -1769,7 +1801,7 @@ No noise, no distortion.
           alert('Upload a garment image.');
           return;
         }
-        if (!isAccessory && !hasModel && !selectedReadyModel) {
+        if (!isAccessory && !isGhostMannequin && !hasModel && !selectedReadyModel) {
           alert('Upload a model image.');
           return;
         }
@@ -1793,7 +1825,7 @@ No noise, no distortion.
         };
 
         const promptMessage = buildPrompt(settings);
-        const imageInput = isAccessory ? [dressDataUrl] : [modelDataUrl, dressDataUrl];
+        const imageInput = (isAccessory || isGhostMannequin) ? [dressDataUrl] : [modelDataUrl, dressDataUrl];
         const input = {
           prompt: promptMessage,
           image_input: imageInput,
