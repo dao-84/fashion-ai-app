@@ -126,9 +126,13 @@ https://templatemo.com/tm-600-prism-flux
 
         async function trackEvent(eventName, metadata = {}) {
             try {
+                const betaToken = window.sessionStorage.getItem('beta_token') || '';
                 await fetch('/api/track-event', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(betaToken ? { Authorization: `Bearer ${betaToken}` } : {}),
+                    },
                     body: JSON.stringify({
                         sessionId: getTrackingSessionId(),
                         eventName,
