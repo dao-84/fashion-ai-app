@@ -1,1 +1,1 @@
-<!-- Placeholder for external provider integrations. -->
+<!-- Placeholder for external provider integrations (OpenAI, Replicate, Gemini, etc.). -->

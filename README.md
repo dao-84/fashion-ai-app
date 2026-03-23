@@ -17,6 +17,8 @@ Carica la foto del capo, scegli la modella e ottieni scatti pronti per e-commerc
 - Node.js + Express
 - Frontend HTML/CSS/JS statico
 - Replicate API
+- OpenAI API
+- Google Gemini API opzionale
 
 ## Avvio locale
 
@@ -37,13 +39,19 @@ Copia `.env.example` in `.env` e compila solo le variabili che ti servono.
 ```env
 PORT=3000
 REPLICATE_API_TOKEN=
+OPENAI_API_KEY=
+GOOGLE_API_KEY=
 BETA_TOKEN=
 PUBLIC_BASE_URL=http://localhost:3000
 ALLOWED_ORIGINS=http://localhost:3000
+API_BASE_URL=
+API_KEY=
 ```
 
 Note:
 - `REPLICATE_API_TOKEN` e necessario per la generazione immagini con Replicate.
+- `OPENAI_API_KEY` serve per prompt/descrizioni.
+- `GOOGLE_API_KEY` e opzionale.
 - `BETA_TOKEN` protegge le route API in beta.
 - `PUBLIC_BASE_URL` va impostato a un URL pubblico reale quando un provider esterno deve raggiungere asset serviti dall'app.
 

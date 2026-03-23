@@ -42,7 +42,7 @@
       '<div class="beta-guard-modal__panel" role="dialog" aria-modal="true" aria-labelledby="betaGuardTitle">' +
       '<div class="beta-guard-modal__eyebrow">Beta Access</div>' +
       '<h2 class="beta-guard-modal__title" id="betaGuardTitle">Sblocca le funzioni protette</h2>' +
-      '<p class="beta-guard-modal__copy">Inserisci il token beta per autorizzare le chiamate API e usare gallery e generate.</p>' +
+      '<p class="beta-guard-modal__copy">Inserisci il token beta per autorizzare le chiamate API e usare gallery, generate, upscale e refine.</p>' +
       '<label class="beta-guard-modal__field">' +
       '<span class="beta-guard-modal__label">Beta Token</span>' +
       '<input class="beta-guard-modal__input" id="betaGuardInput" type="password" autocomplete="off" placeholder="Inserisci il token">' +
