@@ -73,10 +73,6 @@ const log = {
   error: (emoji, message, err) => console.error(`${emoji} ${message}`, err ?? ''),
 };
 
-const PUBLIC_API_PATHS = [
-  '/api/track-event',
-];
-
 const publicDir = rootDir;
 const storageDir = path.join(rootDir, 'storage');
 const generatedDir = path.join(storageDir, 'generated');
@@ -132,14 +128,9 @@ app.use(
 app.use(express.json({ limit: '10mb' }));
 app.use(attachOptionalUser);
 
-function isPublicPath(pathname) {
-  return PUBLIC_API_PATHS.some((publicPath) => pathname.startsWith(publicPath));
-}
-
 function betaGuard(req, res, next) {
   if (!BETA_TOKEN) return next();
   if (!req.path.startsWith('/api/')) return next();
-  if (isPublicPath(req.path)) return next();
 
   const authHeader = req.headers.authorization || '';
   const queryToken = req.query?.token || '';
