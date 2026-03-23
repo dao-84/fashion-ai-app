@@ -1,3 +1,5 @@
+const { sanitizeFilename, resolveGeneratedFilePath } = require('../utils/security.utils');
+
 function createServiceError(status, message, details) {
   const error = new Error(message);
   error.status = status;
@@ -15,14 +17,19 @@ function createGalleryService(deps) {
         const images = entries
           .filter((e) => e.isFile())
           .filter((e) => /\.(png|jpg|jpeg|webp)$/i.test(e.name))
-          .map((e) => {
-            const full = path.join(galleryDir, e.name);
-            const stat = fs.statSync(full);
-            return {
-              name: e.name,
-              url: `/generated/${e.name}`,
-              mtime: stat.mtimeMs,
-            };
+          .flatMap((e) => {
+            try {
+              const safeName = sanitizeFilename(e.name);
+              const full = resolveGeneratedFilePath(galleryDir, safeName);
+              const stat = fs.statSync(full);
+              return [{
+                name: safeName,
+                url: `/generated/${safeName}`,
+                mtime: stat.mtimeMs,
+              }];
+            } catch (_error) {
+              return [];
+            }
           })
           .sort((a, b) => b.mtime - a.mtime);
         return { files: images };
@@ -34,12 +41,15 @@ function createGalleryService(deps) {
 
     remove(filename) {
       if (!filename) {
-        throw createServiceError(400, 'Missing filename');
+        throw createServiceError(400, 'Invalid filename');
       }
 
-      const target = path.join(galleryDir, filename);
-      if (!target.startsWith(galleryDir)) {
-        throw createServiceError(400, 'Invalid path');
+      let target;
+      try {
+        target = resolveGeneratedFilePath(galleryDir, filename);
+      } catch (error) {
+        const message = error.message === 'Invalid file path' ? 'Invalid file path' : 'Invalid filename';
+        throw createServiceError(400, message);
       }
 
       try {

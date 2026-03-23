@@ -1,3 +1,12 @@
+const {
+  MAX_BASE64_IMAGE_BYTES,
+  MAX_IMAGE_URL_LENGTH,
+  isAllowedBase64Image,
+  isAllowedImageUrl,
+  estimateBase64Bytes,
+  resolveGeneratedFilePath,
+} = require('./security.utils');
+
 function parseDimensions(aspect = '1:1') {
   const presets = {
     '1:1': { width: 1024, height: 1024 },
@@ -17,24 +26,39 @@ function resolveLocalImagePath(item, deps) {
   const tryResolvePath = (rawPath) => {
     if (!rawPath) return null;
 
-    const normalizedPath = rawPath.replace(/^\/+/, '').replace(/\//g, path.sep);
-    const candidates = [];
+    const normalizedPath = rawPath.trim().replace(/^\/+/, '').replace(/\//g, path.sep);
 
     if (normalizedPath === 'generated' || normalizedPath.startsWith(`generated${path.sep}`)) {
       const relativeGeneratedPath = normalizedPath.replace(/^generated[\\\/]?/, '');
-      candidates.push(path.join(galleryDir, relativeGeneratedPath));
+      try {
+        const generatedCandidate = resolveGeneratedFilePath(galleryDir, relativeGeneratedPath);
+        if (fs.existsSync(generatedCandidate)) {
+          return generatedCandidate;
+        }
+      } catch (_error) {
+        return null;
+      }
     }
 
-    candidates.push(path.join(publicDir, normalizedPath));
+    const publicBasePath = path.resolve(publicDir);
+    const publicCandidate = path.resolve(publicBasePath, normalizedPath);
+    if (
+      publicCandidate === publicBasePath ||
+      (!publicCandidate.startsWith(`${publicBasePath}${path.sep}`) && publicCandidate !== publicBasePath)
+    ) {
+      return null;
+    }
 
-    for (const candidate of candidates) {
-      if (candidate && fs.existsSync(candidate)) {
-        return candidate;
-      }
+    if (fs.existsSync(publicCandidate)) {
+      return publicCandidate;
     }
 
     return null;
   };
+
+  if (item.startsWith('/')) {
+    return tryResolvePath(item);
+  }
 
   if (item.startsWith('http://') || item.startsWith('https://')) {
     try {
@@ -49,29 +73,59 @@ function resolveLocalImagePath(item, deps) {
     return null;
   }
 
-  if (item.startsWith('/')) {
-    return tryResolvePath(item);
-  }
-
-  if (fs.existsSync(item)) {
-    return item;
-  }
-
   return tryResolvePath(item);
 }
 
 function normalizeImageInput(item, deps) {
   const { fs, path } = deps;
 
-  if (typeof item !== 'string' || !item) return item;
-
-  if (item.startsWith('data:image/')) {
-    return { value: item, sourceType: 'data-uri' };
+  if (typeof item !== 'string') {
+    return {
+      value: null,
+      sourceType: 'invalid-input',
+      error: 'Invalid image input',
+    };
   }
 
-  const localPath = resolveLocalImagePath(item, deps);
+  const trimmed = item.trim();
+  if (!trimmed) {
+    return {
+      value: null,
+      sourceType: 'invalid-input',
+      error: 'Invalid image input',
+    };
+  }
+
+  if (trimmed.startsWith('data:')) {
+    if (!isAllowedBase64Image(trimmed)) {
+      return {
+        value: null,
+        sourceType: 'invalid-data-uri',
+        error: 'Invalid image input',
+      };
+    }
+
+    if (estimateBase64Bytes(trimmed) > MAX_BASE64_IMAGE_BYTES) {
+      return {
+        value: null,
+        sourceType: 'oversized-data-uri',
+        error: 'Input too large',
+      };
+    }
+
+    return { value: trimmed, sourceType: 'data-uri' };
+  }
+
+  const localPath = resolveLocalImagePath(trimmed, deps);
   if (localPath) {
     const buffer = fs.readFileSync(localPath);
+    if (buffer.length > MAX_BASE64_IMAGE_BYTES) {
+      return {
+        value: null,
+        sourceType: 'oversized-local-file',
+        error: 'Input too large',
+      };
+    }
     const ext = path.extname(localPath).replace('.', '') || 'png';
     return {
       value: `data:image/${ext};base64,${buffer.toString('base64')}`,
@@ -80,46 +134,30 @@ function normalizeImageInput(item, deps) {
     };
   }
 
-  if (item.startsWith('http://') || item.startsWith('https://')) {
-    try {
-      const urlObj = new URL(item);
-      if (urlObj.hostname === 'localhost' || urlObj.hostname === '127.0.0.1') {
-        return {
-          value: null,
-          sourceType: 'invalid-local-url',
-          error:
-            'Localhost image URLs are not reachable by external providers and could not be resolved from local storage.',
-        };
-      }
-    } catch (_error) {
-      // fall through
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    if (trimmed.length > MAX_IMAGE_URL_LENGTH || !isAllowedImageUrl(trimmed)) {
+      return {
+        value: null,
+        sourceType: 'invalid-remote-url',
+        error: 'Invalid image input',
+      };
     }
-    return { value: item, sourceType: 'remote-url' };
+
+    return { value: trimmed, sourceType: 'remote-url' };
   }
 
-  if (item.startsWith('/')) {
+  if (trimmed.startsWith('/')) {
     return {
       value: null,
       sourceType: 'invalid-local-path',
-      error:
-        'Local image paths must map to a real local file or a public external URL before being sent to an external provider.',
-    };
-  }
-
-  if (fs.existsSync(item)) {
-    const buffer = fs.readFileSync(item);
-    const ext = path.extname(item).replace('.', '') || 'png';
-    return {
-      value: `data:image/${ext};base64,${buffer.toString('base64')}`,
-      sourceType: 'local-file',
-      sourcePath: item,
+      error: 'Invalid image input',
     };
   }
 
   return {
     value: null,
     sourceType: 'invalid-input',
-    error: 'Unsupported image input format.',
+    error: 'Invalid image input',
   };
 }
 

@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const { sanitizeFilename, resolveGeneratedFilePath } = require('../utils/security.utils');
 const {
   PUBLIC_HTML_ROUTES,
   PUBLIC_FILE_ROUTES,
@@ -7,7 +8,7 @@ const {
 } = require('../config/public-manifest');
 
 function registerPublicStatic(app, deps) {
-  const { rootDir, galleryDir } = deps;
+  const { rootDir, galleryDir, fs } = deps;
 
   app.use('/storage', (_req, res) => {
     res.status(404).end();
@@ -29,7 +30,18 @@ function registerPublicStatic(app, deps) {
     });
   });
 
-  app.use('/generated', express.static(galleryDir));
+  app.get('/generated/:name', (req, res) => {
+    try {
+      const safeName = sanitizeFilename(req.params.name);
+      const fullPath = resolveGeneratedFilePath(galleryDir, safeName);
+      if (!fs.existsSync(fullPath)) {
+        return res.status(404).end();
+      }
+      return res.sendFile(fullPath);
+    } catch (_error) {
+      return res.status(404).end();
+    }
+  });
 }
 
 module.exports = {
