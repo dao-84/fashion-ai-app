@@ -146,15 +146,15 @@
   }
 
   function getStoredToken() {
-    return sessionStorage.getItem('beta_token') || '';
+    return localStorage.getItem('beta_token') || '';
   }
 
   function storeToken(token) {
-    sessionStorage.setItem('beta_token', token);
+    localStorage.setItem('beta_token', token);
   }
 
   function clearToken() {
-    sessionStorage.removeItem('beta_token');
+    localStorage.removeItem('beta_token');
   }
 
   function requestBetaToken() {
