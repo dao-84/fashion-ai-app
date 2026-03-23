@@ -29,6 +29,7 @@ const fetch = (...args) =>
   import('node-fetch').then(({ default: fetchImpl }) => fetchImpl(...args));
 
 const app = express();
+app.set('trust proxy', 1);
 const {
   PORT,
   API_BASE_URL,
