@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy | Fashion AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="templatemo-prism-flux.css">
+    <style>
+        .lang-switcher{display:flex;gap:6px;align-items:center;}
+        .lang-btn{background:transparent;border:1px solid rgba(212,175,55,.3);color:var(--text-secondary);font-size:12px;font-weight:600;letter-spacing:1px;padding:4px 10px;cursor:pointer;border-radius:4px;transition:all .2s;}
+        .lang-btn:hover,.lang-btn.active{border-color:#d4af37;color:#d4af37;}
+    </style>
 </head>
 <body class="legal-page">
     <header class="header legal-header" id="header">
@@ -26,84 +31,89 @@
                 </span>
             </a>
             <ul class="nav-menu legal-nav">
-                <li><a href="index.html#home" class="nav-link">Home</a></li>
-                <li><a href="studio.html" class="nav-link">Demo</a></li>
-                <li><a href="index.html#how-it-works" class="nav-link">How it works</a></li>
+                <li><a href="index.html#home" class="nav-link" data-i18n="nav_home">Home</a></li>
+                <li><a href="studio.html" class="nav-link" data-i18n="nav_studio">Studio</a></li>
+                <li><a href="pricing.html" class="nav-link" data-i18n="nav_pricing">Prezzi</a></li>
                 <li><a href="index.html#faq" class="nav-link">FAQ</a></li>
             </ul>
+            <div class="lang-switcher">
+                <button class="lang-btn" data-lang="it" onclick="setLang('it')">IT</button>
+                <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+                <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+            </div>
         </nav>
     </header>
 
     <main class="legal-main">
         <section class="legal-hero">
             <div class="legal-hero__inner">
-                <p class="legal-hero__eyebrow">Legal</p>
-                <h1 class="legal-hero__title">Privacy Policy</h1>
+                <p class="legal-hero__eyebrow" data-i18n="privacy_eyebrow">Legal</p>
+                <h1 class="legal-hero__title" data-i18n="privacy_title">Privacy Policy</h1>
             </div>
         </section>
 
         <section class="legal-section">
             <article class="legal-content">
-                <h2>Privacy Policy</h2>
-                <p class="legal-meta">Last updated: 16/03/2026</p>
+                <h2 data-i18n="privacy_h2">Privacy Policy</h2>
+                <p class="legal-meta" data-i18n="privacy_meta">Ultimo aggiornamento: 16/03/2026</p>
 
-                <h3>Introduction</h3>
-                <p>This Privacy Policy explains how Fashion AI collects, uses, and protects your information when you use our website and services.</p>
-                <p>By using this platform, you agree to the practices described in this policy.</p>
+                <h3 data-i18n="privacy_intro_h">Introduzione</h3>
+                <p data-i18n="privacy_intro_p1">Questa Privacy Policy spiega come Fashion AI raccoglie, utilizza e protegge le tue informazioni quando utilizzi il nostro sito web e i nostri servizi.</p>
+                <p data-i18n="privacy_intro_p2">Utilizzando questa piattaforma, accetti le pratiche descritte in questa policy.</p>
 
-                <h3>Information We Collect</h3>
-                <p>We may collect the following types of information:</p>
+                <h3 data-i18n="privacy_collect_h">Informazioni che raccogliamo</h3>
+                <p data-i18n="privacy_collect_p">Potremmo raccogliere i seguenti tipi di informazioni:</p>
 
-                <h4>Account Information</h4>
-                <p>When you use the service we may collect:</p>
+                <h4 data-i18n="privacy_account_h">Informazioni account</h4>
+                <p data-i18n="privacy_account_p">Quando utilizzi il servizio potremmo raccogliere:</p>
                 <ul>
-                    <li>name</li>
-                    <li>email address</li>
-                    <li>login information</li>
+                    <li data-i18n="privacy_account_l1">nome</li>
+                    <li data-i18n="privacy_account_l2">indirizzo email</li>
+                    <li data-i18n="privacy_account_l3">informazioni di accesso</li>
                 </ul>
 
-                <h4>Uploaded Content</h4>
-                <p>When you use Fashion AI you may upload images such as:</p>
+                <h4 data-i18n="privacy_upload_h">Contenuti caricati</h4>
+                <p data-i18n="privacy_upload_p">Quando utilizzi Fashion AI potresti caricare immagini come:</p>
                 <ul>
-                    <li>clothing photos</li>
-                    <li>model images</li>
-                    <li>product photos</li>
+                    <li data-i18n="privacy_upload_l1">foto di capi di abbigliamento</li>
+                    <li data-i18n="privacy_upload_l2">immagini di modelle</li>
+                    <li data-i18n="privacy_upload_l3">foto di prodotti</li>
                 </ul>
-                <p>These images are used only to generate the requested outputs.</p>
+                <p data-i18n="privacy_upload_note">Queste immagini vengono utilizzate solo per generare gli output richiesti.</p>
 
-                <h3>How We Use Your Data</h3>
-                <p>We use the information to:</p>
+                <h3 data-i18n="privacy_use_h">Come utilizziamo i tuoi dati</h3>
+                <p data-i18n="privacy_use_p">Utilizziamo le informazioni per:</p>
                 <ul>
-                    <li>provide the AI image generation service</li>
-                    <li>improve the platform performance</li>
-                    <li>maintain security of the service</li>
-                    <li>respond to user requests or support questions</li>
+                    <li data-i18n="privacy_use_l1">fornire il servizio di generazione immagini AI</li>
+                    <li data-i18n="privacy_use_l2">migliorare le prestazioni della piattaforma</li>
+                    <li data-i18n="privacy_use_l3">mantenere la sicurezza del servizio</li>
+                    <li data-i18n="privacy_use_l4">rispondere a richieste di supporto</li>
                 </ul>
-                <p>We do not sell your personal data.</p>
+                <p data-i18n="privacy_use_note">Non vendiamo i tuoi dati personali.</p>
 
-                <h3>AI Processing</h3>
-                <p>Uploaded images may be processed by third-party AI providers used to generate the final results.</p>
-                <p>These providers process the images only for generation purposes.</p>
+                <h3 data-i18n="privacy_ai_h">Elaborazione AI</h3>
+                <p data-i18n="privacy_ai_p1">Le immagini caricate potrebbero essere elaborate da provider AI di terze parti utilizzati per generare i risultati finali.</p>
+                <p data-i18n="privacy_ai_p2">Questi provider elaborano le immagini solo ai fini della generazione.</p>
 
-                <h3>Data Storage</h3>
-                <p>We take reasonable measures to protect your data.</p>
-                <p>Some uploaded images or generated images may be temporarily stored to allow the system to function correctly.</p>
+                <h3 data-i18n="privacy_storage_h">Archiviazione dei dati</h3>
+                <p data-i18n="privacy_storage_p1">Adottiamo misure ragionevoli per proteggere i tuoi dati.</p>
+                <p data-i18n="privacy_storage_p2">Alcune immagini caricate o generate potrebbero essere archiviate temporaneamente per consentire il corretto funzionamento del sistema.</p>
 
-                <h3>Analytics</h3>
-                <p>We may use analytics tools to understand how users interact with the platform.</p>
-                <p>These tools help us improve performance and usability.</p>
+                <h3 data-i18n="privacy_analytics_h">Analytics</h3>
+                <p data-i18n="privacy_analytics_p1">Potremmo utilizzare strumenti di analisi per comprendere come gli utenti interagiscono con la piattaforma.</p>
+                <p data-i18n="privacy_analytics_p2">Questi strumenti ci aiutano a migliorare le prestazioni e l'usabilità.</p>
 
-                <h3>Your Rights</h3>
-                <p>Depending on your jurisdiction, you may have the right to:</p>
+                <h3 data-i18n="privacy_rights_h">I tuoi diritti</h3>
+                <p data-i18n="privacy_rights_p">A seconda della tua giurisdizione, potresti avere il diritto di:</p>
                 <ul>
-                    <li>request access to your data</li>
-                    <li>request deletion of your data</li>
-                    <li>request correction of inaccurate data</li>
+                    <li data-i18n="privacy_rights_l1">richiedere l'accesso ai tuoi dati</li>
+                    <li data-i18n="privacy_rights_l2">richiedere la cancellazione dei tuoi dati</li>
+                    <li data-i18n="privacy_rights_l3">richiedere la correzione di dati errati</li>
                 </ul>
-                <p>You may contact us for any privacy request.</p>
+                <p data-i18n="privacy_rights_note">Puoi contattarci per qualsiasi richiesta relativa alla privacy.</p>
 
-                <h3>Contact</h3>
-                <p>For privacy related questions contact:</p>
+                <h3 data-i18n="privacy_contact_h">Contatti</h3>
+                <p data-i18n="privacy_contact_p">Per domande sulla privacy contatta:</p>
                 <p><a href="mailto:contact@fashionai.com">contact@fashionai.com</a></p>
             </article>
         </section>
@@ -113,21 +123,20 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <a href="index.html#home" class="footer-logo">Fashion AI</a>
-                <p class="footer-description">AI-powered fashion visuals for brands, e-commerce and creative teams.</p>
-                <a href="studio.html" class="footer-cta">Try the demo</a>
+                <p class="footer-description" data-i18n="footer_desc">Foto e-commerce AI per brand di moda, piccoli e grandi.</p>
+                <a href="studio.html" class="footer-cta" data-i18n="footer_cta">Apri lo Studio</a>
             </div>
             <div class="footer-section">
-                <h4>Navigation</h4>
+                <h4 data-i18n="footer_nav">Navigazione</h4>
                 <div class="footer-links">
-                    <a href="index.html#home">Home</a>
-                    <a href="studio.html">Demo</a>
-                    <a href="index.html#how-it-works">How it works</a>
-                    <a href="index.html#results-gallery">Results</a>
-                    <a href="index.html#faq">FAQ</a>
+                    <a href="index.html#home" data-i18n="nav_home">Home</a>
+                    <a href="studio.html" data-i18n="nav_studio">Studio</a>
+                    <a href="gallery.html" data-i18n="nav_gallery">Gallery</a>
+                    <a href="pricing.html" data-i18n="nav_pricing">Prezzi</a>
                 </div>
             </div>
             <div class="footer-section">
-                <h4>Legal</h4>
+                <h4 data-i18n="footer_legal">Legal</h4>
                 <div class="footer-links">
                     <a href="privacy.html">Privacy Policy</a>
                     <a href="terms.html">Terms of Service</a>
@@ -136,8 +145,10 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="copyright">© 2026 Fashion AI. All rights reserved.</div>
+            <div class="copyright" data-i18n="footer_copyright">© 2026 Fashion AI. Tutti i diritti riservati.</div>
         </div>
     </footer>
+
+    <script src="i18n.js"></script>
 </body>
 </html>

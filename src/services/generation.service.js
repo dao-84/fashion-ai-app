@@ -41,12 +41,11 @@ function isRetryableProviderOverload(error) {
 function createGenerationService(deps) {
   const {
     replicateIntegration,
+    falIntegration,
     proxyIntegration,
     log,
     logEmoji,
     REPLICATE_MODEL_VERSION,
-    REPLICATE_UPSCALE_MODEL_VERSION,
-    REPLICATE_REFINER_MODEL_VERSION,
     fetch,
     galleryDir,
     publicDir,
@@ -109,20 +108,29 @@ function createGenerationService(deps) {
     },
 
     async generate(input = {}, rawBody = {}) {
-      if (replicateIntegration.isConfigured()) {
+      const requestedProvider = (rawBody.provider || input.provider || 'replicate').toLowerCase();
+      const useFal = requestedProvider === 'fal' && falIntegration && falIntegration.isConfigured();
+      const activeIntegration = useFal ? falIntegration : replicateIntegration;
+      const providerName = useFal ? 'FAL.AI' : 'Replicate';
+
+      if (activeIntegration.isConfigured()) {
         try {
           if (!input.prompt) {
             throw createServiceError(400, 'Missing prompt in input');
           }
 
-          log.info(logEmoji.generate, '[generate] richiesta a Replicate avviata');
+          log.info(logEmoji.generate, `[generate] richiesta a ${providerName} avviata`);
           log.info(logEmoji.generate, `[generate] prompt: ${input.prompt}`);
+
+          const VALID_RESOLUTIONS = ['1K', '2K', '4K'];
+          const resolution = VALID_RESOLUTIONS.includes(input.resolution) ? input.resolution : '1K';
 
           const inputPayload = {
             prompt: input.prompt,
             image_input: Array.isArray(input.image_input) ? [...input.image_input] : [],
             aspect_ratio: input.aspect_ratio || '1:1',
             output_format: input.output_format || 'jpg',
+            resolution,
           };
 
           if (Array.isArray(inputPayload.image_input)) {
@@ -157,7 +165,7 @@ function createGenerationService(deps) {
           log.info(logEmoji.generate, `[generate] aspect_ratio: ${inputPayload.aspect_ratio}`);
 
           const output = await retryAsync(
-            () => replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload),
+            () => activeIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload),
             {
               maxAttempts: 3,
               delaysMs: [2000, 5000],
@@ -167,7 +175,7 @@ function createGenerationService(deps) {
                 const retryLog = typeof log.warn === 'function' ? log.warn.bind(log) : log.info.bind(log);
                 retryLog(
                   logEmoji.warning || logEmoji.generate || logEmoji.error,
-                  `[generate] retry ${attempt + 1}/3 in ${delayMs}ms. Reason: ${reason}`
+                  `[generate] retry ${attempt + 1}/3 in ${delayMs}ms su ${providerName}. Reason: ${reason}`
                 );
               },
               onGiveUp: async (error, attempt) => {
@@ -193,8 +201,8 @@ function createGenerationService(deps) {
             );
           }
           if (error.status) throw error;
-          log.error(logEmoji.error, 'Replicate dice no.', error);
-          throw createServiceError(500, 'Replicate request failed', error.message);
+          log.error(logEmoji.error, `${providerName} dice no.`, error);
+          throw createServiceError(500, `${providerName} request failed`, error.message);
         }
       }
 
@@ -223,64 +231,6 @@ function createGenerationService(deps) {
       }
     },
 
-    async upscale(rawImage) {
-      if (!replicateIntegration.isConfigured()) {
-        throw createServiceError(400, 'Replicate non configurato: aggiungi REPLICATE_API_TOKEN in .env');
-      }
-      if (!rawImage) {
-        throw createServiceError(400, 'Missing image input');
-      }
-
-      const normalizedImage = normalizeImageInput(rawImage, { fs, path, publicDir, galleryDir });
-      if (!normalizedImage?.value) {
-        throw createServiceError(400, normalizedImage?.error || 'Invalid image input format');
-      }
-
-      try {
-        log.info(logEmoji.generate, '[upscale] richiesta a Replicate avviata');
-        const output = await replicateIntegration.runModel(REPLICATE_UPSCALE_MODEL_VERSION, {
-          image: normalizedImage.value,
-        });
-        const saved = await collectSavedOutputs(output);
-        log.info(logEmoji.generate, `[upscale] completata. File salvati: ${saved.length}`);
-        return { output, saved };
-      } catch (error) {
-        log.error(logEmoji.error, 'Replicate upscale failed', error);
-        throw createServiceError(500, 'Replicate request failed', error.message);
-      }
-    },
-
-    async refine(rawImage, rawPrompt) {
-      if (!replicateIntegration.isConfigured()) {
-        throw createServiceError(400, 'Replicate non configurato: aggiungi REPLICATE_API_TOKEN in .env');
-      }
-      if (!rawImage) {
-        throw createServiceError(400, 'Missing image input');
-      }
-      if (!rawPrompt) {
-        throw createServiceError(400, 'Missing prompt input');
-      }
-
-      const normalizedImage = normalizeImageInput(rawImage, { fs, path, publicDir, galleryDir });
-      if (!normalizedImage?.value) {
-        throw createServiceError(400, normalizedImage?.error || 'Invalid image input format');
-      }
-
-      try {
-        log.info(logEmoji.generate, '[refine] richiesta a Replicate avviata');
-        log.info(logEmoji.generate, `[refine] prompt: ${rawPrompt}`);
-        const output = await replicateIntegration.runModel(REPLICATE_REFINER_MODEL_VERSION, {
-          image: normalizedImage.value,
-          prompt: rawPrompt,
-        });
-        const saved = await collectSavedOutputs(output);
-        log.info(logEmoji.generate, `[refine] completata. File salvati: ${saved.length}`);
-        return { output, saved };
-      } catch (error) {
-        log.error(logEmoji.error, 'Replicate refine failed', error);
-        throw createServiceError(500, 'Replicate request failed', error.message);
-      }
-    },
   };
 }
 

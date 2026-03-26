@@ -44,32 +44,6 @@ function createGenerationController(deps) {
       }
     },
 
-    upscale: async (req, res) => {
-      try {
-        const result = await generationService.upscale(req.body?.image || req.body?.input?.image || '');
-        return res.status(200).json(result);
-      } catch (error) {
-        return res.status(error.status || 500).json({
-          error: error.message || 'Replicate request failed',
-          details: error.details || error.message,
-        });
-      }
-    },
-
-    refine: async (req, res) => {
-      try {
-        const result = await generationService.refine(
-          req.body?.image || req.body?.input?.image || '',
-          req.body?.prompt || req.body?.input?.prompt || ''
-        );
-        return res.status(200).json(result);
-      } catch (error) {
-        return res.status(error.status || 500).json({
-          error: error.message || 'Replicate request failed',
-          details: error.details || error.message,
-        });
-      }
-    },
   };
 }
 

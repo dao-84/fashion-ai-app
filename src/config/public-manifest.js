@@ -6,12 +6,15 @@ const PUBLIC_HTML_ROUTES = [
   ['/privacy.html', 'privacy.html'],
   ['/terms.html', 'terms.html'],
   ['/cookies.html', 'cookies.html'],
+  ['/pricing.html', 'pricing.html'],
 ];
 
 const PUBLIC_FILE_ROUTES = [
   ['/templatemo-prism-flux.css', 'templatemo-prism-flux.css'],
   ['/templatemo-prism-scripts.js', 'templatemo-prism-scripts.js'],
   ['/beta-guard-client.js', 'beta-guard-client.js'],
+  ['/i18n.js', 'i18n.js'],
+  ['/waitlist.js', 'waitlist.js'],
 ];
 
 const PUBLIC_DIR_ROUTES = ['images', 'fonts', 'animations'];

@@ -3,6 +3,7 @@ const { createGenerationController } = require('../controllers/generation.contro
 const { createGalleryController } = require('../controllers/gallery.controller');
 const { createPublishController } = require('../controllers/publish.controller');
 const { createTrackController } = require('../controllers/track.controller');
+const { createWaitlistController } = require('../controllers/waitlist.controller');
 const { createAppService } = require('../services/app.service');
 const { createGenerationService } = require('../services/generation.service');
 const { createGalleryService } = require('../services/gallery.service');
@@ -11,7 +12,7 @@ const { createTrackService } = require('../services/track.service');
 
 function registerMainRoutes(app, deps) {
   const appService = createAppService(deps);
-  const generationService = createGenerationService(deps);
+  const generationService = createGenerationService({ ...deps, falIntegration: deps.falIntegration });
   const galleryService = createGalleryService(deps);
   const publishService = createPublishService(deps);
   const trackService = createTrackService(deps);
@@ -25,7 +26,9 @@ function registerMainRoutes(app, deps) {
   const galleryController = createGalleryController({ galleryService });
   const publishController = createPublishController({ publishService });
   const trackController = createTrackController({ trackService });
+  const waitlistController = createWaitlistController();
 
+  app.post('/api/waitlist', waitlistController.submit);
   app.post('/api/openai/prepare', appController.prepareOpenAI);
   app.post('/api/track-event', trackController.event);
 
@@ -34,8 +37,6 @@ function registerMainRoutes(app, deps) {
 
   app.post('/api/generate-model', generationController.generateModel);
   app.post('/api/generate', generationController.generate);
-  app.post('/api/upscale', generationController.upscale);
-  app.post('/api/refine', generationController.refine);
 
   app.get('/api/gallery', galleryController.list);
   app.delete('/api/gallery/:name', galleryController.remove);

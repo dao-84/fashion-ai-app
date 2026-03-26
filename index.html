@@ -6,6 +6,11 @@
     <title>Fashion AI - Studio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="templatemo-prism-flux.css">
+    <style>
+.lang-switcher{display:flex;gap:6px;align-items:center;}
+.lang-btn{background:transparent;border:1px solid rgba(212,175,55,.3);color:var(--text-secondary);font-size:12px;font-weight:600;letter-spacing:1px;padding:4px 10px;cursor:pointer;border-radius:4px;transition:all .2s;}
+.lang-btn:hover,.lang-btn.active{border-color:#d4af37;color:#d4af37;}
+</style>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -16,7 +21,7 @@
                 <div class="prism-face"></div>
                 <div class="prism-face"></div>
             </div>
-            <div style="color: var(--accent-purple); font-size: 18px; text-transform: uppercase; letter-spacing: 3px;">Preparing your fashion shoot...</div>
+            <div style="color: var(--accent-purple); font-size: 18px; text-transform: uppercase; letter-spacing: 3px;" data-i18n="loader_text">Preparing your fashion shoot...</div>
         </div>
     </div>
 
@@ -36,12 +41,19 @@
             </a>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="#home" class="nav-link active">Home</a></li>
-                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-                <li><a href="studio.html" class="nav-link">Studio</a></li>
-                <li><a href="#signup" class="nav-link" onclick="window.openBetaAccessModal && window.openBetaAccessModal(); return false;">Sign up / Log in</a></li>
+                <li><a href="#home" class="nav-link active" data-i18n="nav_home">Home</a></li>
+                <li><a href="gallery.html" class="nav-link" data-i18n="nav_gallery">Gallery</a></li>
+                <li><a href="studio.html" class="nav-link" data-i18n="nav_studio">Studio</a></li>
+                <li><a href="pricing.html" class="nav-link" data-i18n="nav_pricing">Prezzi</a></li>
+                <li><a href="#signup" class="nav-link" data-i18n="nav_signup" onclick="window.openWaitlistModal && window.openWaitlistModal('nav'); return false;">Sign up / Log in</a></li>
             </ul>
-            
+
+            <div class="lang-switcher">
+              <button class="lang-btn" data-lang="it" onclick="setLang('it')">IT</button>
+              <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+              <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+            </div>
+
             <div class="menu-toggle" id="menuToggle">
                 <span></span>
                 <span></span>
@@ -54,45 +66,45 @@
     <section class="saas-hero" id="home">
         <div class="saas-hero__container">
             <div class="saas-hero__content">
-                <p class="saas-hero__eyebrow">AI FASHION PHOTOSHOOT</p>
-                <h1 class="saas-hero__title">Create realistic fashion images from a single garment photo</h1>
-                <p class="saas-hero__description">
+                <p class="saas-hero__eyebrow" data-i18n="hero_eyebrow">AI FASHION PHOTOSHOOT</p>
+                <h1 class="saas-hero__title" data-i18n="hero_title">Create realistic fashion images from a single garment photo</h1>
+                <p class="saas-hero__description" data-i18n="hero_desc">
                     Upload a garment photo, choose a model and scene, and create ready-to-use fashion images in seconds.
                     Built for fashion brands, e-commerce teams, and boutiques.
                 </p>
                 <div class="saas-hero__actions">
-                    <a href="studio.html" class="saas-hero__button saas-hero__button--primary">Open studio</a>
-                    <a href="#instant-preview" class="saas-hero__button saas-hero__button--secondary">Try now</a>
+                    <a href="studio.html" class="saas-hero__button saas-hero__button--primary" data-i18n="hero_btn_primary">Open studio</a>
+                    <a href="#instant-preview" class="saas-hero__button saas-hero__button--secondary" data-i18n="hero_btn_secondary">Try now</a>
                 </div>
             </div>
 
             <aside class="saas-hero__preview" aria-label="Product preview">
                 <div class="saas-hero__preview-shell">
                     <div class="saas-hero__preview-header">
-                        <span class="saas-hero__workflow-label">AI Workflow</span>
-                        <span class="saas-hero__quality-badge">Studio Quality</span>
+                        <span class="saas-hero__workflow-label" data-i18n="hero_workflow_label">AI Workflow</span>
+                        <span class="saas-hero__quality-badge" data-i18n="hero_quality_badge">Studio Quality</span>
                     </div>
 
                     <div class="saas-hero__steps" aria-label="Workflow steps">
                         <div class="saas-hero__step">
                             <span class="saas-hero__step-number">01</span>
                             <div>
-                                <p class="saas-hero__step-title">Upload garment</p>
-                                <p class="saas-hero__step-text">Start from a single product image.</p>
+                                <p class="saas-hero__step-title" data-i18n="hero_step1_title">Upload garment</p>
+                                <p class="saas-hero__step-text" data-i18n="hero_step1_text">Start from a single product image.</p>
                             </div>
                         </div>
                         <div class="saas-hero__step">
                             <span class="saas-hero__step-number">02</span>
                             <div>
-                                <p class="saas-hero__step-title">Choose model</p>
-                                <p class="saas-hero__step-text">Select the right model, styling and scene.</p>
+                                <p class="saas-hero__step-title" data-i18n="hero_step2_title">Choose model</p>
+                                <p class="saas-hero__step-text" data-i18n="hero_step2_text">Select the right model, styling and scene.</p>
                             </div>
                         </div>
                         <div class="saas-hero__step">
                             <span class="saas-hero__step-number">03</span>
                             <div>
-                                <p class="saas-hero__step-title">Create result</p>
-                                <p class="saas-hero__step-text">Create ready-to-use fashion visuals in seconds.</p>
+                                <p class="saas-hero__step-title" data-i18n="hero_step3_title">Create result</p>
+                                <p class="saas-hero__step-text" data-i18n="hero_step3_text">Create ready-to-use fashion visuals in seconds.</p>
                             </div>
                         </div>
                     </div>
@@ -109,7 +121,7 @@
     <section class="results-gallery-section" id="results-gallery">
         <div class="results-gallery">
             <div class="results-gallery__header">
-                <h2 class="results-gallery__title">From one image to fashion visuals ready for use</h2>
+                <h2 class="results-gallery__title" data-i18n="results_title">From one image to fashion visuals ready for use</h2>
             </div>
 
             <div class="results-gallery__grid">
@@ -206,21 +218,21 @@
     <section class="instant-preview-section" id="instant-preview">
         <div class="instant-preview">
             <div class="instant-preview__header">
-                <h2 class="instant-preview__title">See your product in action</h2>
-                <p class="instant-preview__subtitle">
+                <h2 class="instant-preview__title" data-i18n="instant_title">See your product in action</h2>
+                <p class="instant-preview__subtitle" data-i18n="instant_subtitle">
                     Upload a garment and instantly visualize it on a model. No setup. No prompt. Just results.
                 </p>
             </div>
 
             <div class="instant-preview__layout">
                 <article class="instant-preview-card instant-preview-card--upload">
-                    <span class="instant-preview__label">Upload your garment</span>
+                    <span class="instant-preview__label" data-i18n="instant_upload_label">Upload your garment</span>
                     <label class="instant-preview__dropzone" for="instantPreviewInput" id="instantPreviewDropzone">
                         <input type="file" id="instantPreviewInput" class="instant-preview__input" accept="image/*">
                         <div class="instant-preview__dropzone-inner" id="instantPreviewUploadState">
                             <span class="instant-preview__plus" aria-hidden="true">+</span>
-                            <p class="instant-preview__dropzone-title">Drag and drop your image</p>
-                            <p class="instant-preview__dropzone-copy">or tap to upload a garment shot</p>
+                            <p class="instant-preview__dropzone-title" data-i18n="instant_drop_title">Drag and drop your image</p>
+                            <p class="instant-preview__dropzone-copy" data-i18n="instant_drop_copy">or tap to upload a garment shot</p>
                         </div>
                         <div class="instant-preview__garment-preview" id="instantPreviewGarmentPreview" hidden>
                             <img src="" alt="Uploaded garment preview" id="instantPreviewGarmentImage">
@@ -229,18 +241,18 @@
                 </article>
 
                 <article class="instant-preview-card instant-preview-card--model">
-                    <span class="instant-preview__label">AI Model (preset)</span>
+                    <span class="instant-preview__label" data-i18n="instant_model_label">AI Model (preset)</span>
                     <div class="instant-preview__model-frame">
                         <img src="images/models/Nicole.jpeg" alt="Preset AI model preview" class="instant-preview__model-image">
                     </div>
                 </article>
 
                 <article class="instant-preview-card instant-preview-card--result">
-                    <span class="instant-preview__label">Result</span>
+                    <span class="instant-preview__label" data-i18n="instant_result_label">Result</span>
                     <div class="instant-preview__result-frame" id="instantPreviewResultFrame">
                         <div class="instant-preview__result-empty" id="instantPreviewEmptyState">
-                            <p class="instant-preview__result-empty-title">Your preview will appear here</p>
-                            <p class="instant-preview__result-empty-copy">Upload one garment image, then create a polished fashion visual instantly.</p>
+                            <p class="instant-preview__result-empty-title" data-i18n="instant_empty_title">Your preview will appear here</p>
+                            <p class="instant-preview__result-empty-copy" data-i18n="instant_empty_copy">Upload one garment image, then create a polished fashion visual instantly.</p>
                         </div>
 
                         <div class="instant-preview__loading" id="instantPreviewLoading" hidden>
@@ -253,7 +265,7 @@
                         </div>
                     </div>
 
-                    <button type="button" class="instant-preview__generate-button" id="instantPreviewGenerateButton" disabled>Create your shoot</button>
+                    <button type="button" class="instant-preview__generate-button" id="instantPreviewGenerateButton" disabled data-i18n="instant_generate_btn">Create your shoot</button>
 
                     <div class="instant-preview__variations" id="instantPreviewVariations" hidden>
                         <div class="instant-preview__variation">
@@ -265,7 +277,7 @@
                     </div>
 
                     <div class="instant-preview__cta" id="instantPreviewCta" hidden>
-                        <a href="#signup" class="instant-preview__cta-button" onclick="window.openBetaAccessModal && window.openBetaAccessModal(); return false;">Create an account to generate more</a>
+                        <a href="#signup" class="instant-preview__cta-button" data-i18n="instant_cta_btn" onclick="window.openWaitlistModal && window.openWaitlistModal('homepage_generation'); return false;">Create an account to generate more</a>
                     </div>
                 </article>
             </div>
@@ -276,9 +288,9 @@
     <section class="visual-demo-section" id="visual-demo">
         <div class="visual-demo">
             <div class="visual-demo__header">
-                <p class="visual-demo__eyebrow">VISUAL DEMO</p>
-                <h2 class="visual-demo__title">See how one garment becomes a complete fashion image</h2>
-                <p class="visual-demo__description">
+                <p class="visual-demo__eyebrow" data-i18n="demo_eyebrow">VISUAL DEMO</p>
+                <h2 class="visual-demo__title" data-i18n="demo_title">See how one garment becomes a complete fashion image</h2>
+                <p class="visual-demo__description" data-i18n="demo_desc">
                     Start from a single garment image and turn it into a polished fashion visual. Choose the right model,
                     style and scene to create consistent results in seconds.
                 </p>
@@ -286,47 +298,47 @@
 
             <div class="visual-demo__grid">
                 <article class="visual-demo-card visual-demo-card--input">
-                    <span class="visual-demo__label">Input garment</span>
+                    <span class="visual-demo__label" data-i18n="demo_input_label">Input garment</span>
                     <div class="visual-demo__media visual-demo__media--input">
                         <img src="images/demo/demo-input-garment.png" alt="Input garment preview">
                     </div>
-                    <h3 class="visual-demo__card-title">Start from a single product image</h3>
-                    <p class="visual-demo__card-copy">
+                    <h3 class="visual-demo__card-title" data-i18n="demo_card1_title">Start from a single product image</h3>
+                    <p class="visual-demo__card-copy" data-i18n="demo_card1_copy">
                         Upload a flat lay, packshot, or isolated garment image to begin.
                     </p>
                 </article>
 
                 <article class="visual-demo-card visual-demo-card--process">
-                    <span class="visual-demo__label">Creative setup</span>
+                    <span class="visual-demo__label" data-i18n="demo_process_label">Creative setup</span>
                     <div class="visual-demo__media visual-demo__media--process">
                         <div class="visual-demo__workflow-panel">
                             <div class="visual-demo__workflow-row">
-                                <span>Model selected</span>
-                                <strong>Editorial model</strong>
+                                <span data-i18n="demo_model_selected">Model selected</span>
+                                <strong data-i18n="demo_model_value">Editorial model</strong>
                             </div>
                             <div class="visual-demo__workflow-row">
-                                <span>Scene selected</span>
-                                <strong>Luxury studio set</strong>
+                                <span data-i18n="demo_scene_selected">Scene selected</span>
+                                <strong data-i18n="demo_scene_value">Luxury studio set</strong>
                             </div>
                             <div class="visual-demo__workflow-row">
-                                <span>Result ready</span>
-                                <strong>Generation ready</strong>
+                                <span data-i18n="demo_result_ready">Result ready</span>
+                                <strong data-i18n="demo_result_value">Generation ready</strong>
                             </div>
                         </div>
                     </div>
-                    <h3 class="visual-demo__card-title">Choose model, style and scene</h3>
-                    <p class="visual-demo__card-copy">
+                    <h3 class="visual-demo__card-title" data-i18n="demo_card2_title">Choose model, style and scene</h3>
+                    <p class="visual-demo__card-copy" data-i18n="demo_card2_copy">
                         Set the model, visual style and final scene to create a polished result ready for use.
                     </p>
                 </article>
 
                 <article class="visual-demo-card visual-demo-card--output">
-                    <span class="visual-demo__label">Final result</span>
+                    <span class="visual-demo__label" data-i18n="demo_output_label">Final result</span>
                     <div class="visual-demo__media visual-demo__media--output">
                         <img src="images/demo/demo-generated-result.jpeg" alt="Generated fashion result preview">
                     </div>
-                    <h3 class="visual-demo__card-title">Get polished fashion visuals in seconds</h3>
-                    <p class="visual-demo__card-copy">
+                    <h3 class="visual-demo__card-title" data-i18n="demo_card3_title">Get polished fashion visuals in seconds</h3>
+                    <p class="visual-demo__card-copy" data-i18n="demo_card3_copy">
                         Create polished visuals for e-commerce, campaigns, product pages and lookbooks.
                     </p>
                 </article>
@@ -338,9 +350,9 @@
     <section class="how-it-works-section" id="how-it-works">
         <div class="how-it-works">
             <div class="how-it-works__header">
-                <p class="how-it-works__eyebrow">HOW IT WORKS</p>
-                <h2 class="how-it-works__title">Create a fashion image in three simple steps</h2>
-                <p class="how-it-works__description">
+                <p class="how-it-works__eyebrow" data-i18n="hiw_eyebrow">HOW IT WORKS</p>
+                <h2 class="how-it-works__title" data-i18n="hiw_title">Create a fashion image in three simple steps</h2>
+                <p class="how-it-works__description" data-i18n="hiw_desc">
                     From garment photo to ready-to-use visual. No studio, no photographer, no complex workflow.
                 </p>
             </div>
@@ -356,8 +368,8 @@
                             <path d="M12 4l0 12"/>
                         </svg>
                     </div>
-                    <h3 class="how-it-works__card-title">Upload your garment</h3>
-                    <p class="how-it-works__card-text">
+                    <h3 class="how-it-works__card-title" data-i18n="hiw_step1_title">Upload your garment</h3>
+                    <p class="how-it-works__card-text" data-i18n="hiw_step1_text">
                         Start from a flat lay, packshot, or isolated garment image.
                     </p>
                 </article>
@@ -372,8 +384,8 @@
                             <path d="M8 21a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2"/>
                         </svg>
                     </div>
-                    <h3 class="how-it-works__card-title">Choose model and scene</h3>
-                    <p class="how-it-works__card-text">
+                    <h3 class="how-it-works__card-title" data-i18n="hiw_step2_title">Choose model and scene</h3>
+                    <p class="how-it-works__card-text" data-i18n="hiw_step2_text">
                         Set the right model, style and final scene for your result.
                     </p>
                 </article>
@@ -388,15 +400,15 @@
                             <path d="M9 18a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/>
                         </svg>
                     </div>
-                    <h3 class="how-it-works__card-title">Create the final result</h3>
-                    <p class="how-it-works__card-text">
+                    <h3 class="how-it-works__card-title" data-i18n="hiw_step3_title">Create the final result</h3>
+                    <p class="how-it-works__card-text" data-i18n="hiw_step3_text">
                         Create realistic visuals ready for product pages, campaigns and lookbooks.
                     </p>
                 </article>
             </div>
 
             <div class="how-it-works__actions">
-                <a href="studio.html" class="how-it-works__button">Open studio</a>
+                <a href="studio.html" class="how-it-works__button" data-i18n="hiw_btn">Open studio</a>
             </div>
         </div>
     </section>
@@ -404,13 +416,13 @@
     <section class="problem-solution-section" id="problem-solution">
         <div class="problem-solution">
             <div class="problem-solution__header">
-                <p class="problem-solution__eyebrow">PROBLEM / SOLUTION</p>
-                <h2 class="problem-solution__title">Fashion production is expensive. It doesn't have to be.</h2>
+                <p class="problem-solution__eyebrow" data-i18n="ps_eyebrow">PROBLEM / SOLUTION</p>
+                <h2 class="problem-solution__title" data-i18n="ps_title">Fashion production is expensive. It doesn't have to be.</h2>
             </div>
 
             <div class="problem-solution__grid">
                 <article class="problem-solution__panel problem-solution__panel--problem">
-                    <h3 class="problem-solution__panel-title">Traditional fashion production</h3>
+                    <h3 class="problem-solution__panel-title" data-i18n="ps_problem_title">Traditional fashion production</h3>
                     <ul class="problem-solution__list">
                         <li class="problem-solution__item problem-solution__item--problem" data-problem-solution-item>
                             <span class="problem-solution__icon" aria-hidden="true">
@@ -420,7 +432,7 @@
                                     <path d="M12 13m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/>
                                 </svg>
                             </span>
-                            <span class="problem-solution__item-text">Photoshoots can cost thousands</span>
+                            <span class="problem-solution__item-text" data-i18n="ps_p1">Photoshoots can cost thousands</span>
                         </li>
                         <li class="problem-solution__item problem-solution__item--problem" data-problem-solution-item>
                             <span class="problem-solution__icon" aria-hidden="true">
@@ -430,7 +442,7 @@
                                     <path d="M12 3a9 9 0 1 0 9 9"/>
                                 </svg>
                             </span>
-                            <span class="problem-solution__item-text">Production takes days or weeks</span>
+                            <span class="problem-solution__item-text" data-i18n="ps_p2">Production takes days or weeks</span>
                         </li>
                         <li class="problem-solution__item problem-solution__item--problem" data-problem-solution-item>
                             <span class="problem-solution__icon" aria-hidden="true">
@@ -441,7 +453,7 @@
                                     <path d="M5 14h9"/>
                                 </svg>
                             </span>
-                            <span class="problem-solution__item-text">Limited creative variations</span>
+                            <span class="problem-solution__item-text" data-i18n="ps_p3">Limited creative variations</span>
                         </li>
                         <li class="problem-solution__item problem-solution__item--problem" data-problem-solution-item>
                             <span class="problem-solution__icon" aria-hidden="true">
@@ -455,13 +467,13 @@
                                     <path d="M3 3l18 18"/>
                                 </svg>
                             </span>
-                            <span class="problem-solution__item-text">Hard to scale content production</span>
+                            <span class="problem-solution__item-text" data-i18n="ps_p4">Hard to scale content production</span>
                         </li>
                     </ul>
                 </article>
 
                 <article class="problem-solution__panel problem-solution__panel--solution">
-                    <h3 class="problem-solution__panel-title">Fashion AI</h3>
+                    <h3 class="problem-solution__panel-title" data-i18n="ps_solution_title">Fashion AI</h3>
                     <ul class="problem-solution__list">
                         <li class="problem-solution__item problem-solution__item--solution" data-problem-solution-item>
                             <span class="problem-solution__icon" aria-hidden="true">
@@ -472,7 +484,7 @@
                                     <path d="M9 18a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6"/>
                                 </svg>
                             </span>
-                            <span class="problem-solution__item-text">Generate visuals in seconds</span>
+                            <span class="problem-solution__item-text" data-i18n="ps_s1">Generate visuals in seconds</span>
                         </li>
                         <li class="problem-solution__item problem-solution__item--solution" data-problem-solution-item>
                             <span class="problem-solution__icon" aria-hidden="true">
@@ -481,7 +493,7 @@
                                     <path d="M13 3l-8 9h6l-1 9l8 -9h-6l1 -9"/>
                                 </svg>
                             </span>
-                            <span class="problem-solution__item-text">No models or studios required</span>
+                            <span class="problem-solution__item-text" data-i18n="ps_s2">No models or studios required</span>
                         </li>
                         <li class="problem-solution__item problem-solution__item--solution" data-problem-solution-item>
                             <span class="problem-solution__icon" aria-hidden="true">
@@ -494,7 +506,7 @@
                                     <path d="M12.5 13.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
                                 </svg>
                             </span>
-                            <span class="problem-solution__item-text">More creative flexibility</span>
+                            <span class="problem-solution__item-text" data-i18n="ps_s3">More creative flexibility</span>
                         </li>
                         <li class="problem-solution__item problem-solution__item--solution" data-problem-solution-item>
                             <span class="problem-solution__icon" aria-hidden="true">
@@ -506,18 +518,18 @@
                                     <path d="M14 14h6v6h-6z"/>
                                 </svg>
                             </span>
-                            <span class="problem-solution__item-text">Create content at scale</span>
+                            <span class="problem-solution__item-text" data-i18n="ps_s4">Create content at scale</span>
                         </li>
                     </ul>
                 </article>
             </div>
 
-            <p class="problem-solution__statement">
+            <p class="problem-solution__statement" data-i18n="ps_statement">
                 Create fashion visuals faster, with lower production cost and more flexibility.
             </p>
 
             <div class="problem-solution__cta">
-                <a href="studio.html" class="problem-solution__button">Open studio</a>
+                <a href="studio.html" class="problem-solution__button" data-i18n="ps_btn">Open studio</a>
             </div>
         </div>
     </section>
@@ -526,7 +538,7 @@
     <section class="benefits-section" id="benefits">
         <div class="benefits">
             <div class="benefits__header">
-                <h2 class="benefits__title">Why fashion teams use Fashion AI</h2>
+                <h2 class="benefits__title" data-i18n="benefits_title">Why fashion teams use Fashion AI</h2>
             </div>
 
             <div class="benefits__grid">
@@ -539,8 +551,8 @@
                             <path d="M5 14h9"/>
                         </svg>
                     </div>
-                    <h3 class="benefits__card-title">Save on production costs</h3>
-                    <p class="benefits__text">Lower production costs by reducing the need for studios, models, crews and logistics.</p>
+                    <h3 class="benefits__card-title" data-i18n="ben1_title">Save on production costs</h3>
+                    <p class="benefits__text" data-i18n="ben1_text">Lower production costs by reducing the need for studios, models, crews and logistics.</p>
                 </article>
 
                 <article class="benefits__card">
@@ -550,8 +562,8 @@
                             <path d="M13 3l-8 9h6l-1 9l8 -9h-6l1 -9"/>
                         </svg>
                     </div>
-                    <h3 class="benefits__card-title">Create content faster</h3>
-                    <p class="benefits__text">Move from garment photo to polished output in seconds instead of days or weeks.</p>
+                    <h3 class="benefits__card-title" data-i18n="ben2_title">Create content faster</h3>
+                    <p class="benefits__text" data-i18n="ben2_text">Move from garment photo to polished output in seconds instead of days or weeks.</p>
                 </article>
 
                 <article class="benefits__card">
@@ -565,8 +577,8 @@
                             <path d="M12.5 13.5a.5 .5 0 1 0 1 0a.5 .5 0 0 0 -1 0"/>
                         </svg>
                     </div>
-                    <h3 class="benefits__card-title">Test more creative directions</h3>
-                    <p class="benefits__text">Test more styles, scenes and creative directions without repeating production.</p>
+                    <h3 class="benefits__card-title" data-i18n="ben3_title">Test more creative directions</h3>
+                    <p class="benefits__text" data-i18n="ben3_text">Test more styles, scenes and creative directions without repeating production.</p>
                 </article>
 
                 <article class="benefits__card">
@@ -579,8 +591,8 @@
                             <path d="M14 14h6v6h-6z"/>
                         </svg>
                     </div>
-                    <h3 class="benefits__card-title">Scale visuals across channels</h3>
-                    <p class="benefits__text">Create more assets for product pages, campaigns, social content and lookbooks from one garment image.</p>
+                    <h3 class="benefits__card-title" data-i18n="ben4_title">Scale visuals across channels</h3>
+                    <p class="benefits__text" data-i18n="ben4_text">Create more assets for product pages, campaigns, social content and lookbooks from one garment image.</p>
                 </article>
             </div>
         </div>
@@ -589,9 +601,9 @@
     <section class="final-cta-section" id="final-cta">
         <div class="final-cta">
             <div class="final-cta__container">
-                <h2 class="final-cta__title">Start creating fashion visuals in minutes</h2>
-                <p class="final-cta__subtitle">Upload one garment image, choose the setup, and create polished results for your brand.</p>
-                <a href="studio.html" class="final-cta__button">Open studio</a>
+                <h2 class="final-cta__title" data-i18n="final_cta_title">Start creating fashion visuals in minutes</h2>
+                <p class="final-cta__subtitle" data-i18n="final_cta_subtitle">Upload one garment image, choose the setup, and create polished results for your brand.</p>
+                <a href="studio.html" class="final-cta__button" data-i18n="final_cta_btn">Open studio</a>
             </div>
         </div>
     </section>
@@ -599,57 +611,57 @@
     <section class="faq-section" id="faq">
         <div class="faq">
             <div class="faq__header">
-                <h2 class="faq__title">Frequently asked questions</h2>
+                <h2 class="faq__title" data-i18n="faq_title">Frequently asked questions</h2>
             </div>
 
             <div class="faq__list">
                 <article class="faq__item">
                     <button class="faq__question" type="button" aria-expanded="false">
-                        <span>Do I need technical skills?</span>
+                        <span data-i18n="faq1_q">Do I need technical skills?</span>
                         <span class="faq__toggle" aria-hidden="true"></span>
                     </button>
                     <div class="faq__answer">
-                        <p>No. Upload a garment image, choose the setup, and create polished visuals in a simple workflow.</p>
+                        <p data-i18n="faq1_a">No. Upload a garment image, choose the setup, and create polished visuals in a simple workflow.</p>
                     </div>
                 </article>
 
                 <article class="faq__item">
                     <button class="faq__question" type="button" aria-expanded="false">
-                        <span>What garments can I upload?</span>
+                        <span data-i18n="faq2_q">What garments can I upload?</span>
                         <span class="faq__toggle" aria-hidden="true"></span>
                     </button>
                     <div class="faq__answer">
-                        <p>You can upload dresses, jackets, tops, trousers, skirts, accessories and most fashion items from a clear garment photo.</p>
+                        <p data-i18n="faq2_a">You can upload dresses, jackets, tops, trousers, skirts, accessories and most fashion items from a clear garment photo.</p>
                     </div>
                 </article>
 
                 <article class="faq__item">
                     <button class="faq__question" type="button" aria-expanded="false">
-                        <span>Who is Fashion AI designed for?</span>
+                        <span data-i18n="faq3_q">Who is Fashion AI designed for?</span>
                         <span class="faq__toggle" aria-hidden="true"></span>
                     </button>
                     <div class="faq__answer">
-                        <p>Fashion AI is built for fashion brands, e-commerce teams and boutiques that need faster content production.</p>
+                        <p data-i18n="faq3_a">Fashion AI is built for fashion brands, e-commerce teams and boutiques that need faster content production.</p>
                     </div>
                 </article>
 
                 <article class="faq__item">
                     <button class="faq__question" type="button" aria-expanded="false">
-                        <span>Do I need a traditional photoshoot?</span>
+                        <span data-i18n="faq4_q">Do I need a traditional photoshoot?</span>
                         <span class="faq__toggle" aria-hidden="true"></span>
                     </button>
                     <div class="faq__answer">
-                        <p>No. You can start from a garment photo and create polished fashion visuals without a studio, photographer or model booking.</p>
+                        <p data-i18n="faq4_a">No. You can start from a garment photo and create polished fashion visuals without a studio, photographer or model booking.</p>
                     </div>
                 </article>
 
                 <article class="faq__item">
                     <button class="faq__question" type="button" aria-expanded="false">
-                        <span>Where can I use the results?</span>
+                        <span data-i18n="faq5_q">Where can I use the results?</span>
                         <span class="faq__toggle" aria-hidden="true"></span>
                     </button>
                     <div class="faq__answer">
-                        <p>The results are suitable for product pages, campaigns, lookbooks and social content, depending on your setup.</p>
+                        <p data-i18n="faq5_a">The results are suitable for product pages, campaigns, lookbooks and social content, depending on your setup.</p>
                     </div>
                 </article>
             </div>
@@ -661,45 +673,45 @@
         <div class="upload-backdrop" id="uploadBackdrop"></div>
         <div class="upload-dialog">
             <button class="upload-close" id="uploadClose" aria-label="Close upload">&times;</button>
-            <h3 class="upload-title">Create result</h3>
-            <p class="upload-subtitle">Add the garment image and model image to create your fashion result.</p>
+            <h3 class="upload-title" data-i18n="upload_title">Create result</h3>
+            <p class="upload-subtitle" data-i18n="upload_subtitle">Add the garment image and model image to create your fashion result.</p>
             <div class="upload-grid">
                 <label class="upload-dropzone" for="dressInput">
-                    <div class="drop-label">Garment image</div>
-                    <div class="drop-hint">Drag or click</div>
+                    <div class="drop-label" data-i18n="upload_garment_label">Garment image</div>
+                    <div class="drop-hint" data-i18n="upload_drag">Drag or click</div>
                     <div class="drop-preview" id="dressPreview"></div>
                     <input type="file" id="dressInput" accept="image/*" hidden>
                 </label>
                 <label class="upload-dropzone" for="modelInput">
-                    <div class="drop-label">Model image</div>
-                    <div class="drop-hint">Drag or click</div>
+                    <div class="drop-label" data-i18n="upload_model_label">Model image</div>
+                    <div class="drop-hint" data-i18n="upload_drag">Drag or click</div>
                     <div class="drop-preview" id="modelPreview"></div>
                     <input type="file" id="modelInput" accept="image/*" hidden>
                 </label>
             </div>
             <div class="upload-field">
-                <div class="dress-type-label">Garment type</div>
+                <div class="dress-type-label" data-i18n="upload_garment_type">Garment type</div>
                 <div class="dress-type-options" id="dressTypeOptions">
                     <button class="dress-type-btn active" data-type="dress" title="Total look">
                         <img src="images/icon/clothes.png" alt="Total look">
-                        <span>Total look</span>
+                        <span data-i18n="upload_total_look">Total look</span>
                     </button>
                     <button class="dress-type-btn" data-type="top" title="Upper">
                         <img src="images/icon/tshirt.png" alt="Upper">
-                        <span>Upper</span>
+                        <span data-i18n="upload_upper">Upper</span>
                     </button>
                     <button class="dress-type-btn" data-type="lower" title="Lower">
                         <img src="images/icon/trousers.png" alt="Lower">
-                        <span>Lower</span>
+                        <span data-i18n="upload_lower">Lower</span>
                     </button>
                     <button class="dress-type-btn" data-type="accessory" title="Accessory">
                         <img src="images/icon/pendant.png" alt="Accessory">
-                        <span>Accessory</span>
+                        <span data-i18n="upload_accessory">Accessory</span>
                     </button>
                 </div>
             </div>
             <div class="upload-field">
-                <label for="aspectSelect">Aspect ratio</label>
+                <label for="aspectSelect" data-i18n="upload_aspect">Aspect ratio</label>
                 <select id="aspectSelect">
                     <option value="1:1">1:1 (square)</option>
                     <option value="3:4">3:4 (portrait)</option>
@@ -709,25 +721,25 @@
                 </select>
             </div>
             <div class="upload-field">
-                <label for="backgroundSelect">Choose the scene</label>
+                <label for="backgroundSelect" data-i18n="upload_scene_label">Choose the scene</label>
                 <select id="backgroundSelect">
-                    <option value="studio">Neutral studio</option>
-                    <option value="runway">Runway show</option>
-                    <option value="urban">Urban glow</option>
-                    <option value="retail">Premium retail</option>
-                    <option value="lifestyle">Soft lifestyle</option>
-                    <option value="custom">Custom scene</option>
+                    <option value="studio" data-i18n="upload_scene_studio">Neutral studio</option>
+                    <option value="runway" data-i18n="upload_scene_runway">Runway show</option>
+                    <option value="urban" data-i18n="upload_scene_urban">Urban glow</option>
+                    <option value="retail" data-i18n="upload_scene_retail">Premium retail</option>
+                    <option value="lifestyle" data-i18n="upload_scene_lifestyle">Soft lifestyle</option>
+                    <option value="custom" data-i18n="upload_scene_custom">Custom scene</option>
                 </select>
             </div>
             <div class="upload-field">
-                <label for="backgroundPrompt">Custom scene</label>
-                <textarea id="backgroundPrompt" rows="3" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
+                <label for="backgroundPrompt" data-i18n="upload_custom_scene_label">Custom scene</label>
+                <textarea id="backgroundPrompt" rows="3" data-i18n-placeholder="upload_custom_placeholder" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
             </div>
-            <button class="upload-action" id="uploadSubmit" disabled>Create result</button>
+            <button class="upload-action" id="uploadSubmit" disabled data-i18n="upload_submit">Create result</button>
             <div class="model-ready">
                 <div class="model-ready-head">
-                    <h4>Ready-made models</h4>
-                    <p>Choose a model from the ready-to-use library.</p>
+                    <h4 data-i18n="model_ready_title">Ready-made models</h4>
+                    <p data-i18n="model_ready_desc">Choose a model from the ready-to-use library.</p>
                 </div>
                 <div class="model-ready-grid">
                     <div class="model-ready-card" data-model-src="images/models/Adrian.jpeg" data-model-name="Adrian">
@@ -760,16 +772,16 @@
         <div class="image-viewer-backdrop" id="imageViewerBackdrop"></div>
         <div class="image-viewer-dialog">
             <button class="image-viewer-close" id="imageViewerClose" aria-label="Close preview">&times;</button>
-            <h3 class="image-viewer-title">Generated result preview</h3>
+            <h3 class="image-viewer-title" data-i18n="viewer_title">Generated result preview</h3>
             <div class="image-viewer-body">
                 <img id="imageViewerImg" alt="Generated image">
             </div>
             <div class="image-viewer-actions">
-                <a class="image-viewer-btn" id="imageViewerLink" href="#" target="_blank" rel="noopener noreferrer">Open image</a>
-                <button class="image-viewer-btn" id="imageViewerSave">Save to gallery</button>
-                <button class="image-viewer-btn" id="imageViewerPose">Change pose</button>
-                <button class="image-viewer-btn" id="imageViewerBg">Change scene</button>
-                <button class="image-viewer-btn" id="imageViewerRegen">Regenerate</button>
+                <a class="image-viewer-btn" id="imageViewerLink" href="#" target="_blank" rel="noopener noreferrer" data-i18n="viewer_open">Open image</a>
+                <button class="image-viewer-btn" id="imageViewerSave" data-i18n="viewer_save">Save to gallery</button>
+                <button class="image-viewer-btn" id="imageViewerPose" data-i18n="viewer_pose">Change pose</button>
+                <button class="image-viewer-btn" id="imageViewerBg" data-i18n="viewer_bg">Change scene</button>
+                <button class="image-viewer-btn" id="imageViewerRegen" data-i18n="viewer_regen">Regenerate</button>
             </div>
         </div>
     </div>
@@ -824,19 +836,19 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <a href="#home" class="footer-logo">Fashion AI</a>
-                <p class="footer-description">
+                <p class="footer-description" data-i18n="footer_desc">
                     AI-powered fashion visuals for brands, e-commerce and creative teams.
                 </p>
-                <a href="studio.html" class="footer-cta">Open studio</a>
+                <a href="studio.html" class="footer-cta" data-i18n="footer_cta">Open studio</a>
             </div>
             
             <div class="footer-section">
-                <h4>Navigation</h4>
+                <h4 data-i18n="footer_nav">Navigation</h4>
                 <div class="footer-links">
                     <a href="#home">Home</a>
                     <a href="studio.html">Demo</a>
-                    <a href="#how-it-works">How it works</a>
-                    <a href="#results-gallery">Results</a>
+                    <a href="#how-it-works" data-i18n="footer_how">How it works</a>
+                    <a href="#results-gallery" data-i18n="footer_results">Results</a>
                     <a href="#faq">FAQ</a>
                 </div>
             </div>
@@ -852,13 +864,15 @@
         </div>
         
         <div class="footer-bottom">
-            <div class="copyright">
+            <div class="copyright" data-i18n="footer_copyright">
                 © 2026 Fashion AI. All rights reserved.
             </div>
         </div>
     </footer>
 
+    <script src="i18n.js"></script>
     <script src="beta-guard-client.js"></script>
+    <script src="waitlist.js"></script>
     <script src="templatemo-prism-scripts.js"></script>
 </body>
 </html>

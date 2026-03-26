@@ -38,20 +38,14 @@ const env = {
     'REPLICATE_MODEL_VERSION_IDENTITY',
     DEFAULTS.replicateModelVersionIdentity
   ),
-  REPLICATE_UPSCALE_MODEL_VERSION: readString(
-    'REPLICATE_UPSCALE_MODEL_VERSION',
-    DEFAULTS.replicateUpscaleModelVersion
-  ),
-  REPLICATE_REFINER_MODEL_VERSION: readString(
-    'REPLICATE_REFINER_MODEL_VERSION',
-    DEFAULTS.replicateRefinerModelVersion
-  ),
+  FAL_KEY: readString('FAL_KEY'),
   OPENAI_API_KEY: readString('OPENAI_API_KEY'),
   OPENAI_MODEL: readString('OPENAI_MODEL', DEFAULTS.openaiModel),
   OPENAI_IMAGE_MODEL: readString('OPENAI_IMAGE_MODEL', DEFAULTS.openaiImageModel),
-  GOOGLE_API_KEY: readString('GOOGLE_API_KEY'),
-  GEMINI_IMAGE_MODEL: readString('GEMINI_IMAGE_MODEL', DEFAULTS.geminiImageModel),
   BETA_TOKEN: readString('BETA_TOKEN'),
+  AIRTABLE_TOKEN: readString('AIRTABLE_TOKEN'),
+  AIRTABLE_BASE_ID: readString('AIRTABLE_BASE_ID'),
+  AIRTABLE_TABLE: readString('AIRTABLE_TABLE', 'Waitlist'),
   PUBLIC_BASE_URL: readString('PUBLIC_BASE_URL'),
   ALLOWED_ORIGINS: readCsv('ALLOWED_ORIGINS'),
   DEFAULT_MODEL_BASE_PROMPT,

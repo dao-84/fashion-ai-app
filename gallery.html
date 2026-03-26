@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery - AI Photoshoot</title>
+  <title>Gallery - Fashion AI</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="templatemo-prism-flux.css">
+  <style>
+    .lang-switcher{display:flex;gap:6px;align-items:center;}
+    .lang-btn{background:transparent;border:1px solid rgba(212,175,55,.3);color:var(--text-secondary);font-size:12px;font-weight:600;letter-spacing:1px;padding:4px 10px;cursor:pointer;border-radius:4px;transition:all .2s;}
+    .lang-btn:hover,.lang-btn.active{border-color:#d4af37;color:#d4af37;}
+  </style>
 </head>
 <body class="gallery-body">
   <header class="header" id="header">
@@ -22,11 +27,17 @@
         </span>
       </a>
       <ul class="nav-menu" id="navMenu">
-        <li><a href="index.html#home" class="nav-link">Home</a></li>
-        <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
-        <li><a href="studio.html" class="nav-link">Studio</a></li>
-        <li><a href="index.html#signup" class="nav-link" onclick="window.openBetaAccessModal && window.openBetaAccessModal(); return false;">Sign up / Log in</a></li>
+        <li><a href="index.html#home" class="nav-link" data-i18n="nav_home">Home</a></li>
+        <li><a href="gallery.html" class="nav-link active" data-i18n="nav_gallery">Gallery</a></li>
+        <li><a href="studio.html" class="nav-link" data-i18n="nav_studio">Studio</a></li>
+        <li><a href="pricing.html" class="nav-link" data-i18n="nav_pricing">Prezzi</a></li>
+        <li><a href="index.html#signup" class="nav-link" data-i18n="nav_signup" onclick="window.openWaitlistModal && window.openWaitlistModal('nav'); return false;">Accedi / Registrati</a></li>
       </ul>
+      <div class="lang-switcher">
+        <button class="lang-btn" data-lang="it" onclick="setLang('it')">IT</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+      </div>
       <div class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-controls="navMenu" aria-expanded="false" role="button" tabindex="0">
         <span></span>
         <span></span>
@@ -37,16 +48,16 @@
 
   <main class="gallery-page">
     <div class="section-header" style="padding-top:120px;">
-      <h2 class="section-title">Gallery</h2>
-      <p class="section-subtitle">Immagini generate e salvate nella tua sessione</p>
+      <h2 class="section-title" data-i18n="gallery_title">Gallery</h2>
+      <p class="section-subtitle" data-i18n="gallery_subtitle">Immagini generate e salvate nella tua sessione</p>
     </div>
     <div class="gallery-compact-grid" id="galleryList"></div>
     <div class="gallery-load-more" id="galleryLoadMore" style="display:none;">
-      <button class="gallery-load-more-btn" type="button" title="Mostra altre immagini">
+      <button class="gallery-load-more-btn" type="button" data-i18n="gallery_load_more">
         Mostra altre
       </button>
     </div>
-    <div id="galleryEmpty" style="text-align:center; margin:40px 0; color:var(--text-secondary); display:none;">
+    <div id="galleryEmpty" style="text-align:center; margin:40px 0; color:var(--text-secondary); display:none;" data-i18n="gallery_empty">
       Nessuna immagine trovata. Genera un look per popolare la gallery.
     </div>
   </main>
@@ -70,14 +81,16 @@
           <div class="image-viewer-count" id="imageViewerCount"></div>
         </div>
         <div class="image-viewer-actions">
-          <a class="image-viewer-btn" id="imageViewerLink" href="#" target="_blank" rel="noopener noreferrer">Apri immagine</a>
-          <a class="image-viewer-btn" id="imageViewerDownload" href="#" download><i class="fa fa-download" style="margin-right:6px;"></i>Scarica</a>
+          <a class="image-viewer-btn" id="imageViewerLink" href="#" target="_blank" rel="noopener noreferrer" data-i18n="gallery_open">Apri immagine</a>
+          <a class="image-viewer-btn" id="imageViewerDownload" href="#" download><i class="fa fa-download" style="margin-right:6px;"></i><span data-i18n="gallery_download">Scarica</span></a>
         </div>
       </div>
     </div>
   </div>
 
+  <script src="i18n.js"></script>
   <script src="beta-guard-client.js"></script>
+  <script src="waitlist.js"></script>
   <script>
     const listEl = document.getElementById('galleryList');
     const emptyEl = document.getElementById('galleryEmpty');

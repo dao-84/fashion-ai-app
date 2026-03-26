@@ -16,6 +16,7 @@ const { notFoundHandler } = require('./middleware/notFound.middleware');
 const { errorHandler } = require('./middleware/error.middleware');
 const { createOpenAIIntegration } = require('./integrations/ai/openai.integration');
 const { createReplicateIntegration } = require('./integrations/ai/replicate.integration');
+const { createFalIntegration } = require('./integrations/ai/fal.integration');
 const { createProxyIntegration } = require('./integrations/ai/proxy.integration');
 
 let OpenAI;
@@ -37,13 +38,10 @@ const {
   REPLICATE_API_TOKEN,
   REPLICATE_MODEL_VERSION,
   REPLICATE_MODEL_VERSION_IDENTITY,
-  REPLICATE_UPSCALE_MODEL_VERSION,
-  REPLICATE_REFINER_MODEL_VERSION,
+  FAL_KEY,
   OPENAI_API_KEY,
   OPENAI_MODEL,
   OPENAI_IMAGE_MODEL,
-  GOOGLE_API_KEY,
-  GEMINI_IMAGE_MODEL,
   DEFAULT_MODEL_BASE_PROMPT,
   BETA_TOKEN,
   ALLOWED_ORIGINS,
@@ -56,7 +54,6 @@ const openai = OPENAI_API_KEY && OpenAI ? new OpenAI({ apiKey: OPENAI_API_KEY })
 
 const logEmoji = {
   openaiImage: '🖼️',
-  gemini: '🔮',
   startup: '🚀',
   proxy: '🛰️',
   generate: '🎨',
@@ -95,16 +92,16 @@ function logProvider() {
     log.warn(logEmoji.warn, '[startup] Nessun motore AI configurato: aggiungi REPLICATE_API_TOKEN oppure API_BASE_URL/API_KEY in .env');
   }
 
+  if (falIntegration.isConfigured()) {
+    log.info(logEmoji.generate, '[startup] FAL.AI pronto (model: fal-ai/nano-banana-2)');
+  } else {
+    log.warn(logEmoji.warn, '[startup] FAL.AI non configurato: aggiungi FAL_KEY in .env per usare FAL.AI');
+  }
+
   if (openai) {
     log.info(logEmoji.openai, `[startup] OpenAI pronto (model: ${OPENAI_MODEL})`);
   } else {
     log.warn(logEmoji.warn, '[startup] OpenAI non configurato: aggiungi OPENAI_API_KEY in .env per generare prompt');
-  }
-
-  if (GOOGLE_API_KEY) {
-    log.info(logEmoji.gemini, `[startup] Gemini pronto (model: ${GEMINI_IMAGE_MODEL})`);
-  } else {
-    log.warn(logEmoji.warn, '[startup] Gemini non configurato: aggiungi GOOGLE_API_KEY in .env per generare immagini con Imagen');
   }
 
   if (OPENAI_API_KEY) {
@@ -158,6 +155,7 @@ const openaiIntegration = createOpenAIIntegration({
   OPENAI_MODEL,
 });
 const replicateIntegration = createReplicateIntegration({ replicate });
+const falIntegration = createFalIntegration({ FAL_KEY });
 const proxyIntegration = createProxyIntegration({
   fetch,
   API_BASE_URL,
@@ -179,11 +177,10 @@ registerRoutes(app, {
   REPLICATE_MODEL_VERSION_IDENTITY,
   REPLICATE_MODEL_VERSION,
   fetch,
-  REPLICATE_UPSCALE_MODEL_VERSION,
-  REPLICATE_REFINER_MODEL_VERSION,
   publicDir,
   openaiIntegration,
   replicateIntegration,
+  falIntegration,
   proxyIntegration,
 });
 

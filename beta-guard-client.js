@@ -42,17 +42,17 @@
       '<div class="beta-guard-modal__panel" role="dialog" aria-modal="true" aria-labelledby="betaGuardTitle">' +
       '<div class="beta-guard-modal__eyebrow">Beta Access</div>' +
       '<h2 class="beta-guard-modal__title" id="betaGuardTitle">Sblocca le funzioni protette</h2>' +
-      '<p class="beta-guard-modal__copy">Inserisci il token beta per autorizzare le chiamate API e usare gallery, generate, upscale e refine.</p>' +
+      '<p class="beta-guard-modal__copy">Inserisci la password per accedere allo studio.</p>' +
       '<label class="beta-guard-modal__field">' +
-      '<span class="beta-guard-modal__label">Beta Token</span>' +
-      '<input class="beta-guard-modal__input" id="betaGuardInput" type="password" autocomplete="off" placeholder="Inserisci il token">' +
+      '<span class="beta-guard-modal__label">Password</span>' +
+      '<input class="beta-guard-modal__input" id="betaGuardInput" type="password" autocomplete="off" placeholder="Inserisci la password">' +
       '</label>' +
       '<div class="beta-guard-modal__status" id="betaGuardStatus"></div>' +
       '<div class="beta-guard-modal__actions">' +
       '<button type="button" class="beta-guard-modal__button beta-guard-modal__button--ghost" id="betaGuardCancel">Chiudi</button>' +
       '<button type="button" class="beta-guard-modal__button beta-guard-modal__button--primary" id="betaGuardSave">Entra</button>' +
       '</div>' +
-      '<div class="beta-guard-modal__hint">Il token viene salvato nella sessione corrente del browser.</div>' +
+      '<div class="beta-guard-modal__hint">La password viene salvata nella sessione corrente del browser.</div>' +
       '</div>';
 
     document.body.appendChild(overlay);
@@ -98,16 +98,34 @@
     modalElements.save.addEventListener('click', function () {
       var token = (modalElements.input.value || '').trim();
       if (!token) {
-        setStatus('Inserisci un token valido.', true);
+        setStatus('Inserisci la password.', true);
         return;
       }
 
-      storeToken(token);
-      if (pendingTokenRequest) {
-        pendingTokenRequest.resolve(token);
-        pendingTokenRequest = null;
-      }
-      closeModal();
+      modalElements.save.disabled = true;
+      setStatus('Verifica in corso...', false);
+
+      origFetch('/api/gallery', {
+        headers: { Authorization: 'Bearer ' + token },
+      }).then(function (res) {
+        modalElements.save.disabled = false;
+        if (res.status === 401) {
+          setStatus('Password non corretta.', true);
+          modalElements.input.value = '';
+          modalElements.input.focus();
+          return;
+        }
+        storeToken(token);
+        setStatus('', false);
+        if (pendingTokenRequest) {
+          pendingTokenRequest.resolve(token);
+          pendingTokenRequest = null;
+        }
+        closeModal();
+      }).catch(function () {
+        modalElements.save.disabled = false;
+        setStatus('Errore di rete. Riprova.', true);
+      });
     });
 
     return modalElements;
@@ -139,10 +157,7 @@
   }
 
   function renderBetaDenied() {
-    document.body.innerHTML =
-      '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0a0a0a;">' +
-      '<p style="color:#fff;font-family:sans-serif;font-size:18px;letter-spacing:2px;">Accesso non autorizzato.</p>' +
-      '</div>';
+    window.location.href = 'index.html#home';
   }
 
   function getStoredToken() {
@@ -208,16 +223,13 @@
     });
   };
 
-  function isSignupLink(link) {
+  function isStudioLink(link) {
     if (!link || !link.getAttribute) return false;
     var rawHref = link.getAttribute('href') || '';
-    if (rawHref === '#signup' || rawHref === 'index.html#signup') {
-      return true;
-    }
-
+    if (rawHref === 'studio.html') return true;
     try {
       var resolved = new URL(link.href, window.location.origin);
-      return resolved.hash === '#signup';
+      return resolved.pathname === '/studio.html';
     } catch (_err) {
       return false;
     }
@@ -225,10 +237,58 @@
 
   document.addEventListener('click', function (event) {
     var link = event.target && event.target.closest ? event.target.closest('a') : null;
-    if (!isSignupLink(link)) return;
+    if (!isStudioLink(link)) return;
     event.preventDefault();
-    openModal();
+    if (getStoredToken()) {
+      window.location.href = 'studio.html';
+      return;
+    }
+    requestBetaToken()
+      .then(function () {
+        window.location.href = 'studio.html';
+      })
+      .catch(function () {
+        window.location.href = 'index.html#home';
+      });
   });
 
   window.openBetaAccessModal = openModal;
+
+  /* ── Proactive studio protection ─────────────────────────── */
+
+  // Se si apre studio.html senza token → chiedi subito la password
+  var onStudioPage = window.location.pathname === '/studio.html' ||
+    window.location.pathname.endsWith('/studio.html');
+
+  if (onStudioPage && !getStoredToken()) {
+    requestBetaToken().catch(function () {
+      window.location.href = 'index.html#home';
+    });
+  }
+
+  // Bottoni che fanno chiamate API → controllo proattivo prima della chiamata
+  var _GUARDED_BTNS = ['#studioProgressGenerate', '#instantPreviewGenerateButton'];
+  var _authingGenerate = false;
+  document.addEventListener('click', function (event) {
+    if (_authingGenerate) return;
+    if (getStoredToken()) return;
+    var target = event.target && event.target.closest ? event.target : null;
+    if (!target) return;
+    var matched = _GUARDED_BTNS.some(function (sel) {
+      return target.closest(sel);
+    });
+    if (!matched) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    _authingGenerate = true;
+    requestBetaToken()
+      .then(function () {
+        _authingGenerate = false;
+        target.click();
+      })
+      .catch(function () {
+        _authingGenerate = false;
+        window.location.href = 'index.html#home';
+      });
+  }, true);
 })();
