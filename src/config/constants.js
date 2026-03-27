@@ -1,3 +1,6 @@
+// Crediti assegnati all'utente alla registrazione — cambia questo valore per modificarlo
+const FREE_CREDITS_ON_REGISTER = 3;
+
 const DEFAULTS = {
   port: 3000,
   openaiModel: 'gpt-4o-mini',
@@ -14,4 +17,5 @@ const DEFAULT_MODEL_BASE_PROMPT =
 module.exports = {
   DEFAULTS,
   DEFAULT_MODEL_BASE_PROMPT,
+  FREE_CREDITS_ON_REGISTER,
 };

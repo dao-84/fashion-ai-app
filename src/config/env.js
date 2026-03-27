@@ -48,6 +48,7 @@ const env = {
   AIRTABLE_BASE_ID: readString('AIRTABLE_BASE_ID'),
   AIRTABLE_TABLE: readString('AIRTABLE_TABLE', 'Waitlist'),
   DATABASE_URL: readString('DATABASE_URL'),
+  JWT_SECRET: readString('JWT_SECRET', 'changeme-set-a-real-secret-in-env'),
   R2_ACCOUNT_ID: readString('R2_ACCOUNT_ID'),
   R2_ACCESS_KEY_ID: readString('R2_ACCESS_KEY_ID'),
   R2_SECRET_ACCESS_KEY: readString('R2_SECRET_ACCESS_KEY'),

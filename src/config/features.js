@@ -1,7 +1,7 @@
 const { env } = require('./env');
 
 const features = {
-  enableAuth: false,
+  enableAuth: true,
   enableBilling: false,
   enableCredits: false,
   enableDatabase: true,

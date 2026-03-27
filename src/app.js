@@ -9,7 +9,7 @@ const rateLimit = require('express-rate-limit');
 const Replicate = require('replicate');
 const { registerRoutes } = require('./routes');
 const { env, rootDir } = require('./config/env');
-const { initializeDatabase } = require('./db/connection');
+const { initializeDatabase, getPool } = require('./db/connection');
 const { registerPublicStatic } = require('./middleware/public-static');
 const { attachOptionalUser } = require('./middleware/auth.middleware');
 const { notFoundHandler } = require('./middleware/notFound.middleware');
@@ -47,6 +47,7 @@ const {
   DEFAULT_MODEL_BASE_PROMPT,
   BETA_TOKEN,
   ALLOWED_ORIGINS,
+  JWT_SECRET,
 } = env;
 
 const replicate = REPLICATE_API_TOKEN
@@ -134,18 +135,23 @@ app.use(express.json({ limit: '10mb' }));
 app.use(attachOptionalUser);
 
 function betaGuard(req, res, next) {
-  if (!BETA_TOKEN) return next();
   if (!req.path.startsWith('/api/')) return next();
 
+  // Le route di autenticazione sono sempre pubbliche
+  if (req.path.startsWith('/api/auth/')) return next();
+
+  // Con auth attivo: accetta JWT valido (già verificato da attachOptionalUser)
+  const { features } = require('./config/features');
+  if (features.enableAuth && req.auth?.isAuthenticated) return next();
+
+  // Fallback: beta token classico
+  if (!BETA_TOKEN) return next();
   const authHeader = req.headers.authorization || '';
   const queryToken = req.query?.token || '';
-
-  if (authHeader === `Bearer ${BETA_TOKEN}` || queryToken === BETA_TOKEN) {
-    return next();
-  }
+  if (authHeader === `Bearer ${BETA_TOKEN}` || queryToken === BETA_TOKEN) return next();
 
   log.warn(logEmoji.auth, `[beta-guard] accesso negato - IP: ${req.ip} - path: ${req.path}`);
-  return res.status(401).json({ error: 'Accesso beta non autorizzato.' });
+  return res.status(401).json({ error: 'Accesso richiede autenticazione.' });
 }
 
 app.use(betaGuard);
@@ -192,6 +198,8 @@ registerRoutes(app, {
   falIntegration,
   googleIntegration,
   proxyIntegration,
+  getPool,
+  JWT_SECRET,
 });
 
 app.use(notFoundHandler);

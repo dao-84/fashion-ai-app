@@ -1,20 +1,20 @@
 const express = require('express');
-
-// Future auth route registration.
-// Prepared for login, session inspection, refresh, and recovery flows.
-
-function createAuthRouter(_deps = {}) {
-  const router = express.Router();
-
-  // No active auth endpoints yet. Router intentionally kept empty.
-  return router;
-}
+const { createAuthService } = require('../services/auth.service');
+const { createAuthController } = require('../controllers/auth.controller');
 
 function registerAuthRoutes(app, deps) {
-  app.use('/api/auth', createAuthRouter(deps));
+  const authService = createAuthService({
+    getPool: deps.getPool,
+    JWT_SECRET: deps.JWT_SECRET,
+  });
+  const authController = createAuthController({ authService });
+
+  const router = express.Router();
+  router.post('/register', authController.register);
+  router.post('/login', authController.login);
+  router.get('/me', authController.me);
+
+  app.use('/api/auth', router);
 }
 
-module.exports = {
-  createAuthRouter,
-  registerAuthRoutes,
-};
+module.exports = { registerAuthRoutes };
