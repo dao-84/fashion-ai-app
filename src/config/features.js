@@ -4,7 +4,7 @@ const features = {
   enableAuth: false,
   enableBilling: false,
   enableCredits: false,
-  enableDatabase: false,
+  enableDatabase: true,
   enableAuthDebugInfo: env.NODE_ENV !== 'production',
 };
 
