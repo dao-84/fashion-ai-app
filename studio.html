@@ -139,7 +139,8 @@
                   </select>
                   <select class="studio-progress-provider-mini" aria-label="AI Provider">
                     <option value="replicate">Replicate</option>
-                    <option value="fal">FAL.AI</option>
+                    <option value="fal" selected>FAL.AI</option>
+                    <option value="google">Google AI</option>
                   </select>
                   <select class="studio-progress-resolution-mini" aria-label="Resolution">
                     <option value="1K" selected>1K</option>
@@ -167,7 +168,8 @@
                   </select>
                   <select class="studio-progress-provider-mini" aria-label="AI Provider">
                     <option value="replicate">Replicate</option>
-                    <option value="fal">FAL.AI</option>
+                    <option value="fal" selected>FAL.AI</option>
+                    <option value="google">Google AI</option>
                   </select>
                   <select class="studio-progress-resolution-mini" aria-label="Resolution">
                     <option value="1K" selected>1K</option>
@@ -196,7 +198,8 @@
                   </select>
                   <select class="studio-progress-provider-mini" aria-label="AI Provider">
                     <option value="replicate">Replicate</option>
-                    <option value="fal">FAL.AI</option>
+                    <option value="fal" selected>FAL.AI</option>
+                    <option value="google">Google AI</option>
                   </select>
                   <select class="studio-progress-resolution-mini" aria-label="Resolution">
                     <option value="1K" selected>1K</option>
@@ -226,7 +229,8 @@
                   </select>
                   <select class="studio-progress-provider-mini" aria-label="AI Provider">
                     <option value="replicate">Replicate</option>
-                    <option value="fal">FAL.AI</option>
+                    <option value="fal" selected>FAL.AI</option>
+                    <option value="google">Google AI</option>
                   </select>
                   <select class="studio-progress-resolution-mini" aria-label="Resolution">
                     <option value="1K" selected>1K</option>
@@ -245,8 +249,9 @@
                   <div class="studio-progress-field">
                     <span data-i18n="studio_provider_label">Provider AI</span>
                     <div class="studio-progress-aspect-options" id="studioProviderOptions">
-                      <button type="button" class="studio-progress-aspect-btn active" data-provider="replicate">Replicate</button>
-                      <button type="button" class="studio-progress-aspect-btn" data-provider="fal">FAL.AI</button>
+                      <button type="button" class="studio-progress-aspect-btn" data-provider="replicate">Replicate</button>
+                      <button type="button" class="studio-progress-aspect-btn active" data-provider="fal">FAL.AI</button>
+                      <button type="button" class="studio-progress-aspect-btn" data-provider="google">Google AI</button>
                     </div>
                   </div>
                   <div class="studio-progress-field">
@@ -351,6 +356,7 @@
               <select id="studioProviderSelect">
                 <option value="replicate">Replicate</option>
                 <option value="fal">FAL.AI</option>
+                <option value="google">Google AI</option>
               </select>
             </div>
             <textarea id="studioBackgroundPrompt" rows="2" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
@@ -475,6 +481,11 @@
             </div>
 
             <div class="model-builder-footer">
+              <select class="studio-progress-provider-mini" aria-label="AI Provider">
+                <option value="replicate">Replicate</option>
+                <option value="fal">FAL.AI</option>
+                <option value="google">Google AI</option>
+              </select>
               <button class="upload-action" type="button" id="studioGenerateModelBtn" data-i18n="mb_generate_btn">Genera modella</button>
             </div>
           </div>
@@ -534,7 +545,7 @@
       const providerSelectMain = document.getElementById('studioProviderSelect');
       const providerMiniSelects = Array.from(document.querySelectorAll('.studio-progress-provider-mini'));
       const resolutionMiniSelects = Array.from(document.querySelectorAll('.studio-progress-resolution-mini'));
-      let selectedProvider = 'replicate';
+      let selectedProvider = 'fal';
       let selectedResolution = '1K';
 
       function setProvider(value) {
@@ -1964,7 +1975,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           const resp = await fetch('/api/generate-model', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ input }),
+            body: JSON.stringify({ input, provider: selectedProvider || 'replicate' }),
           });
           if (resp.status === 429) {
             alert('Request limit reached. Please wait and try again.');

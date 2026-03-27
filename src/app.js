@@ -17,6 +17,7 @@ const { errorHandler } = require('./middleware/error.middleware');
 const { createOpenAIIntegration } = require('./integrations/ai/openai.integration');
 const { createReplicateIntegration } = require('./integrations/ai/replicate.integration');
 const { createFalIntegration } = require('./integrations/ai/fal.integration');
+const { createGoogleIntegration } = require('./integrations/ai/google.integration');
 const { createProxyIntegration } = require('./integrations/ai/proxy.integration');
 
 let OpenAI;
@@ -39,6 +40,7 @@ const {
   REPLICATE_MODEL_VERSION,
   REPLICATE_MODEL_VERSION_IDENTITY,
   FAL_KEY,
+  GOOGLE_AI_KEY,
   OPENAI_API_KEY,
   OPENAI_MODEL,
   OPENAI_IMAGE_MODEL,
@@ -93,9 +95,15 @@ function logProvider() {
   }
 
   if (falIntegration.isConfigured()) {
-    log.info(logEmoji.generate, '[startup] FAL.AI pronto (model: fal-ai/nano-banana-2)');
+    log.info(logEmoji.generate, '[startup] FAL.AI pronto (model: fal-ai/nano-banana-2/edit)');
   } else {
     log.warn(logEmoji.warn, '[startup] FAL.AI non configurato: aggiungi FAL_KEY in .env per usare FAL.AI');
+  }
+
+  if (googleIntegration.isConfigured()) {
+    log.info(logEmoji.generate, '[startup] Google AI pronto (model: gemini-3.1-flash-image-preview)');
+  } else {
+    log.warn(logEmoji.warn, '[startup] Google AI non configurato: aggiungi GOOGLE_AI_KEY in .env per usare Google');
   }
 
   if (openai) {
@@ -156,6 +164,7 @@ const openaiIntegration = createOpenAIIntegration({
 });
 const replicateIntegration = createReplicateIntegration({ replicate });
 const falIntegration = createFalIntegration({ FAL_KEY });
+const googleIntegration = createGoogleIntegration({ GOOGLE_AI_KEY });
 const proxyIntegration = createProxyIntegration({
   fetch,
   API_BASE_URL,
@@ -181,6 +190,7 @@ registerRoutes(app, {
   openaiIntegration,
   replicateIntegration,
   falIntegration,
+  googleIntegration,
   proxyIntegration,
 });
 

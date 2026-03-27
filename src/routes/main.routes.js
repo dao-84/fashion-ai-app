@@ -12,7 +12,7 @@ const { createTrackService } = require('../services/track.service');
 
 function registerMainRoutes(app, deps) {
   const appService = createAppService(deps);
-  const generationService = createGenerationService({ ...deps, falIntegration: deps.falIntegration });
+  const generationService = createGenerationService({ ...deps, falIntegration: deps.falIntegration, googleIntegration: deps.googleIntegration });
   const galleryService = createGalleryService(deps);
   const publishService = createPublishService(deps);
   const trackService = createTrackService(deps);

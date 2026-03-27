@@ -9,6 +9,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1018.0",
     "@fal-ai/client": "^1.9.5",
+    "@google/genai": "^1.46.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

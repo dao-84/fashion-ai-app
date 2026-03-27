@@ -43,6 +43,7 @@ function createGenerationService(deps) {
   const {
     replicateIntegration,
     falIntegration,
+    googleIntegration,
     proxyIntegration,
     log,
     logEmoji,
@@ -84,9 +85,14 @@ function createGenerationService(deps) {
   }
 
   return {
-    async generateModel(input = {}) {
-      if (!replicateIntegration.isConfigured()) {
-        throw createServiceError(400, 'Replicate non configurato: aggiungi REPLICATE_API_TOKEN in .env');
+    async generateModel(input = {}, rawBody = {}) {
+      const requestedProvider = (rawBody.provider || 'replicate').toLowerCase();
+      const useGoogle = requestedProvider === 'google' && googleIntegration && googleIntegration.isConfigured();
+      const activeIntegration = useGoogle ? googleIntegration : replicateIntegration;
+      const providerName = useGoogle ? 'Google AI' : 'Replicate';
+
+      if (!activeIntegration.isConfigured()) {
+        throw createServiceError(400, `${providerName} non configurato.`);
       }
 
       const rawPrompt = input.prompt || '';
@@ -105,32 +111,32 @@ function createGenerationService(deps) {
         throw createServiceError(400, 'Richiesta non consentita: il prompt contiene termini non ammessi.');
       }
 
-      const finalPrompt = cleanedPrompt;
-
       const inputPayload = {
-        prompt: finalPrompt,
+        prompt: cleanedPrompt,
         aspect_ratio: input.aspect_ratio || '4:3',
         output_format: input.output_format || 'jpg',
+        image_input: [],
       };
 
       try {
-        log.info(logEmoji.generate, `[generate-model] prompt: ${finalPrompt}`);
-        log.info(logEmoji.generate, `[generate-model] richiesta a Replicate avviata (${REPLICATE_MODEL_VERSION})`);
-        const output = await replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
+        log.info(logEmoji.generate, `[generate-model] prompt: ${cleanedPrompt}`);
+        log.info(logEmoji.generate, `[generate-model] richiesta a ${providerName} avviata`);
+        const output = await activeIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
         const saved = await collectSavedOutputs(output);
         log.info(logEmoji.generate, `[generate-model] completata. File salvati: ${saved.length}`);
         return { output, saved };
       } catch (error) {
-        log.error(logEmoji.error, 'Replicate model (persona) failed', error);
-        throw createServiceError(500, 'Replicate request failed', error.message);
+        log.error(logEmoji.error, `${providerName} generate-model failed`, error);
+        throw createServiceError(500, `${providerName} request failed`, error.message);
       }
     },
 
     async generate(input = {}, rawBody = {}) {
       const requestedProvider = (rawBody.provider || input.provider || 'replicate').toLowerCase();
       const useFal = requestedProvider === 'fal' && falIntegration && falIntegration.isConfigured();
-      const activeIntegration = useFal ? falIntegration : replicateIntegration;
-      const providerName = useFal ? 'FAL.AI' : 'Replicate';
+      const useGoogle = requestedProvider === 'google' && googleIntegration && googleIntegration.isConfigured();
+      const activeIntegration = useGoogle ? googleIntegration : useFal ? falIntegration : replicateIntegration;
+      const providerName = useGoogle ? 'Google AI' : useFal ? 'FAL.AI' : 'Replicate';
 
       if (activeIntegration.isConfigured()) {
         try {
@@ -182,11 +188,13 @@ function createGenerationService(deps) {
           }
 
           // FAL.AI richiede URL pubblici https:// — converti base64 in R2
+          // Google AI accetta base64 direttamente — nessun upload necessario
           if (useFal && r2.isConfigured()) {
             inputPayload.image_input = await uploadImagesToR2(inputPayload.image_input, log, logEmoji);
           }
 
           log.info(logEmoji.generate, `[generate] aspect_ratio: ${inputPayload.aspect_ratio}`);
+          log.info(logEmoji.generate, `[generate] resolution: ${inputPayload.resolution}`);
 
           const output = await retryAsync(
             () => activeIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload),

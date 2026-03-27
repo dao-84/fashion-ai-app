@@ -39,6 +39,7 @@ const env = {
     DEFAULTS.replicateModelVersionIdentity
   ),
   FAL_KEY: readString('FAL_KEY'),
+  GOOGLE_AI_KEY: readString('GOOGLE_AI_KEY'),
   OPENAI_API_KEY: readString('OPENAI_API_KEY'),
   OPENAI_MODEL: readString('OPENAI_MODEL', DEFAULTS.openaiModel),
   OPENAI_IMAGE_MODEL: readString('OPENAI_IMAGE_MODEL', DEFAULTS.openaiImageModel),
