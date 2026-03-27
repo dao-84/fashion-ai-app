@@ -89,6 +89,54 @@ function createAuthService(deps) {
         return { isValid: false, user: null };
       }
     },
+
+    async getProfile({ userId } = {}) {
+      const pool = getPool();
+      const result = await pool.query(
+        'SELECT id, email, plan, role, credits_balance, created_at FROM users WHERE id = $1',
+        [userId]
+      );
+      if (result.rows.length === 0) {
+        const err = new Error('Utente non trovato.');
+        err.status = 404;
+        throw err;
+      }
+      return result.rows[0];
+    },
+
+    async changePassword({ userId, currentPassword, newPassword } = {}) {
+      if (!currentPassword || !newPassword) {
+        const err = new Error('Password attuale e nuova password sono obbligatorie.');
+        err.status = 400;
+        throw err;
+      }
+      if (newPassword.length < 6) {
+        const err = new Error('La nuova password deve essere di almeno 6 caratteri.');
+        err.status = 400;
+        throw err;
+      }
+
+      const pool = getPool();
+      const result = await pool.query(
+        'SELECT password_hash FROM users WHERE id = $1',
+        [userId]
+      );
+      if (result.rows.length === 0) {
+        const err = new Error('Utente non trovato.');
+        err.status = 404;
+        throw err;
+      }
+
+      const match = await bcrypt.compare(currentPassword, result.rows[0].password_hash);
+      if (!match) {
+        const err = new Error('Password attuale non corretta.');
+        err.status = 401;
+        throw err;
+      }
+
+      const newHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+      await pool.query('UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2', [newHash, userId]);
+    },
   };
 }
 

@@ -83,7 +83,8 @@ Replicate presenta problemi di affidabilità ("service busy"). FAL.AI serve lo s
 - ✅ Assegnare crediti Free (3) alla registrazione
 - ✅ Attivare feature flag `enableAuth`
 - ✅ JWT_SECRET aggiunta in .env e su Railway
-- ⬜ Creare pagina profilo utente (profile.html) — posticipato a dopo FASE 03
+- ✅ Creare pagina profilo utente (profile.html) — email, piano, crediti, cambia password, logout
+- ⬜ Ottimizzare visualizzazione profilo (UI/UX, dati aggiuntivi, esperienza mobile)
 - ⬜ (Opzionale) Reset password via email
 
 ---

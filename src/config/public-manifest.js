@@ -7,6 +7,7 @@ const PUBLIC_HTML_ROUTES = [
   ['/terms.html', 'terms.html'],
   ['/cookies.html', 'cookies.html'],
   ['/pricing.html', 'pricing.html'],
+  ['/profile.html', 'profile.html'],
 ];
 
 const PUBLIC_FILE_ROUTES = [

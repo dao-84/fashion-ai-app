@@ -5,9 +5,7 @@ const { registerUserRoutes } = require('./user.routes');
 const { features } = require('../config/features');
 
 function registerRoutes(app, deps) {
-  registerMainRoutes(app, deps);
-
-  // Future modules stay disabled until corresponding features are explicitly enabled.
+  // Le route specifiche vanno registrate PRIMA del catch-all in registerMainRoutes
   if (features.enableAuth) {
     registerAuthRoutes(app, deps);
   }
@@ -19,6 +17,9 @@ function registerRoutes(app, deps) {
   if (features.enableAuth) {
     registerUserRoutes(app, deps);
   }
+
+  // registerMainRoutes contiene app.get('*') che deve stare per ultimo
+  registerMainRoutes(app, deps);
 }
 
 module.exports = {
