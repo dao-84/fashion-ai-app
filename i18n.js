@@ -17,7 +17,7 @@
       nav_gallery: 'Gallery',
       nav_studio: 'Studio',
       nav_pricing: 'Prezzi',
-      nav_signup: 'Accedi / Registrati',
+      nav_signup: 'Accedi',
       footer_desc: 'Foto fashion professionali per brand di moda, e-commerce e boutique — senza studio, senza shooting.',
       footer_cta: 'Apri lo Studio',
       footer_nav: 'Navigazione',
@@ -401,7 +401,7 @@
       nav_gallery: 'Gallery',
       nav_studio: 'Studio',
       nav_pricing: 'Pricing',
-      nav_signup: 'Sign up / Log in',
+      nav_signup: 'Log in',
       footer_desc: 'AI-powered fashion visuals for brands, e-commerce and creative teams.',
       footer_cta: 'Open Studio',
       footer_nav: 'Navigation',
@@ -767,7 +767,7 @@
       nav_gallery: 'Galería',
       nav_studio: 'Estudio',
       nav_pricing: 'Precios',
-      nav_signup: 'Acceder / Registrarse',
+      nav_signup: 'Acceder',
       footer_desc: 'Fotos de moda profesionales para marcas, tiendas online y boutiques — sin estudio, sin shooting.',
       footer_cta: 'Abrir el Estudio',
       footer_nav: 'Navegación',
@@ -1153,25 +1153,48 @@
     document.documentElement.lang = currentLang;
   }
 
-  function updateLangButtons() {
-    document.querySelectorAll('.lang-btn').forEach(function (btn) {
-      btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
+  var FLAGS = { it: '🇮🇹', en: '🇬🇧', es: '🇪🇸' };
+
+  function updateLangSwitchers() {
+    var flag = FLAGS[currentLang] || FLAGS.it;
+    document.querySelectorAll('.lang-switcher').forEach(function (sw) {
+      var selected = sw.querySelector('.lang-selected');
+      if (selected) selected.textContent = flag;
+      sw.querySelectorAll('.lang-option').forEach(function (opt) {
+        opt.style.display = opt.getAttribute('data-lang') === currentLang ? 'none' : '';
+      });
+      var dropdown = sw.querySelector('.lang-dropdown');
+      if (dropdown) dropdown.classList.remove('open');
     });
   }
+
+  window.toggleLangDropdown = function (btn) {
+    var dropdown = btn.nextElementSibling;
+    if (!dropdown) return;
+    dropdown.classList.toggle('open');
+  };
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest || !e.target.closest('.lang-switcher')) {
+      document.querySelectorAll('.lang-dropdown.open').forEach(function (d) {
+        d.classList.remove('open');
+      });
+    }
+  });
 
   function setLang(lang) {
     if (!T[lang]) return;
     currentLang = lang;
     localStorage.setItem('fashionai_lang', lang);
     applyTranslations();
-    updateLangButtons();
+    updateLangSwitchers();
     document.dispatchEvent(new CustomEvent('fashionai:langchange', { detail: { lang: lang } }));
   }
 
   /* Auto-init */
   function init() {
     applyTranslations();
-    updateLangButtons();
+    updateLangSwitchers();
   }
 
   if (document.readyState === 'loading') {

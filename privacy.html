@@ -6,11 +6,6 @@
     <title>Privacy Policy | Fashion AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="templatemo-prism-flux.css">
-    <style>
-        .lang-switcher{display:flex;gap:6px;align-items:center;}
-        .lang-btn{background:transparent;border:1px solid rgba(212,175,55,.3);color:var(--text-secondary);font-size:12px;font-weight:600;letter-spacing:1px;padding:4px 10px;cursor:pointer;border-radius:4px;transition:all .2s;}
-        .lang-btn:hover,.lang-btn.active{border-color:#d4af37;color:#d4af37;}
-    </style>
 </head>
 <body class="legal-page">
     <header class="header legal-header" id="header">
@@ -37,9 +32,12 @@
                 <li><a href="index.html#faq" class="nav-link">FAQ</a></li>
             </ul>
             <div class="lang-switcher">
-                <button class="lang-btn" data-lang="it" onclick="setLang('it')">IT</button>
-                <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-                <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+              <button class="lang-selected" onclick="toggleLangDropdown(this)" aria-label="Cambia lingua">🇮🇹</button>
+              <div class="lang-dropdown">
+                <button class="lang-option" data-lang="it" onclick="setLang('it')">🇮🇹</button>
+                <button class="lang-option" data-lang="en" onclick="setLang('en')">🇬🇧</button>
+                <button class="lang-option" data-lang="es" onclick="setLang('es')">🇪🇸</button>
+              </div>
             </div>
         </nav>
     </header>

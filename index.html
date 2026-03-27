@@ -6,12 +6,7 @@
     <title>Fashion AI - Studio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="templatemo-prism-flux.css">
-    <style>
-.lang-switcher{display:flex;gap:6px;align-items:center;}
-.lang-btn{background:transparent;border:1px solid rgba(212,175,55,.3);color:var(--text-secondary);font-size:12px;font-weight:600;letter-spacing:1px;padding:4px 10px;cursor:pointer;border-radius:4px;transition:all .2s;}
-.lang-btn:hover,.lang-btn.active{border-color:#d4af37;color:#d4af37;}
-</style>
-</head>
+    </head>
 <body>
     <!-- Loading Screen -->
     <div class="loader" id="loader">
@@ -45,13 +40,16 @@
                 <li><a href="gallery.html" class="nav-link" data-i18n="nav_gallery">Gallery</a></li>
                 <li><a href="studio.html" class="nav-link" data-i18n="nav_studio">Studio</a></li>
                 <li><a href="pricing.html" class="nav-link" data-i18n="nav_pricing">Prezzi</a></li>
-                <li><a href="#signup" class="nav-link" data-i18n="nav_signup" onclick="window.openWaitlistModal && window.openWaitlistModal('nav'); return false;">Sign up / Log in</a></li>
+                <li><a href="#signup" class="nav-link" data-i18n="nav_signup" onclick="window.openWaitlistModal && window.openWaitlistModal('nav'); return false;">Accedi</a></li>
             </ul>
 
             <div class="lang-switcher">
-              <button class="lang-btn" data-lang="it" onclick="setLang('it')">IT</button>
-              <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-              <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+              <button class="lang-selected" onclick="toggleLangDropdown(this)" aria-label="Cambia lingua">🇮🇹</button>
+              <div class="lang-dropdown">
+                <button class="lang-option" data-lang="it" onclick="setLang('it')">🇮🇹</button>
+                <button class="lang-option" data-lang="en" onclick="setLang('en')">🇬🇧</button>
+                <button class="lang-option" data-lang="es" onclick="setLang('es')">🇪🇸</button>
+              </div>
             </div>
 
             <div class="menu-toggle" id="menuToggle">

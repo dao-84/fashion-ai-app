@@ -14,9 +14,9 @@ function createGalleryController(deps) {
       }
     },
 
-    remove: (req, res) => {
+    remove: async (req, res) => {
       try {
-        const result = galleryService.remove(req.params.name);
+        const result = await galleryService.remove(req.params.name);
         return res.status(200).json(result);
       } catch (error) {
         return res.status(error.status || 500).json({

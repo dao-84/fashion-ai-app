@@ -14,29 +14,6 @@
             margin: 0 auto;
         }
 
-        /* ── Switcher lingua ── */
-        .lang-switcher {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-        .lang-btn {
-            background: transparent;
-            border: 1px solid rgba(212,175,55,0.3);
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            padding: 4px 10px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        .lang-btn:hover,
-        .lang-btn.active {
-            border-color: var(--accent-red);
-            color: var(--accent-red);
-        }
 
         /* ── Hero ── */
         .pricing-hero {
@@ -400,13 +377,17 @@
                 <li><a href="gallery.html" class="nav-link">Gallery</a></li>
                 <li><a href="studio.html" class="nav-link">Studio</a></li>
                 <li><a href="pricing.html" class="nav-link active" data-i18n="nav_pricing">Prezzi</a></li>
+                <li><a href="index.html#signup" class="nav-link" data-i18n="nav_signup" onclick="window.openWaitlistModal && window.openWaitlistModal('nav'); return false;">Accedi</a></li>
             </ul>
 
             <!-- Switcher lingua -->
             <div class="lang-switcher">
-                <button class="lang-btn active" data-lang="it" onclick="setLang('it')">IT</button>
-                <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-                <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+              <button class="lang-selected" onclick="toggleLangDropdown(this)" aria-label="Cambia lingua">🇮🇹</button>
+              <div class="lang-dropdown">
+                <button class="lang-option" data-lang="it" onclick="setLang('it')">🇮🇹</button>
+                <button class="lang-option" data-lang="en" onclick="setLang('en')">🇬🇧</button>
+                <button class="lang-option" data-lang="es" onclick="setLang('es')">🇪🇸</button>
+              </div>
             </div>
 
             <div class="menu-toggle" id="menuToggle">
@@ -1000,13 +981,40 @@
 
         let currentLang = localStorage.getItem('fashionai_lang') || 'it';
 
+        var FLAGS = { it: '🇮🇹', en: '🇬🇧', es: '🇪🇸' };
+
+        function updateLangSwitchers() {
+            var flag = FLAGS[currentLang] || FLAGS.it;
+            document.querySelectorAll('.lang-switcher').forEach(function(sw) {
+                var selected = sw.querySelector('.lang-selected');
+                if (selected) selected.textContent = flag;
+                sw.querySelectorAll('.lang-option').forEach(function(opt) {
+                    opt.style.display = opt.getAttribute('data-lang') === currentLang ? 'none' : '';
+                });
+                var dropdown = sw.querySelector('.lang-dropdown');
+                if (dropdown) dropdown.classList.remove('open');
+            });
+        }
+
+        window.toggleLangDropdown = function(btn) {
+            var dropdown = btn.nextElementSibling;
+            if (!dropdown) return;
+            dropdown.classList.toggle('open');
+        };
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest || !e.target.closest('.lang-switcher')) {
+                document.querySelectorAll('.lang-dropdown.open').forEach(function(d) {
+                    d.classList.remove('open');
+                });
+            }
+        });
+
         function setLang(lang) {
             currentLang = lang;
             localStorage.setItem('fashionai_lang', lang);
             applyTranslations();
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-            });
+            updateLangSwitchers();
             document.documentElement.lang = lang;
         }
 
@@ -1044,9 +1052,7 @@
 
         // ── Inizializzazione ──
         applyTranslations();
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
-        });
+        updateLangSwitchers();
     </script>
 </body>
 </html>

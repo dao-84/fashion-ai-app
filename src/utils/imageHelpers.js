@@ -125,6 +125,7 @@ function normalizeImageInput(item, deps) {
 
 async function saveOutputItem(item, index, deps) {
   const { fetch, fs, path, galleryDir, log, logEmoji } = deps;
+  const r2 = require('../integrations/storage/r2.integration');
 
   const resolveUrl = (maybe) => {
     if (!maybe) return null;
@@ -134,7 +135,7 @@ async function saveOutputItem(item, index, deps) {
     return null;
   };
 
-  const saveBufferToLocal = (buffer, mimeType, fallbackExt = 'jpg') => {
+  const saveBufferToLocal = async (buffer, mimeType, fallbackExt = 'jpg') => {
     try {
       const safeMime = mimeType || 'application/octet-stream';
       const ext = (safeMime.split('/')[1] || fallbackExt || 'bin').split(';')[0];
@@ -142,6 +143,17 @@ async function saveOutputItem(item, index, deps) {
       const filePath = path.join(galleryDir, fileName);
       fs.writeFileSync(filePath, buffer);
       log.info(logEmoji.save, `[generate] salvato file: ${filePath}`);
+
+      if (r2.isConfigured()) {
+        try {
+          const publicUrl = await r2.upload(buffer, fileName, safeMime);
+          log.info(logEmoji.save, `[generate] caricato su R2: ${publicUrl}`);
+          return publicUrl;
+        } catch (uploadError) {
+          log.warn(logEmoji.warn, `[generate] upload R2 fallito, uso file locale: ${uploadError.message}`);
+        }
+      }
+
       return `/generated/${fileName}`;
     } catch (error) {
       log.warn(logEmoji.warn, `[generate] salvataggio immagine fallito: ${error.message}`);
@@ -159,7 +171,7 @@ async function saveOutputItem(item, index, deps) {
         }
         const buffer = Buffer.from(await response.arrayBuffer());
         const mimeType = response.headers.get('content-type') || 'image/jpeg';
-        return saveBufferToLocal(buffer, mimeType);
+        return await saveBufferToLocal(buffer, mimeType);
       } catch (error) {
         log.warn(logEmoji.warn, `[generate] download immagine fallito: ${error.message}`);
         return directUrl;
@@ -180,7 +192,7 @@ async function saveOutputItem(item, index, deps) {
       }
       const buffer = Buffer.from(await response.arrayBuffer());
       const mimeType = response.headers.get('content-type') || 'image/jpeg';
-      return saveBufferToLocal(buffer, mimeType);
+      return await saveBufferToLocal(buffer, mimeType);
     } catch (error) {
       log.warn(logEmoji.warn, `[generate] download immagine fallito: ${error.message}`);
       return item;
@@ -192,12 +204,12 @@ async function saveOutputItem(item, index, deps) {
     const mimeType = dataMatch[1] || 'image/png';
     const base64String = dataMatch[2];
     const buffer = Buffer.from(base64String, 'base64');
-    return saveBufferToLocal(buffer, mimeType, mimeType.split('/')[1]);
+    return await saveBufferToLocal(buffer, mimeType, mimeType.split('/')[1]);
   }
 
   try {
     const buffer = Buffer.from(item, 'base64');
-    return saveBufferToLocal(buffer, 'image/png', 'png');
+    return await saveBufferToLocal(buffer, 'image/png', 'png');
   } catch (error) {
     log.warn(logEmoji.warn, `[generate] salvataggio base64 fallito: ${error.message}`);
     return null;

@@ -5,6 +5,8 @@ function createServiceError(status, message, details) {
   return error;
 }
 
+const r2 = require('../integrations/storage/r2.integration');
+
 function createGalleryService(deps) {
   const { galleryDir, fs, path, log, logEmoji } = deps;
 
@@ -32,7 +34,7 @@ function createGalleryService(deps) {
       }
     },
 
-    remove(filename) {
+    async remove(filename) {
       if (!filename) {
         throw createServiceError(400, 'Missing filename');
       }
@@ -45,9 +47,17 @@ function createGalleryService(deps) {
       try {
         if (fs.existsSync(target)) {
           fs.unlinkSync(target);
-          return { ok: true };
         }
-        throw createServiceError(404, 'File not found');
+
+        if (r2.isConfigured()) {
+          try {
+            await r2.remove(filename);
+          } catch (r2Error) {
+            log.warn(logEmoji.warn, `[gallery] eliminazione R2 fallita: ${r2Error.message}`);
+          }
+        }
+
+        return { ok: true };
       } catch (error) {
         if (error.status) throw error;
         log.error(logEmoji.error, '[gallery] delete failed', error);
