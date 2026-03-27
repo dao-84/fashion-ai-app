@@ -2,6 +2,7 @@ const { saveOutputItem, normalizeImageInput } = require('../utils/imageHelpers')
 const { hasBannedKeyword, mentionsMinor } = require('../utils/promptGuards');
 const { cleanTextInput } = require('../utils/stringHelpers');
 const { retryAsync } = require('../utils/asyncRetry');
+const r2 = require('../integrations/storage/r2.integration');
 
 function createServiceError(status, message, details, code) {
   const error = new Error(message);
@@ -53,6 +54,24 @@ function createGenerationService(deps) {
     path,
     DEFAULT_MODEL_BASE_PROMPT,
   } = deps;
+
+  // Converte immagini base64 in URL R2 pubblici (richiesto da FAL.AI)
+  async function uploadImagesToR2(images, log, logEmoji) {
+    return Promise.all(
+      images.map(async (uri, idx) => {
+        if (!uri.startsWith('data:image/')) return uri; // già un URL pubblico
+        const match = uri.match(/^data:([^;]+);base64,(.+)$/);
+        if (!match) return uri;
+        const mimeType = match[1];
+        const ext = mimeType.split('/')[1] || 'jpg';
+        const fileName = `input-${Date.now()}-${idx}.${ext}`;
+        const buffer = Buffer.from(match[2], 'base64');
+        const publicUrl = await r2.upload(buffer, fileName, mimeType);
+        log.info(logEmoji.save, `[generate] immagine input caricata su R2: ${publicUrl}`);
+        return publicUrl;
+      })
+    );
+  }
 
   async function collectSavedOutputs(output) {
     const saved = [];
@@ -160,6 +179,11 @@ function createGenerationService(deps) {
 
           if (!inputPayload.image_input.length) {
             throw createServiceError(400, 'image_input must include at least one URI (http/https or data URI)');
+          }
+
+          // FAL.AI richiede URL pubblici https:// — converti base64 in R2
+          if (useFal && r2.isConfigured()) {
+            inputPayload.image_input = await uploadImagesToR2(inputPayload.image_input, log, logEmoji);
           }
 
           log.info(logEmoji.generate, `[generate] aspect_ratio: ${inputPayload.aspect_ratio}`);

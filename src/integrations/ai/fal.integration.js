@@ -1,4 +1,4 @@
-const FAL_MODEL_ID = 'fal-ai/nano-banana-2';
+const FAL_MODEL_ID = 'fal-ai/nano-banana-2/edit';
 
 function createFalIntegration(deps) {
   const { FAL_KEY } = deps;
@@ -24,7 +24,16 @@ function createFalIntegration(deps) {
         throw new Error('FAL.AI non configurato: aggiungi FAL_KEY in .env');
       }
 
-      const result = await fal.subscribe(FAL_MODEL_ID, { input });
+      const falInput = { ...input };
+      if (falInput.image_input !== undefined) {
+        falInput.image_urls = falInput.image_input;
+        delete falInput.image_input;
+      }
+      if (falInput.output_format === 'jpg') {
+        falInput.output_format = 'jpeg';
+      }
+
+      const result = await fal.subscribe(FAL_MODEL_ID, { input: falInput });
 
       // FAL.AI restituisce { images: [{ url, content_type }] }
       // Normalizziamo in array di URL, stesso formato di Replicate

@@ -2044,11 +2044,6 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         lastInput = input;
         const provider = selectedProvider;
 
-        if (provider === 'fal') {
-          alert('FAL.AI non è disponibile in questa versione. Seleziona Replicate per generare.');
-          return;
-        }
-
         trackEvent('generate_clicked', getTrackingMetadata({
           imageInputCount: imageInput.length,
           hasCustomBackground: Boolean(customBackgroundPrompt),
