@@ -85,14 +85,9 @@ function createGenerationService(deps) {
   }
 
   return {
-    async generateModel(input = {}, rawBody = {}) {
-      const requestedProvider = (rawBody.provider || 'replicate').toLowerCase();
-      const useGoogle = requestedProvider === 'google' && googleIntegration && googleIntegration.isConfigured();
-      const activeIntegration = useGoogle ? googleIntegration : replicateIntegration;
-      const providerName = useGoogle ? 'Google AI' : 'Replicate';
-
-      if (!activeIntegration.isConfigured()) {
-        throw createServiceError(400, `${providerName} non configurato.`);
+    async generateModel(input = {}) {
+      if (!replicateIntegration.isConfigured()) {
+        throw createServiceError(400, 'Replicate non configurato.');
       }
 
       const rawPrompt = input.prompt || '';
@@ -120,14 +115,14 @@ function createGenerationService(deps) {
 
       try {
         log.info(logEmoji.generate, `[generate-model] prompt: ${cleanedPrompt}`);
-        log.info(logEmoji.generate, `[generate-model] richiesta a ${providerName} avviata`);
-        const output = await activeIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
+        log.info(logEmoji.generate, `[generate-model] richiesta a Replicate avviata`);
+        const output = await replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
         const saved = await collectSavedOutputs(output);
         log.info(logEmoji.generate, `[generate-model] completata. File salvati: ${saved.length}`);
         return { output, saved };
       } catch (error) {
-        log.error(logEmoji.error, `${providerName} generate-model failed`, error);
-        throw createServiceError(500, `${providerName} request failed`, error.message);
+        log.error(logEmoji.error, `Replicate generate-model failed`, error);
+        throw createServiceError(500, `Replicate request failed`, error.message);
       }
     },
 

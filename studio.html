@@ -137,11 +137,6 @@
                     <option value="9:16">9:16</option>
                     <option value="16:9">16:9</option>
                   </select>
-                  <select class="studio-progress-provider-mini" aria-label="AI Provider">
-                    <option value="replicate">Replicate</option>
-                    <option value="fal" selected>FAL.AI</option>
-                    <option value="google">Google AI</option>
-                  </select>
                   <select class="studio-progress-resolution-mini" aria-label="Resolution">
                     <option value="1K" selected>1K</option>
                     <option value="2K">2K</option>
@@ -165,11 +160,6 @@
                     <option value="4:3">4:3</option>
                     <option value="9:16">9:16</option>
                     <option value="16:9">16:9</option>
-                  </select>
-                  <select class="studio-progress-provider-mini" aria-label="AI Provider">
-                    <option value="replicate">Replicate</option>
-                    <option value="fal" selected>FAL.AI</option>
-                    <option value="google">Google AI</option>
                   </select>
                   <select class="studio-progress-resolution-mini" aria-label="Resolution">
                     <option value="1K" selected>1K</option>
@@ -195,11 +185,6 @@
                     <option value="4:3">4:3</option>
                     <option value="9:16">9:16</option>
                     <option value="16:9">16:9</option>
-                  </select>
-                  <select class="studio-progress-provider-mini" aria-label="AI Provider">
-                    <option value="replicate">Replicate</option>
-                    <option value="fal" selected>FAL.AI</option>
-                    <option value="google">Google AI</option>
                   </select>
                   <select class="studio-progress-resolution-mini" aria-label="Resolution">
                     <option value="1K" selected>1K</option>
@@ -227,11 +212,6 @@
                     <option value="9:16">9:16</option>
                     <option value="16:9">16:9</option>
                   </select>
-                  <select class="studio-progress-provider-mini" aria-label="AI Provider">
-                    <option value="replicate">Replicate</option>
-                    <option value="fal" selected>FAL.AI</option>
-                    <option value="google">Google AI</option>
-                  </select>
                   <select class="studio-progress-resolution-mini" aria-label="Resolution">
                     <option value="1K" selected>1K</option>
                     <option value="2K">2K</option>
@@ -246,14 +226,6 @@
                   <p class="studio-progress-panel-helper" data-i18n="studio_panel_generate_helper">Controlla le impostazioni e crea il risultato finale.</p>
                 </div>
                 <div class="studio-progress-generate">
-                  <div class="studio-progress-field">
-                    <span data-i18n="studio_provider_label">Provider AI</span>
-                    <div class="studio-progress-aspect-options" id="studioProviderOptions">
-                      <button type="button" class="studio-progress-aspect-btn" data-provider="replicate">Replicate</button>
-                      <button type="button" class="studio-progress-aspect-btn active" data-provider="fal">FAL.AI</button>
-                      <button type="button" class="studio-progress-aspect-btn" data-provider="google">Google AI</button>
-                    </div>
-                  </div>
                   <div class="studio-progress-field">
                     <span data-i18n="studio_aspect_label">Rapporto d'aspetto</span>
                     <div class="studio-progress-aspect-options" id="studioProgressAspectOptions">
@@ -352,11 +324,6 @@
                 <option value="4:3">4:3</option>
                 <option value="9:16">9:16</option>
                 <option value="16:9">16:9</option>
-              </select>
-              <select id="studioProviderSelect">
-                <option value="replicate">Replicate</option>
-                <option value="fal">FAL.AI</option>
-                <option value="google">Google AI</option>
               </select>
             </div>
             <textarea id="studioBackgroundPrompt" rows="2" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
@@ -481,11 +448,6 @@
             </div>
 
             <div class="model-builder-footer">
-              <select class="studio-progress-provider-mini" aria-label="AI Provider">
-                <option value="replicate">Replicate</option>
-                <option value="fal">FAL.AI</option>
-                <option value="google">Google AI</option>
-              </select>
               <button class="upload-action" type="button" id="studioGenerateModelBtn" data-i18n="mb_generate_btn">Genera modella</button>
             </div>
           </div>
@@ -541,21 +503,10 @@
       const generateBtn = document.getElementById('studioGenerate');
 
       const progressAspectOptions = document.getElementById('studioProgressAspectOptions');
-      const providerOptions = document.getElementById('studioProviderOptions');
-      const providerSelectMain = document.getElementById('studioProviderSelect');
-      const providerMiniSelects = Array.from(document.querySelectorAll('.studio-progress-provider-mini'));
       const resolutionMiniSelects = Array.from(document.querySelectorAll('.studio-progress-resolution-mini'));
-      let selectedProvider = 'fal';
+      const selectedProvider = 'fal';
       let selectedResolution = '1K';
 
-      function setProvider(value) {
-        selectedProvider = value;
-        if (providerSelectMain) providerSelectMain.value = value;
-        providerMiniSelects.forEach((s) => { s.value = value; });
-        providerOptions?.querySelectorAll('.studio-progress-aspect-btn').forEach((b) => {
-          b.classList.toggle('active', b.dataset.provider === selectedProvider);
-        });
-      }
       const progressSteps = Array.from(document.querySelectorAll('#studioProgressSteps .studio-progress-step'));
       const progressPanels = Array.from(document.querySelectorAll('#studioProgressContent .studio-progress-panel'));
       const progressDressTypeOptions = document.getElementById('studioProgressDressTypeOptions');
@@ -1730,21 +1681,6 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         if (!btn) return;
         e.preventDefault();
         setAspectValue(btn.dataset.aspect || '3:4');
-      });
-
-      providerOptions?.addEventListener('click', (e) => {
-        const btn = e.target.closest('.studio-progress-aspect-btn');
-        if (!btn || !btn.dataset.provider) return;
-        e.preventDefault();
-        setProvider(btn.dataset.provider);
-      });
-
-      providerSelectMain?.addEventListener('change', () => {
-        setProvider(providerSelectMain.value);
-      });
-
-      providerMiniSelects.forEach((s) => {
-        s.addEventListener('change', () => setProvider(s.value));
       });
 
       const resolutionWarning = document.getElementById('studioResolutionWarning');
