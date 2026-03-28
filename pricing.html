@@ -58,6 +58,8 @@
             padding: 32px 24px;
             position: relative;
             transition: border-color 0.3s, transform 0.3s;
+            display: flex;
+            flex-direction: column;
         }
         .plan-card:hover {
             border-color: rgba(212,175,55,0.4);
@@ -118,6 +120,7 @@
             list-style: none;
             padding: 0;
             margin: 0 0 28px;
+            flex: 1;
         }
         .plan-features li {
             display: flex;
@@ -191,50 +194,71 @@
         .compare-section {
             margin-bottom: 80px;
         }
+        .compare-table-wrap {
+            border: 1px solid rgba(212,175,55,0.18);
+            border-radius: 16px;
+            overflow: hidden;
+        }
         .compare-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
         }
+        .compare-table thead tr {
+            background: rgba(212,175,55,0.07);
+        }
         .compare-table th {
-            padding: 14px 16px;
+            padding: 16px 16px;
             font-size: 11px;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--text-secondary);
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(212,175,55,0.22);
+            border-right: 1px solid rgba(255,255,255,0.06);
         }
+        .compare-table th:last-child { border-right: none; }
         .compare-table th:first-child {
             text-align: left;
         }
         .compare-table th.featured-col {
             color: var(--accent-red);
+            background: rgba(212,175,55,0.08);
         }
         .compare-table td {
             padding: 12px 16px;
             color: var(--text-secondary);
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            border-right: 1px solid rgba(255,255,255,0.04);
         }
+        .compare-table td:last-child { border-right: none; }
+        .compare-table tbody tr:last-child td { border-bottom: none; }
         .compare-table td:first-child {
             text-align: left;
             color: var(--text-primary);
             font-size: 13px;
         }
         .compare-table tr:hover td {
-            background: rgba(255,255,255,0.02);
+            background: rgba(255,255,255,0.03);
         }
         .compare-table .check { color: var(--accent-red); }
-        .compare-table .cross { color: rgba(255,255,255,0.2); }
-        .compare-table .featured-val { color: var(--accent-blue); font-weight: 600; }
+        .compare-table .cross { color: rgba(255,255,255,0.25); }
+        .compare-table .featured-val {
+            color: var(--accent-blue);
+            font-weight: 600;
+            background: rgba(212,175,55,0.04);
+        }
         .compare-table .section-row td {
             font-size: 11px;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--accent-red);
-            padding-top: 20px;
+            padding-top: 16px;
+            padding-bottom: 10px;
             font-weight: 600;
+            background: rgba(212,175,55,0.05);
+            border-bottom: 1px solid rgba(212,175,55,0.15);
         }
 
         /* ── Crediti extra ── */
@@ -338,6 +362,107 @@
             margin-bottom: 24px;
         }
 
+        /* ── Toggle mensile/annuale ── */
+        .billing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 28px;
+        }
+        .billing-toggle__label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .billing-toggle__label.is-active {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .billing-toggle__switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            cursor: pointer;
+        }
+        .billing-toggle__switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .billing-toggle__track {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 999px;
+            transition: background 0.2s;
+        }
+        .billing-toggle__switch input:checked + .billing-toggle__track {
+            background: rgba(212,175,55,0.25);
+            border-color: rgba(212,175,55,0.6);
+        }
+        .billing-toggle__track::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(212,175,55,0.7);
+            transition: transform 0.2s;
+        }
+        .billing-toggle__switch input:checked + .billing-toggle__track::after {
+            transform: translateX(22px);
+            background: #d4af37;
+        }
+        .billing-toggle__save {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #0a0a0a;
+            background: linear-gradient(90deg, #d4af37, #f6dd8a);
+            padding: 3px 9px;
+            border-radius: 999px;
+            margin-left: 4px;
+        }
+
+        /* ── Prezzo annuale nelle card ── */
+        .plan-price__annual {
+            display: none;
+        }
+        .plan-price__monthly-strike {
+            display: none;
+            font-size: 14px;
+            color: rgba(255,255,255,0.3);
+            text-decoration: line-through;
+            margin-bottom: 2px;
+        }
+        .plan-price__annual-note {
+            display: none;
+            font-size: 12px;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 2px;
+        }
+        .plan-discount-badge {
+            display: none;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #0a0a0a;
+            background: linear-gradient(90deg, #d4af37, #f6dd8a);
+            padding: 2px 8px;
+            border-radius: 999px;
+            margin-bottom: 6px;
+        }
+        body.annual-billing .plan-price__annual { display: block; }
+        body.annual-billing .plan-price__monthly { display: none; }
+        body.annual-billing .plan-price__monthly-strike { display: block; }
+        body.annual-billing .plan-price__annual-note { display: block; }
+        body.annual-billing .plan-discount-badge { display: inline-block; }
+
         /* ── Responsive ── */
         @media (max-width: 768px) {
             .pricing-grid {
@@ -362,8 +487,12 @@
         <nav class="nav-container">
             <a href="index.html" class="logo">
                 <div class="logo-icon">
-                    <div class="logo-prism" aria-hidden="true">
-                        <div class="prism-shape"></div>
+                    <div class="logo-loader">
+                        <div class="loader-prism">
+                            <div class="prism-face"></div>
+                            <div class="prism-face"></div>
+                            <div class="prism-face"></div>
+                        </div>
                     </div>
                 </div>
                 <span class="logo-text">
@@ -408,6 +537,15 @@
             <p class="pricing-hero__subtitle" data-i18n="hero_subtitle">
                 Inizia gratis. Passa a un piano superiore quando ne hai bisogno. Nessun contratto, cancelli quando vuoi.
             </p>
+            <div class="billing-toggle">
+                <span class="billing-toggle__label is-active" id="labelMonthly" data-i18n="toggle_monthly">Mensile</span>
+                <label class="billing-toggle__switch">
+                    <input type="checkbox" id="billingToggle">
+                    <span class="billing-toggle__track"></span>
+                </label>
+                <span class="billing-toggle__label" id="labelAnnual" data-i18n="toggle_annual">Annuale</span>
+                <span class="billing-toggle__save" data-i18n="toggle_save">Risparmia fino al 15%</span>
+            </div>
         </section>
 
         <!-- Card piani -->
@@ -416,16 +554,16 @@
             <!-- FREE -->
             <div class="plan-card">
                 <p class="plan-name">Free</p>
-                <div class="plan-price">€0<span data-i18n="per_month">/mese</span></div>
-                <p class="plan-credits" data-i18n="free_credits">3 crediti al mese</p>
+                <div class="plan-price">€0</div>
+                <p class="plan-credits" data-i18n="free_credits">12 crediti una tantum</p>
                 <hr class="plan-divider">
                 <ul class="plan-features">
-                    <li><i class="fas fa-check"></i><span><strong>3</strong> <span data-i18n="credits_month">crediti/mese</span></span></li>
-                    <li><i class="fas fa-check"></i><span><strong>2</strong> <span data-i18n="styles">stili</span>: E-commerce, Ghost Mannequin</span></li>
+                    <li><i class="fas fa-check"></i><span><strong>12</strong> <span data-i18n="credits_once">crediti una tantum</span></span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="all_styles_free"><strong>Tutti</strong> gli stili</span></span></li>
                     <li><i class="fas fa-check"></i><span><strong data-i18n="resolution_only">Solo risoluzione</strong> 1K</span></li>
+                    <li><i class="fas fa-check"></i><span>Listing Generator <strong>(0,5 cr)</strong></span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="custom_bg">Sfondo personalizzato</span></li>
                     <li><i class="fas fa-xmark"></i><span data-i18n="custom_model">Modella personalizzata</span></li>
-                    <li><i class="fas fa-xmark"></i><span>Listing Generator</span></li>
-                    <li><i class="fas fa-xmark"></i><span data-i18n="batch">Batch generation</span></li>
                 </ul>
                 <a href="studio.html" class="plan-cta plan-cta--outline" data-i18n="cta_free">Prova gratis</a>
             </div>
@@ -433,56 +571,68 @@
             <!-- STARTER -->
             <div class="plan-card">
                 <p class="plan-name">Starter</p>
-                <div class="plan-price">€12<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-price__monthly-strike">€7,89<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-discount-badge">-12%</div>
+                <div class="plan-price plan-price__monthly">€7,89<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-price plan-price__annual">€6,94<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-price__annual-note" data-i18n="billed_annual">€83,32 fatturati annualmente</div>
                 <p class="plan-credits" data-i18n="starter_credits">30 crediti al mese</p>
                 <hr class="plan-divider">
                 <ul class="plan-features">
                     <li><i class="fas fa-check"></i><span><strong>30</strong> <span data-i18n="credits_month">crediti/mese</span></span></li>
-                    <li><i class="fas fa-check"></i><span><strong>4</strong> <span data-i18n="styles">stili</span></span></li>
-                    <li><i class="fas fa-check"></i><span><strong data-i18n="resolution_up_to">Fino a</strong> 2K</span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="custom_model">Modella personalizzata</span> <strong data-i18n="max2month">(max 2/mese)</strong></li>
-                    <li><i class="fas fa-xmark"></i><span>Listing Generator</span></li>
-                    <li><i class="fas fa-xmark"></i><span data-i18n="batch">Batch generation</span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="all_styles_free"><strong>Tutti</strong> gli stili</span></li>
+                    <li><i class="fas fa-check"></i><span><strong data-i18n="resolution_only">Solo risoluzione</strong> 1K</span></li>
+                    <li><i class="fas fa-check"></i><span>Listing Generator <strong>(0,5 cr)</strong></span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="custom_bg">Sfondo personalizzato</span></li>
+                    <li><i class="fas fa-xmark"></i><span data-i18n="custom_model">Modella personalizzata</span></li>
                 </ul>
                 <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_start">Inizia ora</a>
             </div>
 
             <!-- PRO (featured) -->
             <div class="plan-card plan-card--featured">
-                <div class="plan-badge" data-i18n="badge_popular">PIÙ POPOLARE</div>
+                <div class="plan-badge" data-i18n="badge_popular">BEST VALUE</div>
                 <p class="plan-name">Pro</p>
-                <div class="plan-price">€29<span data-i18n="per_month">/mese</span></div>
-                <p class="plan-credits" data-i18n="pro_credits">100 crediti al mese</p>
+                <div class="plan-price__monthly-strike">€29<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-discount-badge">-15%</div>
+                <div class="plan-price plan-price__monthly">€29<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-price plan-price__annual">€24,65<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-price__annual-note" data-i18n="billed_annual_pro">€295,80 fatturati annualmente</div>
+                <p class="plan-credits" data-i18n="pro_credits">150 crediti al mese</p>
                 <hr class="plan-divider">
                 <ul class="plan-features">
-                    <li><i class="fas fa-check"></i><span><strong>100</strong> <span data-i18n="credits_month">crediti/mese</span></span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="all_styles"><strong>Tutti</strong> i 10 stili</span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="all_resolutions"><strong>Tutte</strong> le risoluzioni (1K–4K)</span></li>
+                    <li><i class="fas fa-check"></i><span><strong>150</strong> <span data-i18n="credits_month">crediti/mese</span></span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="all_styles"><strong>Tutti</strong> gli stili</span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="pro_resolutions"><strong>Tutte</strong> le risoluzioni (1K–4K)</span></li>
                     <li><i class="fas fa-check"></i><span data-i18n="custom_model_unlimited">Modella personalizzata <strong>illimitata</strong></span></li>
-                    <li><i class="fas fa-check"></i><span>Listing Generator <strong data-i18n="seo_multilang">(SEO multilingua)</strong></span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="batch_5">Batch <strong>(max 5/mese)</strong></span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="custom_scene">Scena personalizzata</span></li>
+                    <li><i class="fas fa-check"></i><span>Listing Generator <strong data-i18n="free_label">(gratuito)</strong></span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="custom_bg">Sfondo personalizzato</span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="priority_gen">Priorità di generazione</span></li>
                 </ul>
                 <a href="#" class="plan-cta plan-cta--primary" data-i18n="cta_pro">Attiva Pro</a>
             </div>
 
-            <!-- BUSINESS -->
+            <!-- ENTERPRISE -->
             <div class="plan-card">
-                <p class="plan-name">Business</p>
-                <div class="plan-price">€79<span data-i18n="per_month">/mese</span></div>
-                <p class="plan-credits" data-i18n="business_credits">300 crediti al mese</p>
+                <p class="plan-name">Enterprise</p>
+                <div class="plan-price__monthly-strike">€99<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-discount-badge">-12%</div>
+                <div class="plan-price plan-price__monthly">€99<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-price plan-price__annual">€87,12<span data-i18n="per_month">/mese</span></div>
+                <div class="plan-price__annual-note" data-i18n="billed_annual_ent">€1.045,44 fatturati annualmente</div>
+                <p class="plan-credits" data-i18n="enterprise_credits">500 crediti al mese</p>
                 <hr class="plan-divider">
                 <ul class="plan-features">
-                    <li><i class="fas fa-check"></i><span><strong>300</strong> <span data-i18n="credits_month">crediti/mese</span></span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="all_styles"><strong>Tutti</strong> i 10 stili</span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="all_res_1cr"><strong>Tutte</strong> le risoluzioni — sempre 1 credito</span></li>
+                    <li><i class="fas fa-check"></i><span><strong>500</strong> <span data-i18n="credits_month">crediti/mese</span></span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="all_styles"><strong>Tutti</strong> gli stili</span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="all_resolutions"><strong>Tutte</strong> le risoluzioni (1K–4K)</span></li>
                     <li><i class="fas fa-check"></i><span data-i18n="custom_model_unlimited">Modella personalizzata <strong>illimitata</strong></span></li>
-                    <li><i class="fas fa-check"></i><span>Listing Generator <strong data-i18n="seo_multilang">(SEO multilingua)</strong></span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="batch_unlimited">Batch <strong>illimitato</strong></span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="shopify_export">Export Shopify CSV</span></li>
-                    <li><i class="fas fa-check"></i><span data-i18n="whatsapp_support">Supporto WhatsApp diretto</span></li>
+                    <li><i class="fas fa-check"></i><span>Listing Generator <strong data-i18n="free_label">(gratuito)</strong></span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="api_access">API Access</span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="team_accounts">Account team multipli</span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="dedicated_support">Supporto dedicato</span></li>
                 </ul>
-                <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_business">Contattaci</a>
+                <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_enterprise">Contattaci</a>
             </div>
 
         </section>
@@ -491,7 +641,7 @@
         <section class="compare-section">
             <h2 class="section-title" data-i18n="compare_title">Confronto completo</h2>
             <p class="section-subtitle" data-i18n="compare_subtitle">Tutte le feature, piano per piano</p>
-            <div style="overflow-x: auto;">
+            <div class="compare-table-wrap" style="overflow-x: auto;">
                 <table class="compare-table">
                     <thead>
                         <tr>
@@ -499,7 +649,7 @@
                             <th>Free</th>
                             <th>Starter</th>
                             <th class="featured-col">Pro ⭐</th>
-                            <th>Business</th>
+                            <th>Enterprise</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -507,11 +657,11 @@
                             <td colspan="5" data-i18n="section_credits">CREDITI</td>
                         </tr>
                         <tr>
-                            <td data-i18n="col_credits_month">Crediti/mese</td>
-                            <td>3</td>
-                            <td>30</td>
-                            <td class="featured-val">100</td>
-                            <td>300</td>
+                            <td data-i18n="col_credits_month">Crediti</td>
+                            <td data-i18n="col_free_credits_val">12 una tantum</td>
+                            <td>30/mese</td>
+                            <td class="featured-val">150/mese</td>
+                            <td>500/mese</td>
                         </tr>
                         <tr>
                             <td data-i18n="col_extra_credits">Crediti extra disponibili</td>
@@ -534,16 +684,16 @@
                         <tr>
                             <td>2K</td>
                             <td><i class="fas fa-xmark cross"></i></td>
-                            <td><i class="fas fa-check check"></i> 2 cr</td>
-                            <td class="featured-val"><i class="fas fa-check check"></i> 2 cr</td>
-                            <td><i class="fas fa-check check"></i> 1 cr</td>
+                            <td><i class="fas fa-xmark cross"></i></td>
+                            <td class="featured-val"><i class="fas fa-check check"></i> 1,5 cr</td>
+                            <td><i class="fas fa-check check"></i> 1,5 cr</td>
                         </tr>
                         <tr>
                             <td>4K</td>
                             <td><i class="fas fa-xmark cross"></i></td>
                             <td><i class="fas fa-xmark cross"></i></td>
-                            <td class="featured-val"><i class="fas fa-check check"></i> 3 cr</td>
-                            <td><i class="fas fa-check check"></i> 1 cr</td>
+                            <td class="featured-val"><i class="fas fa-check check"></i> 2 cr</td>
+                            <td><i class="fas fa-check check"></i> 2 cr</td>
                         </tr>
 
                         <tr class="section-row">
@@ -551,10 +701,10 @@
                         </tr>
                         <tr>
                             <td data-i18n="col_styles_available">Stili disponibili</td>
-                            <td>2</td>
-                            <td>4</td>
-                            <td class="featured-val" data-i18n="all_10">Tutti 10</td>
-                            <td data-i18n="all_10">Tutti 10</td>
+                            <td data-i18n="all_10">Tutti</td>
+                            <td data-i18n="all_10">Tutti</td>
+                            <td class="featured-val" data-i18n="all_10">Tutti</td>
+                            <td data-i18n="all_10">Tutti</td>
                         </tr>
 
                         <tr class="section-row">
@@ -563,40 +713,47 @@
                         <tr>
                             <td data-i18n="col_custom_model">Modella personalizzata</td>
                             <td><i class="fas fa-xmark cross"></i></td>
-                            <td data-i18n="max2">Max 2/mese</td>
+                            <td><i class="fas fa-xmark cross"></i></td>
                             <td class="featured-val" data-i18n="unlimited">Illimitata</td>
                             <td data-i18n="unlimited">Illimitata</td>
                         </tr>
                         <tr>
-                            <td data-i18n="col_custom_scene">Scena personalizzata</td>
-                            <td><i class="fas fa-xmark cross"></i></td>
-                            <td><i class="fas fa-xmark cross"></i></td>
-                            <td class="featured-val"><i class="fas fa-check check"></i></td>
-                            <td><i class="fas fa-check check"></i></td>
-                        </tr>
-                        <tr>
                             <td>Listing Generator</td>
+                            <td>0,5 cr</td>
+                            <td>0,5 cr</td>
+                            <td class="featured-val" data-i18n="free_label">Gratuito</td>
+                            <td data-i18n="free_label">Gratuito</td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="col_custom_bg">Sfondo personalizzato</td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-val"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="col_priority">Priorità generazione</td>
                             <td><i class="fas fa-xmark cross"></i></td>
                             <td><i class="fas fa-xmark cross"></i></td>
                             <td class="featured-val"><i class="fas fa-check check"></i></td>
                             <td><i class="fas fa-check check"></i></td>
                         </tr>
                         <tr>
-                            <td data-i18n="col_batch">Batch generation</td>
-                            <td><i class="fas fa-xmark cross"></i></td>
-                            <td><i class="fas fa-xmark cross"></i></td>
-                            <td class="featured-val" data-i18n="max5month">Max 5/mese</td>
-                            <td data-i18n="unlimited">Illimitata</td>
-                        </tr>
-                        <tr>
-                            <td data-i18n="col_shopify">Export Shopify CSV</td>
+                            <td data-i18n="col_api">API Access</td>
                             <td><i class="fas fa-xmark cross"></i></td>
                             <td><i class="fas fa-xmark cross"></i></td>
                             <td class="featured-val"><i class="fas fa-xmark cross"></i></td>
                             <td><i class="fas fa-check check"></i></td>
                         </tr>
                         <tr>
-                            <td data-i18n="col_support">Supporto WhatsApp</td>
+                            <td data-i18n="col_team">Account team multipli</td>
+                            <td><i class="fas fa-xmark cross"></i></td>
+                            <td><i class="fas fa-xmark cross"></i></td>
+                            <td class="featured-val"><i class="fas fa-xmark cross"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="col_support">Supporto dedicato</td>
                             <td><i class="fas fa-xmark cross"></i></td>
                             <td><i class="fas fa-xmark cross"></i></td>
                             <td class="featured-val"><i class="fas fa-xmark cross"></i></td>
@@ -615,22 +772,22 @@
                 <div class="credit-pack">
                     <div class="credit-pack__amount">10</div>
                     <div class="credit-pack__label" data-i18n="credits">crediti</div>
-                    <div class="credit-pack__price">€5</div>
-                    <div class="credit-pack__unit">€0.50 / credito</div>
+                    <div class="credit-pack__price">€3,20</div>
+                    <div class="credit-pack__unit">€0,32 / credito</div>
                     <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
                 </div>
                 <div class="credit-pack">
                     <div class="credit-pack__amount">50</div>
                     <div class="credit-pack__label" data-i18n="credits">crediti</div>
-                    <div class="credit-pack__price">€22</div>
-                    <div class="credit-pack__unit">€0.44 / credito</div>
+                    <div class="credit-pack__price">€15</div>
+                    <div class="credit-pack__unit">€0,30 / credito</div>
                     <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
                 </div>
                 <div class="credit-pack">
                     <div class="credit-pack__amount">100</div>
                     <div class="credit-pack__label" data-i18n="credits">crediti</div>
-                    <div class="credit-pack__price">€39</div>
-                    <div class="credit-pack__unit">€0.39 / credito</div>
+                    <div class="credit-pack__price">€28</div>
+                    <div class="credit-pack__unit">€0,28 / credito</div>
                     <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
                 </div>
             </div>
@@ -762,32 +919,32 @@
                 hero_title: 'Scegli il tuo piano',
                 hero_subtitle: 'Inizia gratis. Passa a un piano superiore quando ne hai bisogno. Nessun contratto, cancelli quando vuoi.',
                 per_month: '/mese',
-                free_credits: '3 crediti al mese',
+                free_credits: '12 crediti una tantum',
                 starter_credits: '30 crediti al mese',
-                pro_credits: '100 crediti al mese',
-                business_credits: '300 crediti al mese',
+                pro_credits: '150 crediti al mese',
+                enterprise_credits: '500 crediti al mese',
                 credits_month: 'crediti/mese',
+                credits_once: 'crediti una tantum',
                 styles: 'stili',
                 resolution_only: 'Solo risoluzione',
                 resolution_up_to: 'Fino a',
                 custom_model: 'Modella personalizzata',
                 custom_model_unlimited: 'Modella personalizzata <strong>illimitata</strong>',
-                max2month: '(max 2/mese)',
-                batch: 'Batch generation',
-                batch_5: 'Batch <strong>(max 5/mese)</strong>',
-                batch_unlimited: 'Batch <strong>illimitato</strong>',
-                all_styles: '<strong>Tutti</strong> i 10 stili',
+                all_styles: '<strong>Tutti</strong> gli stili',
+                all_styles_free: '<strong>Tutti</strong> gli stili',
                 all_resolutions: '<strong>Tutte</strong> le risoluzioni (1K–4K)',
-                all_res_1cr: '<strong>Tutte</strong> le risoluzioni — sempre 1 credito',
-                custom_scene: 'Scena personalizzata',
-                seo_multilang: '(SEO multilingua)',
-                shopify_export: 'Export Shopify CSV',
-                whatsapp_support: 'Supporto WhatsApp diretto',
-                badge_popular: 'PIÙ POPOLARE',
+                pro_resolutions: '<strong>Tutte</strong> le risoluzioni (1K–4K)',
+                custom_bg: 'Sfondo personalizzato',
+                priority_gen: 'Priorità di generazione',
+                api_access: 'API Access',
+                team_accounts: 'Account team multipli',
+                dedicated_support: 'Supporto dedicato',
+                free_label: 'Gratuito',
+                badge_popular: 'BEST VALUE',
                 cta_free: 'Prova gratis',
                 cta_start: 'Inizia ora',
                 cta_pro: 'Attiva Pro',
-                cta_business: 'Contattaci',
+                cta_enterprise: 'Contattaci',
                 cta_buy: 'Acquista',
                 compare_title: 'Confronto completo',
                 compare_subtitle: 'Tutte le feature, piano per piano',
@@ -796,17 +953,17 @@
                 section_resolution: 'RISOLUZIONE',
                 section_styles: 'STILI',
                 section_features: 'FUNZIONALITÀ',
-                col_credits_month: 'Crediti/mese',
+                col_credits_month: 'Crediti',
+                col_free_credits_val: '12 una tantum',
                 col_extra_credits: 'Crediti extra disponibili',
                 col_styles_available: 'Stili disponibili',
                 col_custom_model: 'Modella personalizzata',
-                col_custom_scene: 'Scena personalizzata',
-                col_batch: 'Batch generation',
-                col_shopify: 'Export Shopify CSV',
-                col_support: 'Supporto WhatsApp',
-                all_10: 'Tutti 10',
-                max2: 'Max 2/mese',
-                max5month: 'Max 5/mese',
+                col_custom_bg: 'Sfondo personalizzato',
+                col_priority: 'Priorità generazione',
+                col_api: 'API Access',
+                col_team: 'Account team multipli',
+                col_support: 'Supporto dedicato',
+                all_10: 'Tutti',
                 unlimited: 'Illimitata',
                 extra_title: 'Crediti extra',
                 extra_subtitle: 'Non scadono. Seguono le regole del tuo piano attivo.',
@@ -814,15 +971,21 @@
                 faq_title: 'Domande frequenti',
                 faq_subtitle: "Hai un'altra domanda? Scrivici su WhatsApp.",
                 faq1_q: 'Cosa sono i crediti?',
-                faq1_a: 'Ogni generazione di immagine costa crediti. La quantità dipende dalla risoluzione scelta: 1K costa 1 credito, 2K costa 2 crediti (o 1 con il piano Business), 4K costa 3 crediti (o 1 con Business). I crediti mensili si azzerano a inizio mese e non si accumulano.',
+                faq1_a: 'Ogni generazione di immagine costa crediti. La quantità dipende dalla risoluzione: 1K = 1 credito, 2K = 1,5 crediti, 4K = 2 crediti (solo piano Enterprise). Il Listing Generator costa 0,5 crediti per Free e Starter, è gratuito per Pro ed Enterprise. I crediti mensili si azzerano a inizio mese e non si accumulano.',
                 faq2_q: 'Posso cambiare piano in qualsiasi momento?',
                 faq2_a: 'Sì. Puoi fare upgrade o downgrade in qualsiasi momento. Il cambio è immediato. Se fai upgrade a metà mese ricevi i crediti del nuovo piano subito.',
                 faq3_q: 'I crediti non usati scadono?',
                 faq3_a: 'I crediti mensili inclusi nel piano si azzerano a fine mese. I crediti extra acquistati separatamente non scadono mai.',
                 faq4_q: "Cos'è il Listing Generator?",
-                faq4_a: "Il Listing Generator crea automaticamente il titolo SEO e la descrizione e-commerce del tuo prodotto insieme all'immagine generata. Supporta italiano, inglese, spagnolo e francese. Disponibile dal piano Pro in su.",
-                faq5_q: 'Come funziona il piano Business rispetto al Pro?',
-                faq5_a: 'La differenza chiave è il costo delle risoluzioni alte. Con Pro, una generazione 4K costa 3 crediti. Con Business costa sempre 1 credito, indipendentemente dalla risoluzione. Per chi genera molte immagini in alta qualità, Business è molto più conveniente.',
+                faq4_a: "Il Listing Generator crea automaticamente il titolo SEO e la descrizione e-commerce del tuo prodotto insieme all'immagine generata. Supporta italiano, inglese, spagnolo e francese. Costa 0,5 crediti per Free e Starter, ed è gratuito dal piano Pro in su.",
+                faq5_q: 'Come funziona il piano Enterprise rispetto al Pro?',
+                faq5_a: 'Il piano Enterprise aggiunge la risoluzione 4K, 500 crediti al mese, API Access, account team multipli e supporto dedicato. È pensato per brand con volumi elevati o team che lavorano insieme.',
+                toggle_monthly: 'Mensile',
+                toggle_annual: 'Annuale',
+                toggle_save: 'Risparmia fino al 15%',
+                billed_annual: '€83,32 fatturati annualmente',
+                billed_annual_pro: '€295,80 fatturati annualmente',
+                billed_annual_ent: '€1.045,44 fatturati annualmente',
                 cta_bottom_text: 'Inizia con il piano Free, senza carta di credito.',
                 cta_bottom_btn: 'Apri lo Studio',
                 footer_desc: 'Foto e-commerce AI per brand di moda, piccoli e grandi.',
@@ -836,32 +999,32 @@
                 hero_title: 'Choose your plan',
                 hero_subtitle: 'Start for free. Upgrade when you need more. No contracts, cancel anytime.',
                 per_month: '/mo',
-                free_credits: '3 credits per month',
+                free_credits: '12 one-time credits',
                 starter_credits: '30 credits per month',
-                pro_credits: '100 credits per month',
-                business_credits: '300 credits per month',
+                pro_credits: '150 credits per month',
+                enterprise_credits: '500 credits per month',
                 credits_month: 'credits/month',
+                credits_once: 'one-time credits',
                 styles: 'styles',
                 resolution_only: 'Resolution',
                 resolution_up_to: 'Up to',
                 custom_model: 'Custom AI model',
                 custom_model_unlimited: '<strong>Unlimited</strong> custom AI model',
-                max2month: '(max 2/month)',
-                batch: 'Batch generation',
-                batch_5: 'Batch <strong>(max 5/month)</strong>',
-                batch_unlimited: '<strong>Unlimited</strong> batch',
-                all_styles: '<strong>All</strong> 10 styles',
+                all_styles: '<strong>All</strong> styles',
+                all_styles_free: '<strong>All</strong> styles',
                 all_resolutions: '<strong>All</strong> resolutions (1K–4K)',
-                all_res_1cr: '<strong>All</strong> resolutions — always 1 credit',
-                custom_scene: 'Custom scene',
-                seo_multilang: '(multilingual SEO)',
-                shopify_export: 'Shopify CSV export',
-                whatsapp_support: 'Direct WhatsApp support',
-                badge_popular: 'MOST POPULAR',
+                pro_resolutions: '<strong>All</strong> resolutions (1K–4K)',
+                custom_bg: 'Custom background',
+                priority_gen: 'Generation priority',
+                api_access: 'API Access',
+                team_accounts: 'Multiple team accounts',
+                dedicated_support: 'Dedicated support',
+                free_label: 'Free',
+                badge_popular: 'BEST VALUE',
                 cta_free: 'Try for free',
                 cta_start: 'Get started',
                 cta_pro: 'Activate Pro',
-                cta_business: 'Contact us',
+                cta_enterprise: 'Contact us',
                 cta_buy: 'Buy',
                 compare_title: 'Full comparison',
                 compare_subtitle: 'All features, plan by plan',
@@ -870,17 +1033,17 @@
                 section_resolution: 'RESOLUTION',
                 section_styles: 'STYLES',
                 section_features: 'FEATURES',
-                col_credits_month: 'Credits/month',
+                col_credits_month: 'Credits',
+                col_free_credits_val: '12 one-time',
                 col_extra_credits: 'Extra credits available',
                 col_styles_available: 'Available styles',
                 col_custom_model: 'Custom AI model',
-                col_custom_scene: 'Custom scene',
-                col_batch: 'Batch generation',
-                col_shopify: 'Shopify CSV export',
-                col_support: 'WhatsApp support',
-                all_10: 'All 10',
-                max2: 'Max 2/month',
-                max5month: 'Max 5/month',
+                col_custom_bg: 'Custom background',
+                col_priority: 'Generation priority',
+                col_api: 'API Access',
+                col_team: 'Multiple team accounts',
+                col_support: 'Dedicated support',
+                all_10: 'All',
                 unlimited: 'Unlimited',
                 extra_title: 'Extra credits',
                 extra_subtitle: "They never expire. Follow your active plan's rules.",
@@ -888,15 +1051,21 @@
                 faq_title: 'Frequently asked questions',
                 faq_subtitle: 'Have another question? Message us on WhatsApp.',
                 faq1_q: 'What are credits?',
-                faq1_a: 'Each image generation costs credits. The amount depends on the resolution: 1K costs 1 credit, 2K costs 2 credits (or 1 with Business plan), 4K costs 3 credits (or 1 with Business). Monthly credits reset at the start of each month and do not accumulate.',
+                faq1_a: 'Each image generation costs credits. The amount depends on the resolution: 1K = 1 credit, 2K = 1.5 credits, 4K = 2 credits (Enterprise only). The Listing Generator costs 0.5 credits for Free and Starter, and is free for Pro and Enterprise. Monthly credits reset at the start of each month and do not accumulate.',
                 faq2_q: 'Can I change plans at any time?',
                 faq2_a: 'Yes. You can upgrade or downgrade at any time. Changes take effect immediately. Upgrading mid-month gives you the new plan credits right away.',
                 faq3_q: 'Do unused credits expire?',
                 faq3_a: 'Monthly credits included in a plan reset at the end of the month. Extra credits purchased separately never expire.',
                 faq4_q: 'What is the Listing Generator?',
-                faq4_a: 'The Listing Generator automatically creates an SEO title and e-commerce description for your product alongside the generated image. Supports Italian, English, Spanish and French. Available from Pro plan onwards.',
-                faq5_q: 'How does Business compare to Pro?',
-                faq5_a: 'The key difference is how high-resolution credits are counted. With Pro, a 4K generation costs 3 credits. With Business it always costs 1 credit regardless of resolution. For brands generating many high-quality images, Business is significantly more cost-effective.',
+                faq4_a: 'The Listing Generator automatically creates an SEO title and e-commerce description for your product alongside the generated image. Supports Italian, English, Spanish and French. Costs 0.5 credits for Free and Starter, and is free from Pro onwards.',
+                faq5_q: 'How does Enterprise compare to Pro?',
+                faq5_a: 'Enterprise adds 4K resolution, 500 credits per month, API Access, multiple team accounts and dedicated support. It is designed for high-volume brands or teams working together.',
+                toggle_monthly: 'Monthly',
+                toggle_annual: 'Annual',
+                toggle_save: 'Save up to 15%',
+                billed_annual: '€83.32 billed annually',
+                billed_annual_pro: '€295.80 billed annually',
+                billed_annual_ent: '€1,045.44 billed annually',
                 cta_bottom_text: 'Start with the Free plan, no credit card required.',
                 cta_bottom_btn: 'Open the Studio',
                 footer_desc: 'AI fashion photography for brands of all sizes.',
@@ -910,32 +1079,32 @@
                 hero_title: 'Elige tu plan',
                 hero_subtitle: 'Empieza gratis. Cambia de plan cuando lo necesites. Sin contratos, cancela cuando quieras.',
                 per_month: '/mes',
-                free_credits: '3 créditos al mes',
+                free_credits: '12 créditos únicos',
                 starter_credits: '30 créditos al mes',
-                pro_credits: '100 créditos al mes',
-                business_credits: '300 créditos al mes',
+                pro_credits: '150 créditos al mes',
+                enterprise_credits: '500 créditos al mes',
                 credits_month: 'créditos/mes',
+                credits_once: 'créditos únicos',
                 styles: 'estilos',
                 resolution_only: 'Solo resolución',
                 resolution_up_to: 'Hasta',
                 custom_model: 'Modelo personalizado',
                 custom_model_unlimited: 'Modelo personalizado <strong>ilimitado</strong>',
-                max2month: '(máx 2/mes)',
-                batch: 'Generación en lote',
-                batch_5: 'Lote <strong>(máx 5/mes)</strong>',
-                batch_unlimited: 'Lote <strong>ilimitado</strong>',
-                all_styles: '<strong>Todos</strong> los 10 estilos',
+                all_styles: '<strong>Todos</strong> los estilos',
+                all_styles_free: '<strong>Todos</strong> los estilos',
                 all_resolutions: '<strong>Todas</strong> las resoluciones (1K–4K)',
-                all_res_1cr: '<strong>Todas</strong> las resoluciones — siempre 1 crédito',
-                custom_scene: 'Escena personalizada',
-                seo_multilang: '(SEO multilingüe)',
-                shopify_export: 'Exportación CSV Shopify',
-                whatsapp_support: 'Soporte directo por WhatsApp',
-                badge_popular: 'MÁS POPULAR',
+                pro_resolutions: '<strong>Todas</strong> las resoluciones (1K–4K)',
+                custom_bg: 'Fondo personalizado',
+                priority_gen: 'Prioridad de generación',
+                api_access: 'API Access',
+                team_accounts: 'Cuentas de equipo múltiples',
+                dedicated_support: 'Soporte dedicado',
+                free_label: 'Gratuito',
+                badge_popular: 'MEJOR VALOR',
                 cta_free: 'Prueba gratis',
                 cta_start: 'Empezar ahora',
                 cta_pro: 'Activar Pro',
-                cta_business: 'Contáctanos',
+                cta_enterprise: 'Contáctanos',
                 cta_buy: 'Comprar',
                 compare_title: 'Comparación completa',
                 compare_subtitle: 'Todas las funciones, plan por plan',
@@ -944,17 +1113,17 @@
                 section_resolution: 'RESOLUCIÓN',
                 section_styles: 'ESTILOS',
                 section_features: 'FUNCIONALIDADES',
-                col_credits_month: 'Créditos/mes',
+                col_credits_month: 'Créditos',
+                col_free_credits_val: '12 únicos',
                 col_extra_credits: 'Créditos extra disponibles',
                 col_styles_available: 'Estilos disponibles',
                 col_custom_model: 'Modelo personalizado',
-                col_custom_scene: 'Escena personalizada',
-                col_batch: 'Generación en lote',
-                col_shopify: 'Exportación CSV Shopify',
-                col_support: 'Soporte WhatsApp',
-                all_10: 'Todos 10',
-                max2: 'Máx 2/mes',
-                max5month: 'Máx 5/mes',
+                col_custom_bg: 'Fondo personalizado',
+                col_priority: 'Prioridad de generación',
+                col_api: 'API Access',
+                col_team: 'Cuentas de equipo múltiples',
+                col_support: 'Soporte dedicado',
+                all_10: 'Todos',
                 unlimited: 'Ilimitado',
                 extra_title: 'Créditos extra',
                 extra_subtitle: 'No caducan. Siguen las reglas de tu plan activo.',
@@ -962,15 +1131,21 @@
                 faq_title: 'Preguntas frecuentes',
                 faq_subtitle: '¿Otra pregunta? Escríbenos por WhatsApp.',
                 faq1_q: '¿Qué son los créditos?',
-                faq1_a: 'Cada generación de imagen consume créditos. La cantidad depende de la resolución: 1K cuesta 1 crédito, 2K cuesta 2 créditos (o 1 con el plan Business), 4K cuesta 3 créditos (o 1 con Business). Los créditos mensuales se reinician al inicio de cada mes y no se acumulan.',
+                faq1_a: 'Cada generación de imagen consume créditos. La cantidad depende de la resolución: 1K = 1 crédito, 2K = 1,5 créditos, 4K = 2 créditos (solo Enterprise). El Listing Generator cuesta 0,5 créditos para Free y Starter, y es gratuito para Pro y Enterprise. Los créditos mensuales se reinician al inicio de cada mes y no se acumulan.',
                 faq2_q: '¿Puedo cambiar de plan en cualquier momento?',
                 faq2_a: 'Sí. Puedes hacer upgrade o downgrade en cualquier momento. El cambio es inmediato. Si haces upgrade a mitad de mes, recibes los créditos del nuevo plan de inmediato.',
                 faq3_q: '¿Los créditos no usados caducan?',
                 faq3_a: 'Los créditos mensuales incluidos en el plan se reinician a fin de mes. Los créditos extra comprados por separado nunca caducan.',
                 faq4_q: '¿Qué es el Listing Generator?',
-                faq4_a: 'El Listing Generator crea automáticamente el título SEO y la descripción de e-commerce junto con la imagen generada. Compatible con italiano, inglés, español y francés. Disponible desde el plan Pro.',
-                faq5_q: '¿En qué se diferencia Business de Pro?',
-                faq5_a: 'La diferencia clave está en el coste de las resoluciones altas. Con Pro, una generación 4K cuesta 3 créditos. Con Business siempre cuesta 1 crédito, sin importar la resolución. Para quien genera muchas imágenes en alta calidad, Business es mucho más rentable.',
+                faq4_a: 'El Listing Generator crea automáticamente el título SEO y la descripción de e-commerce junto con la imagen generada. Compatible con italiano, inglés, español y francés. Cuesta 0,5 créditos para Free y Starter, y es gratuito desde el plan Pro.',
+                faq5_q: '¿En qué se diferencia Enterprise de Pro?',
+                faq5_a: 'Enterprise añade resolución 4K, 500 créditos al mes, API Access, cuentas de equipo múltiples y soporte dedicado. Está diseñado para marcas con altos volúmenes o equipos que trabajan juntos.',
+                toggle_monthly: 'Mensual',
+                toggle_annual: 'Anual',
+                toggle_save: 'Ahorra hasta un 15%',
+                billed_annual: '€83,32 facturados anualmente',
+                billed_annual_pro: '€295,80 facturados anualmente',
+                billed_annual_ent: '€1.045,44 facturados anualmente',
                 cta_bottom_text: 'Empieza con el plan Free, sin tarjeta de crédito.',
                 cta_bottom_btn: 'Abrir el Estudio',
                 footer_desc: 'Fotografía de moda con IA para marcas de todos los tamaños.',
@@ -978,6 +1153,29 @@
                 footer_nav: 'Navegación',
             },
         };
+
+        // ── Toggle mensile/annuale ──
+        const billingToggle = document.getElementById('billingToggle');
+        const labelMonthly = document.getElementById('labelMonthly');
+        const labelAnnual = document.getElementById('labelAnnual');
+
+        // Default: annuale
+        billingToggle.checked = true;
+        document.body.classList.add('annual-billing');
+        labelMonthly.classList.remove('is-active');
+        labelAnnual.classList.add('is-active');
+
+        billingToggle.addEventListener('change', function () {
+            if (this.checked) {
+                document.body.classList.add('annual-billing');
+                labelMonthly.classList.remove('is-active');
+                labelAnnual.classList.add('is-active');
+            } else {
+                document.body.classList.remove('annual-billing');
+                labelMonthly.classList.add('is-active');
+                labelAnnual.classList.remove('is-active');
+            }
+        });
 
         let currentLang = localStorage.getItem('fashionai_lang') || 'it';
 

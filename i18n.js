@@ -391,6 +391,22 @@
       cookies_changes_p2: 'Le modifiche saranno pubblicate su questa pagina con la data di aggiornamento.',
       cookies_contact_h: 'Contatti',
       cookies_contact_p: 'Per domande sui cookie contatta:',
+
+      /* ── PROFILE ── */
+      profile_eyebrow: 'Account',
+      profile_title: 'Il tuo profilo',
+      profile_loading: 'Caricamento...',
+      profile_account_title: 'Informazioni account',
+      profile_email: 'Email',
+      profile_plan: 'Piano',
+      profile_credits: 'Crediti disponibili',
+      profile_member_since: 'Membro dal',
+      profile_pwd_title: 'Cambia password',
+      profile_pwd_current: 'Password attuale',
+      profile_pwd_new: 'Nuova password',
+      profile_pwd_confirm: 'Conferma nuova password',
+      profile_pwd_btn: 'Salva nuova password',
+      profile_logout: "Esci dall'account",
     },
 
     /* ════════════════════════════════════
@@ -757,6 +773,22 @@
       cookies_changes_p2: 'Changes will be posted on this page with the updated date.',
       cookies_contact_h: 'Contact',
       cookies_contact_p: 'For questions about cookies contact:',
+
+      /* ── PROFILE ── */
+      profile_eyebrow: 'Account',
+      profile_title: 'Your profile',
+      profile_loading: 'Loading...',
+      profile_account_title: 'Account information',
+      profile_email: 'Email',
+      profile_plan: 'Plan',
+      profile_credits: 'Available credits',
+      profile_member_since: 'Member since',
+      profile_pwd_title: 'Change password',
+      profile_pwd_current: 'Current password',
+      profile_pwd_new: 'New password',
+      profile_pwd_confirm: 'Confirm new password',
+      profile_pwd_btn: 'Save new password',
+      profile_logout: 'Log out',
     },
 
     /* ════════════════════════════════════
@@ -1123,6 +1155,22 @@
       cookies_changes_p2: 'Los cambios se publicarán en esta página con la fecha de actualización.',
       cookies_contact_h: 'Contacto',
       cookies_contact_p: 'Para preguntas sobre las cookies contacta:',
+
+      /* ── PROFILE ── */
+      profile_eyebrow: 'Cuenta',
+      profile_title: 'Tu perfil',
+      profile_loading: 'Cargando...',
+      profile_account_title: 'Información de cuenta',
+      profile_email: 'Email',
+      profile_plan: 'Plan',
+      profile_credits: 'Créditos disponibles',
+      profile_member_since: 'Miembro desde',
+      profile_pwd_title: 'Cambiar contraseña',
+      profile_pwd_current: 'Contraseña actual',
+      profile_pwd_new: 'Nueva contraseña',
+      profile_pwd_confirm: 'Confirmar nueva contraseña',
+      profile_pwd_btn: 'Guardar nueva contraseña',
+      profile_logout: 'Cerrar sesión',
     },
   };
 
