@@ -68,6 +68,7 @@ function registerMainRoutes(app, deps) {
   app.get('/api/gallery', requireAuth, galleryController.list);
   app.delete('/api/gallery/:name', requireAuth, galleryController.remove);
   app.post('/api/gallery/:id/remove-watermark', requireAuth, galleryController.removeWatermark);
+  app.post('/api/gallery/:id/autocopy', requireAuth, galleryController.saveAutocopy);
 
   app.get('*', appController.fallbackToIndex);
 }

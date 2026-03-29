@@ -1109,6 +1109,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       let pendingGeneratedModelUrl = '';
       let lastInput = null;
       let lastImageUrl = '';
+      let lastGenerationId = null;
       let suggestionContainer = document.querySelector('.studio-inline-suggestions');
       let genAnimMounted = false;
       const RECENT_BATCH_SIZE = 8;
@@ -1237,14 +1238,60 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         const params = new URLSearchParams(window.location.search);
         const acUrl = params.get('autocopy');
         if (!acUrl) return;
-        // Pulisce l'URL senza ricaricare la pagina
+        const genId = params.get('generationId');
+        const savedCopyRaw = params.get('savedCopy');
+        const savedStyle = params.get('savedStyle') || 'ecommerce';
+        const savedLang = params.get('savedLang') || 'it';
         window.history.replaceState({}, '', 'studio.html');
-        // Aspetta che il DOM e il piano utente siano pronti, poi apre il modal
+
         const tryOpen = (attempts = 0) => {
           if (attempts > 20) return;
           if (document.getElementById('autoCopyModal') && typeof lastImageUrl !== 'undefined') {
             lastImageUrl = decodeURIComponent(acUrl);
+            if (genId) lastGenerationId = parseInt(genId, 10);
             document.getElementById('studioAutoCopy')?.click();
+
+            // Se c'è un copy già salvato, mostralo subito senza rigenerare
+            if (savedCopyRaw) {
+              try {
+                const savedResult = JSON.parse(decodeURIComponent(savedCopyRaw));
+                // Aspetta che il modal sia aperto
+                setTimeout(() => {
+                  const styleSelect = document.getElementById('autoCopyStyle');
+                  const langSelect = document.getElementById('autoCopyLanguage');
+                  if (styleSelect) styleSelect.value = savedStyle;
+                  if (langSelect) langSelect.value = savedLang;
+                  // Popola i campi risultato e mostra la preview
+                  const STYLE_LABELS = {
+                    ecommerce:   { title: 'Titolo SEO', desc: 'Descrizione', extra: 'Bullet points', extraKey: 'bullet_points' },
+                    social:      { title: 'Hook / Caption', desc: 'Caption Instagram', extra: 'Hashtag', extraKey: 'hashtag' },
+                    editorial:   { title: 'Headline', desc: 'Corpo editoriale', extra: 'Quote', extraKey: 'quote' },
+                    marketplace: { title: 'Titolo Marketplace', desc: 'Descrizione', extra: 'Bullet features', extraKey: 'bullet_points' },
+                  };
+                  const labels = STYLE_LABELS[savedStyle] || STYLE_LABELS.ecommerce;
+                  const titleLabel = document.getElementById('autoCopyTitleLabel');
+                  const descLabel = document.getElementById('autoCopyDescLabel');
+                  const titleResult = document.getElementById('autoCopyTitleResult');
+                  const descResult = document.getElementById('autoCopyDescResult');
+                  const extraSection = document.getElementById('autoCopyExtraSection');
+                  const extraLabel = document.getElementById('autoCopyExtraLabel');
+                  const extraResult = document.getElementById('autoCopyExtraResult');
+                  const resultEl = document.getElementById('autoCopyResult');
+                  if (titleLabel) titleLabel.textContent = labels.title;
+                  if (descLabel) descLabel.textContent = labels.desc;
+                  if (titleResult) titleResult.textContent = savedResult.title || savedResult.headline || savedResult.titolo_prodotto || savedResult.titolo_marketplace || '';
+                  if (descResult) descResult.textContent = savedResult.description || savedResult.corpo_editoriale || savedResult.descrizione || savedResult.caption_instagram || savedResult.descrizione_marketplace || '';
+                  const extraData = savedResult[labels.extraKey] || savedResult.quote || null;
+                  if (extraData && extraSection && extraLabel && extraResult) {
+                    extraLabel.textContent = labels.extra;
+                    extraResult.textContent = Array.isArray(extraData) ? extraData.map(i => '• ' + i).join('\n') : extraData;
+                    extraSection.style.display = 'block';
+                  }
+                  if (resultEl) resultEl.style.display = 'block';
+                  window.__showAutoCopyPreview?.(savedStyle, savedResult, lastImageUrl);
+                }, 300);
+              } catch (_) {}
+            }
           } else {
             setTimeout(() => tryOpen(attempts + 1), 150);
           }
@@ -1296,7 +1343,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             <button class="studio-recent-btn" data-action="open" title="Open">
               <i class="fa fa-eye"></i>
             </button>
-            <button class="studio-recent-btn" data-action="autocopy" title="AutoCopy">
+            <button class="studio-recent-btn" data-action="autocopy" title="${file.hasAutocopy ? 'AutoCopy salvato' : 'AutoCopy'}" ${file.hasAutocopy ? 'style="color:#c9a84c;"' : ''}>
               <i class="fa fa-wand-magic-sparkles"></i>
             </button>
             <button class="studio-recent-btn" title="Download" data-download-url="${url}" data-download-name="${file.name}">
@@ -1347,7 +1394,47 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
 
           if (action === 'autocopy') {
             lastImageUrl = url;
+            if (file.id) lastGenerationId = file.id;
             document.getElementById('studioAutoCopy')?.click();
+            // Se ha già una copy salvata, caricala subito nel modal
+            if (file.hasAutocopy && file.autocopyResult) {
+              const savedResult = file.autocopyResult;
+              const savedStyle = file.autocopyStyle || 'ecommerce';
+              const savedLang = file.autocopyLanguage || 'it';
+              setTimeout(() => {
+                const STYLE_LABELS = {
+                  ecommerce:   { title: 'Titolo SEO', desc: 'Descrizione', extra: 'Bullet points', extraKey: 'bullet_points' },
+                  social:      { title: 'Hook / Caption', desc: 'Caption Instagram', extra: 'Hashtag', extraKey: 'hashtag' },
+                  editorial:   { title: 'Headline', desc: 'Corpo editoriale', extra: 'Quote', extraKey: 'quote' },
+                  marketplace: { title: 'Titolo Marketplace', desc: 'Descrizione', extra: 'Bullet features', extraKey: 'bullet_points' },
+                };
+                const styleSelectEl = document.getElementById('autoCopyStyle');
+                const langSelectEl = document.getElementById('autoCopyLanguage');
+                if (styleSelectEl) styleSelectEl.value = savedStyle;
+                if (langSelectEl) langSelectEl.value = savedLang;
+                const labels = STYLE_LABELS[savedStyle] || STYLE_LABELS.ecommerce;
+                const titleLabelEl = document.getElementById('autoCopyTitleLabel');
+                const descLabelEl = document.getElementById('autoCopyDescLabel');
+                const titleResultEl = document.getElementById('autoCopyTitleResult');
+                const descResultEl = document.getElementById('autoCopyDescResult');
+                const extraSectionEl = document.getElementById('autoCopyExtraSection');
+                const extraLabelEl = document.getElementById('autoCopyExtraLabel');
+                const extraResultEl = document.getElementById('autoCopyExtraResult');
+                const resultAreaEl = document.getElementById('autoCopyResult');
+                if (titleLabelEl) titleLabelEl.textContent = labels.title;
+                if (descLabelEl) descLabelEl.textContent = labels.desc;
+                if (titleResultEl) titleResultEl.textContent = savedResult.title || savedResult.headline || savedResult.titolo_prodotto || savedResult.titolo_marketplace || '';
+                if (descResultEl) descResultEl.textContent = savedResult.description || savedResult.corpo_editoriale || savedResult.descrizione || savedResult.caption_instagram || savedResult.descrizione_marketplace || '';
+                const extraData = savedResult[labels.extraKey] || savedResult.quote || null;
+                if (extraData && extraSectionEl && extraLabelEl && extraResultEl) {
+                  extraLabelEl.textContent = labels.extra;
+                  extraResultEl.textContent = Array.isArray(extraData) ? extraData.map(i => '• ' + i).join('\n') : extraData;
+                  extraSectionEl.style.display = 'block';
+                }
+                if (resultAreaEl) resultAreaEl.style.display = 'block';
+                window.__showAutoCopyPreview?.(savedStyle, savedResult, url);
+              }, 300);
+            }
             return;
           }
 
@@ -2167,6 +2254,8 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           recentGallerySignature = nextSignature;
           recentGalleryItems = files;
           window.__studioRecentFiles = files;
+          // Aggiorna lastGenerationId con l'immagine più recente
+          if (files.length && files[0].id) lastGenerationId = files[0].id;
           recentRenderedCount = 0;
           recentList.innerHTML = '';
 
@@ -2616,6 +2705,7 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
             document.getElementById('acPreviewMarketplace').style.display = 'block';
           }
         };
+        window.__showAutoCopyPreview = showPreview;
 
         const openModal = () => {
           if (!lastImageUrl) return;
@@ -2696,6 +2786,14 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
             resultEl.style.display = 'block';
             // Mostra preview visiva nel pannello destro
             showPreview(selectedStyle, result, lastImageUrl);
+            // Salva AutoCopy nel DB se abbiamo un generationId
+            if (lastGenerationId) {
+              fetch(`/api/gallery/${lastGenerationId}/autocopy`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
+                body: JSON.stringify({ result, style: selectedStyle, language: langSelect?.value || 'it' }),
+              }).catch(() => {}); // silenzioso — non blocca l'UX
+            }
             // Aggiorna saldo crediti
             loadCredit?.();
           } catch (err) {

@@ -16,7 +16,7 @@ function createGalleryService(deps) {
         try {
           const pool = getPool();
           const result = await pool.query(
-            'SELECT id, asset_url, asset_url_clean, watermark_removed, created_at FROM generations WHERE user_id = $1 ORDER BY created_at DESC',
+            'SELECT id, asset_url, asset_url_clean, watermark_removed, autocopy_result, autocopy_style, autocopy_language, created_at FROM generations WHERE user_id = $1 ORDER BY created_at DESC',
             [userId]
           );
           const images = result.rows.map((row) => {
@@ -28,6 +28,10 @@ function createGalleryService(deps) {
               url,
               hasClean: !!row.asset_url_clean,
               watermarkRemoved: row.watermark_removed,
+              hasAutocopy: !!row.autocopy_result,
+              autocopyResult: row.autocopy_result || null,
+              autocopyStyle: row.autocopy_style || null,
+              autocopyLanguage: row.autocopy_language || null,
               mtime: new Date(row.created_at).getTime(),
             };
           });
@@ -106,7 +110,6 @@ function createGalleryService(deps) {
 
       const pool = getPool();
 
-      // Recupera la generazione e verifica che appartenga all'utente
       const result = await pool.query(
         'SELECT asset_url_clean, watermark_removed FROM generations WHERE id = $1 AND user_id = $2',
         [generationId, userId]
@@ -117,20 +120,39 @@ function createGalleryService(deps) {
       if (row.watermark_removed) return { cleanUrl: row.asset_url_clean };
       if (!row.asset_url_clean) throw createServiceError(400, 'Versione pulita non disponibile per questa immagine');
 
-      // Scala 0,5 crediti
       await creditService.consumeCredits({
         userId,
         amount: 0.5,
         description: 'Rimozione watermark',
       });
 
-      // Segna come rimossa nel DB
       await pool.query(
         'UPDATE generations SET watermark_removed = TRUE WHERE id = $1',
         [generationId]
       );
 
       return { cleanUrl: row.asset_url_clean };
+    },
+
+    async saveAutocopy({ generationId, userId, result, style, language }) {
+      if (!getPool) throw createServiceError(500, 'Servizio non disponibile');
+      if (!generationId || !userId) throw createServiceError(400, 'Parametri mancanti');
+
+      const pool = getPool();
+
+      // Verifica che la generazione appartenga all'utente
+      const check = await pool.query(
+        'SELECT id FROM generations WHERE id = $1 AND user_id = $2',
+        [generationId, userId]
+      );
+      if (!check.rows.length) throw createServiceError(404, 'Immagine non trovata');
+
+      await pool.query(
+        'UPDATE generations SET autocopy_result = $1, autocopy_style = $2, autocopy_language = $3 WHERE id = $4',
+        [JSON.stringify(result), style, language, generationId]
+      );
+
+      return { ok: true };
     },
   };
 }

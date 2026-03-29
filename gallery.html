@@ -218,7 +218,7 @@
             <button class="gallery-card-icon open" type="button" title="Apri in lightbox">
               <i class="fa fa-eye"></i>
             </button>
-            <button class="gallery-card-icon autocopy-link" data-url="${f.url}" type="button" title="AutoCopy">
+            <button class="gallery-card-icon autocopy-link" data-url="${f.url}" type="button" title="${f.hasAutocopy ? 'AutoCopy salvato' : 'AutoCopy'}" style="${f.hasAutocopy ? 'color:#c9a84c;' : ''}">
               <i class="fa fa-wand-magic-sparkles"></i>
             </button>
             <button class="gallery-card-icon" title="Scarica" onclick="event.stopPropagation(); downloadImage('${f.url}', '${f.name}')">
@@ -240,7 +240,12 @@
       const acBtn = card.querySelector('.gallery-card-icon.autocopy-link');
       acBtn?.addEventListener('click', (e) => {
         e.stopPropagation();
-        window.location.href = `studio.html?autocopy=${encodeURIComponent(f.url)}`;
+        let dest = `studio.html?autocopy=${encodeURIComponent(f.url)}`;
+        if (f.id) dest += `&generationId=${f.id}`;
+        if (f.hasAutocopy && f.autocopyResult) {
+          dest += `&savedCopy=${encodeURIComponent(JSON.stringify(f.autocopyResult))}&savedStyle=${f.autocopyStyle || 'ecommerce'}&savedLang=${f.autocopyLanguage || 'it'}`;
+        }
+        window.location.href = dest;
       });
 
       const deleteBtn = card.querySelector('.gallery-card-icon.ghost');

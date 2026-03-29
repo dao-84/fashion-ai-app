@@ -41,6 +41,22 @@ function createGalleryController(deps) {
         });
       }
     },
+
+    saveAutocopy: async (req, res) => {
+      try {
+        const userId = req.auth?.user?.id;
+        const generationId = req.params.id;
+        const { result, style, language } = req.body || {};
+        if (!result) return res.status(400).json({ error: 'Risultato AutoCopy mancante' });
+        const saved = await galleryService.saveAutocopy({ generationId, userId, result, style, language });
+        return res.status(200).json(saved);
+      } catch (error) {
+        return res.status(error.status || 500).json({
+          error: error.message || 'Salvataggio AutoCopy fallito',
+          details: error.details || error.message,
+        });
+      }
+    },
   };
 }
 

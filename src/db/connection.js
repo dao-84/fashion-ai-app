@@ -60,6 +60,17 @@ async function initializeDatabase() {
       ALTER TABLE generations ADD COLUMN IF NOT EXISTS watermark_removed BOOLEAN DEFAULT FALSE
     `).catch(() => {});
 
+    // Migrazione: aggiungi colonne AutoCopy se non esistono
+    await pool.query(`
+      ALTER TABLE generations ADD COLUMN IF NOT EXISTS autocopy_result JSONB
+    `).catch(() => {});
+    await pool.query(`
+      ALTER TABLE generations ADD COLUMN IF NOT EXISTS autocopy_style VARCHAR(50)
+    `).catch(() => {});
+    await pool.query(`
+      ALTER TABLE generations ADD COLUMN IF NOT EXISTS autocopy_language VARCHAR(10)
+    `).catch(() => {});
+
     databaseState = { initialized: true, provider: 'postgresql' };
     console.log('[db] PostgreSQL connesso e schema verificato');
   } catch (error) {
