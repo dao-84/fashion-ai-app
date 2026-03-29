@@ -362,7 +362,7 @@
                 <button class="image-viewer-btn image-viewer-btn--utility" id="studioOpen" data-i18n="studio_open">Apri</button>
                 <button class="image-viewer-btn image-viewer-btn--utility" id="studioPose" data-i18n="studio_pose">Cambia posa</button>
                 <button class="image-viewer-btn image-viewer-btn--enhance" id="studioRegen" data-i18n="studio_regen">Rigenera</button>
-                <a class="image-viewer-btn image-viewer-btn--download" id="studioDownload" href="#" download title="Download image"><i class="fa fa-download" style="margin-right:6px;"></i><span data-i18n="studio_download">Scarica</span></a>
+                <button class="image-viewer-btn image-viewer-btn--download" id="studioDownload" title="Download image"><i class="fa fa-download" style="margin-right:6px;"></i><span data-i18n="studio_download">Scarica</span></button>
               </div>
             </div>
           </div>
@@ -1047,6 +1047,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
               // Blocco risoluzioni e stili in base al piano
               var plan = (data.user.plan || 'free').toLowerCase();
               currentUserPlan = plan;
+              window.currentUserPlan = plan;
               applyPlanRestrictions(plan);
               applyStyleRestrictions(plan);
             }
@@ -1119,9 +1120,9 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             <button class="studio-recent-btn" data-action="open" title="Open">
               <i class="fa fa-eye"></i>
             </button>
-            <a class="studio-recent-btn" href="${url}" download="${file.name}" title="Download" onclick="event.stopPropagation()">
+            <button class="studio-recent-btn" title="Download" data-download-url="${url}" data-download-name="${file.name}">
               <i class="fa fa-download"></i>
-            </a>
+            </button>
             <button class="studio-recent-btn ghost" data-action="delete" title="Delete">
               <i class="fa fa-trash"></i>
             </button>
@@ -1142,9 +1143,31 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         }
 
         item.addEventListener('click', (e) => {
-          const action = e.target.closest('.studio-recent-btn')?.dataset?.action;
+          const btn = e.target.closest('.studio-recent-btn');
+          const action = btn?.dataset?.action;
+
+          // Download via proxy
+          if (btn?.dataset?.downloadUrl) {
+            e.stopPropagation();
+            const dlUrl = btn.dataset.downloadUrl;
+            const dlName = btn.dataset.downloadName || 'immagine.jpg';
+            const token = localStorage.getItem('auth_token');
+            const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+            fetch(`/api/download?url=${encodeURIComponent(dlUrl)}`, { headers })
+              .then(r => r.blob())
+              .then(blob => {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = dlName;
+                a.click();
+                URL.revokeObjectURL(a.href);
+              })
+              .catch(() => window.open(dlUrl, '_blank'));
+            return;
+          }
+
           if (action === 'open') {
-            window.openStudioViewer(url, file.name);
+            window.openStudioViewer(url, file.name, file);
             return;
           }
           if (action === 'delete') {
@@ -2277,20 +2300,21 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
       });
       backgroundPrompt?.addEventListener('focus', () => trackEvent('change_scene_clicked', getTrackingMetadata({ source: 'background_input' })));
       progressBackgroundPrompt?.addEventListener('focus', () => trackEvent('change_scene_clicked', getTrackingMetadata({ source: 'progress_background_input' })));
-      studioDownloadBtn?.addEventListener('click', () => {
+      studioDownloadBtn?.addEventListener('click', async () => {
         if (!lastImageUrl) return;
         trackEvent('save_to_gallery_clicked', getTrackingMetadata({ imageUrl: lastImageUrl }));
-      });
-
-      const updateDownload = () => {
-        if (studioDownloadBtn && lastImageUrl) {
-          studioDownloadBtn.href = lastImageUrl;
-          studioDownloadBtn.download = lastImageUrl.split('/').pop() || 'immagine.jpg';
+        try {
+          const resp = await fetch(`/api/download?url=${encodeURIComponent(lastImageUrl)}`);
+          const blob = await resp.blob();
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = lastImageUrl.split('/').pop() || 'immagine.jpg';
+          a.click();
+          URL.revokeObjectURL(a.href);
+        } catch (err) {
+          window.open(lastImageUrl, '_blank');
         }
-      };
-      if (mainImg) {
-        new MutationObserver(updateDownload).observe(mainImg, { attributes: true, attributeFilter: ['src'] });
-      }
+      });
 
       setTimeout(() => mountGenAnimation(0), 200);
     })();
@@ -2347,7 +2371,10 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
           <div class="image-viewer-title" id="studioViewerCaption">Anteprima immagine</div>
         </div>
         <div class="image-viewer-actions">
-          <a class="image-viewer-btn" id="studioViewerDownload" href="#" download><i class="fa fa-download" style="margin-right:6px;"></i>Scarica</a>
+          <button class="image-viewer-btn" id="studioViewerWatermarkBtn" style="display:none; cursor:pointer; border:none;">
+            <i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i>Rimuovi watermark — 0,5 cr
+          </button>
+          <button class="image-viewer-btn" id="studioViewerDownload" style="cursor:pointer; border:none;"><i class="fa fa-download" style="margin-right:6px;"></i>Scarica</button>
         </div>
       </div>
     </div>
@@ -2360,16 +2387,66 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
       const viewerDownload = document.getElementById('studioViewerDownload');
       const viewerClose = document.getElementById('studioViewerClose');
       const viewerBackdrop = document.getElementById('studioViewerBackdrop');
+      const viewerWatermarkBtn = document.getElementById('studioViewerWatermarkBtn');
 
-      window.openStudioViewer = function (url, name) {
+      let currentFile = null;
+
+      const studioDownloadImage = async (url, filename) => {
+        try {
+          const token = localStorage.getItem('auth_token');
+          const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+          const proxyUrl = `/api/download?url=${encodeURIComponent(url)}`;
+          const resp = await fetch(proxyUrl, { headers });
+          if (!resp.ok) throw new Error('Download fallito');
+          const blob = await resp.blob();
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = filename || 'immagine.jpg';
+          a.click();
+          URL.revokeObjectURL(a.href);
+        } catch (e) {
+          window.open(url, '_blank');
+        }
+      };
+
+      viewerDownload?.addEventListener('click', () => {
+        if (currentFile) studioDownloadImage(currentFile.url || viewerImg.src, currentFile.name || 'immagine.jpg');
+      });
+
+      window.openStudioViewer = function (url, name, file) {
         if (!viewer || !viewerImg) return;
+        currentFile = file || { url, name };
         viewerImg.src = url;
         viewerCaption.textContent = name || 'Anteprima immagine';
-        viewerDownload.href = url;
-        viewerDownload.download = name || 'immagine.jpg';
+
+        if (viewerWatermarkBtn) {
+          const plan = window.currentUserPlan || 'free';
+          const canRemove = plan === 'free' && currentFile?.hasClean && !currentFile?.watermarkRemoved;
+          viewerWatermarkBtn.style.display = canRemove ? 'inline-flex' : 'none';
+        }
+
         viewer.classList.add('active');
         viewer.setAttribute('aria-hidden', 'false');
       };
+
+      viewerWatermarkBtn?.addEventListener('click', async () => {
+        if (!currentFile?.id) return;
+        viewerWatermarkBtn.disabled = true;
+        viewerWatermarkBtn.textContent = 'Rimozione in corso...';
+        try {
+          const resp = await fetch(`/api/gallery/${currentFile.id}/remove-watermark`, { method: 'POST' });
+          const data = await resp.json();
+          if (!resp.ok) throw new Error(data.error || 'Errore');
+          currentFile.watermarkRemoved = true;
+          viewerImg.src = data.cleanUrl;
+          viewerDownload.href = data.cleanUrl;
+          viewerWatermarkBtn.style.display = 'none';
+        } catch (err) {
+          alert('Errore: ' + err.message);
+          viewerWatermarkBtn.disabled = false;
+          viewerWatermarkBtn.innerHTML = '<i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i>Rimuovi watermark — 0,5 cr';
+        }
+      });
 
       const closeViewer = () => {
         viewer?.classList.remove('active');

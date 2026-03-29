@@ -123,6 +123,40 @@ function normalizeImageInput(item, deps) {
   };
 }
 
+async function applyWatermark(buffer) {
+  const sharp = require('sharp');
+  const meta = await sharp(buffer).metadata();
+  const w = meta.width || 1024;
+  const h = meta.height || 1024;
+
+  const text = 'shotless.ai';
+  const fontSize = Math.round(w * 0.05);
+  const colGap = Math.round(fontSize * 9);
+  const rowGap = Math.round(fontSize * 5);
+  const angle = -35;
+  const diagonal = Math.ceil(Math.sqrt(w * w + h * h));
+
+  const svgTiles = [];
+  for (let y = -diagonal; y < diagonal * 2; y += rowGap) {
+    for (let x = -diagonal; x < diagonal * 2; x += colGap) {
+      svgTiles.push(`<text x="${x}" y="${y}" font-size="${fontSize}" fill="rgba(255,255,255,0.50)" font-family="Arial, sans-serif" font-weight="bold" letter-spacing="2">${text}</text>`);
+    }
+  }
+
+  const svg = Buffer.from(`
+    <svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <g transform="rotate(${angle}, ${w / 2}, ${h / 2})">
+        ${svgTiles.join('\n')}
+      </g>
+    </svg>
+  `);
+
+  return sharp(buffer)
+    .composite([{ input: svg, top: 0, left: 0 }])
+    .jpeg({ quality: 90 })
+    .toBuffer();
+}
+
 async function saveOutputItem(item, index, deps) {
   const { fetch, fs, path, galleryDir, log, logEmoji } = deps;
   const r2 = require('../integrations/storage/r2.integration');
@@ -135,26 +169,53 @@ async function saveOutputItem(item, index, deps) {
     return null;
   };
 
+  const isFree = deps.plan === 'free';
+
   const saveBufferToLocal = async (buffer, mimeType, fallbackExt = 'jpg') => {
     try {
       const safeMime = mimeType || 'application/octet-stream';
       const ext = (safeMime.split('/')[1] || fallbackExt || 'bin').split(';')[0];
-      const fileName = `look-${Date.now()}-${index}-${Math.floor(Math.random() * 1e6)}.${ext}`;
+      const baseName = `look-${Date.now()}-${index}-${Math.floor(Math.random() * 1e6)}`;
+      const fileName = `${baseName}.${ext}`;
       const filePath = path.join(galleryDir, fileName);
-      fs.writeFileSync(filePath, buffer);
+
+      let watermarkedBuffer = buffer;
+      let cleanUrl = null;
+
+      if (isFree) {
+        // Salva prima la versione pulita su R2
+        if (r2.isConfigured()) {
+          try {
+            const cleanFileName = `${baseName}-clean.${ext}`;
+            cleanUrl = await r2.upload(buffer, cleanFileName, safeMime);
+            log.info(logEmoji.save, `[generate] versione pulita salvata su R2: ${cleanUrl}`);
+          } catch (err) {
+            log.warn(logEmoji.warn, `[generate] upload versione pulita R2 fallito: ${err.message}`);
+          }
+        }
+        // Applica watermark al buffer principale
+        try {
+          watermarkedBuffer = await applyWatermark(buffer);
+        } catch (wmErr) {
+          log.warn(logEmoji.warn, `[generate] watermark fallito, uso immagine originale: ${wmErr.message}`);
+          watermarkedBuffer = buffer;
+        }
+      }
+
+      fs.writeFileSync(filePath, watermarkedBuffer);
       log.info(logEmoji.save, `[generate] salvato file: ${filePath}`);
 
+      let publicUrl = `/generated/${fileName}`;
       if (r2.isConfigured()) {
         try {
-          const publicUrl = await r2.upload(buffer, fileName, safeMime);
+          publicUrl = await r2.upload(watermarkedBuffer, fileName, safeMime);
           log.info(logEmoji.save, `[generate] caricato su R2: ${publicUrl}`);
-          return publicUrl;
         } catch (uploadError) {
           log.warn(logEmoji.warn, `[generate] upload R2 fallito, uso file locale: ${uploadError.message}`);
         }
       }
 
-      return `/generated/${fileName}`;
+      return { url: publicUrl, cleanUrl };
     } catch (error) {
       log.warn(logEmoji.warn, `[generate] salvataggio immagine fallito: ${error.message}`);
       return null;
@@ -220,4 +281,5 @@ module.exports = {
   normalizeImageInput,
   parseDimensions,
   saveOutputItem,
+  applyWatermark,
 };

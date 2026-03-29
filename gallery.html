@@ -83,7 +83,10 @@
           <div class="image-viewer-count" id="imageViewerCount"></div>
         </div>
         <div class="image-viewer-actions">
-          <a class="image-viewer-btn" id="imageViewerDownload" href="#" download><i class="fa fa-download" style="margin-right:6px;"></i><span data-i18n="gallery_download">Scarica</span></a>
+          <button class="image-viewer-btn" id="imageViewerWatermarkBtn" style="display:none; cursor:pointer; border:none;">
+            <i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i>Rimuovi watermark — 0,5 cr
+          </button>
+          <button class="image-viewer-btn" id="imageViewerDownload" style="cursor:pointer; border:none;"><i class="fa fa-download" style="margin-right:6px;"></i><span data-i18n="gallery_download">Scarica</span></button>
         </div>
       </div>
     </div>
@@ -106,9 +109,12 @@
     const viewerPrev = document.getElementById('imageViewerPrev');
     const viewerNext = document.getElementById('imageViewerNext');
     const viewerDownload = document.getElementById('imageViewerDownload');
+    const viewerWatermarkBtn = document.getElementById('imageViewerWatermarkBtn');
 
     let allFiles = [];
     let currentIndex = -1;
+    let currentUserPlan = null;
+
 
     const readableName = (file) => file?.name?.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').trim() || 'LOOK';
 
@@ -132,6 +138,15 @@
       }
       viewerCaption.textContent = readableName(file);
       viewerCount.textContent = `${index + 1} / ${allFiles.length}`;
+
+      // Mostra bottone rimozione watermark solo per Free con versione pulita disponibile
+      if (viewerWatermarkBtn) {
+        const isFree = currentUserPlan === 'free';
+        const canRemove = isFree && file.hasClean && !file.watermarkRemoved;
+        console.log('[watermark] plan:', currentUserPlan, 'hasClean:', file.hasClean, 'removed:', file.watermarkRemoved, 'show:', canRemove);
+        viewerWatermarkBtn.style.display = canRemove ? 'inline-flex' : 'none';
+      }
+
       viewer.classList.add('active');
       viewer.setAttribute('aria-hidden', 'false');
     };
@@ -155,6 +170,26 @@
     const updateLoadMoreVisibility = () => {
       if (loadMoreWrap) loadMoreWrap.style.display = 'none';
     };
+
+    window.downloadImage = async (url, filename) => {
+      try {
+        const proxyUrl = `/api/download?url=${encodeURIComponent(url)}`;
+        const resp = await fetch(proxyUrl);
+        const blob = await resp.blob();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename || 'immagine.jpg';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      } catch (e) {
+        window.open(url, '_blank');
+      }
+    };
+
+    viewerDownload?.addEventListener('click', () => {
+      const file = allFiles[currentIndex];
+      if (file) window.downloadImage(file.url, file.name);
+    });
 
     viewerClose?.addEventListener('click', hideImageViewer);
     viewerBackdrop?.addEventListener('click', hideImageViewer);
@@ -195,9 +230,9 @@
             <button class="gallery-card-icon open" type="button" title="Apri in lightbox">
               <i class="fa fa-eye"></i>
             </button>
-            <a class="gallery-card-icon" href="${f.url}" download="${f.name}" title="Scarica" onclick="event.stopPropagation()">
+            <button class="gallery-card-icon" title="Scarica" onclick="event.stopPropagation(); downloadImage('${f.url}', '${f.name}')">
               <i class="fa fa-download"></i>
-            </a>
+            </button>
             <button class="gallery-card-icon ghost" data-name="${f.name}" type="button" title="Elimina">
               <i class="fa fa-trash"></i>
             </button>
@@ -276,8 +311,44 @@
       }
     }
 
+    viewerWatermarkBtn?.addEventListener('click', async () => {
+      const file = allFiles[currentIndex];
+      if (!file?.id) return;
+      viewerWatermarkBtn.disabled = true;
+      viewerWatermarkBtn.textContent = 'Rimozione in corso...';
+      try {
+        const resp = await fetch(`/api/gallery/${file.id}/remove-watermark`, { method: 'POST' });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Errore');
+        // Aggiorna il file in memoria e mostra versione pulita
+        file.watermarkRemoved = true;
+        file.url = data.cleanUrl;
+        viewerImg.src = data.cleanUrl;
+        if (viewerDownload) {
+          viewerDownload.href = data.cleanUrl;
+          viewerDownload.download = file.name;
+        }
+        viewerWatermarkBtn.style.display = 'none';
+        // Aggiorna l'immagine nella card della gallery
+        const cardImg = listEl.querySelector(`.gallery-card:nth-child(${currentIndex + 1}) img`);
+        if (cardImg) cardImg.src = data.cleanUrl;
+        const cardDownload = listEl.querySelector(`.gallery-card:nth-child(${currentIndex + 1}) a[download]`);
+        if (cardDownload) cardDownload.href = data.cleanUrl;
+      } catch (err) {
+        alert('Errore: ' + err.message);
+        viewerWatermarkBtn.disabled = false;
+        viewerWatermarkBtn.innerHTML = '<i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i>Rimuovi watermark — 0,5 cr';
+      }
+    });
+
     loadMoreBtn?.addEventListener('click', () => {});
-    loadGallery();
+
+    // Carica prima il piano utente, poi la gallery
+    fetch('/api/auth/profile').then(r => r.ok ? r.json() : null).then(data => {
+      if (data?.user?.plan) currentUserPlan = data.user.plan;
+    }).catch(() => {}).finally(() => {
+      loadGallery();
+    });
   </script>
   <script>
     (() => {

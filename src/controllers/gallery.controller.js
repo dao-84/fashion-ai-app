@@ -27,6 +27,20 @@ function createGalleryController(deps) {
         });
       }
     },
+
+    removeWatermark: async (req, res) => {
+      try {
+        const userId = req.auth?.user?.id;
+        const generationId = req.params.id;
+        const result = await galleryService.removeWatermark({ generationId, userId });
+        return res.status(200).json(result);
+      } catch (error) {
+        return res.status(error.status || 500).json({
+          error: error.message || 'Rimozione watermark fallita',
+          details: error.details || error.message,
+        });
+      }
+    },
   };
 }
 

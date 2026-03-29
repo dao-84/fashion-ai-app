@@ -77,12 +77,18 @@ function createGenerationService(deps) {
     );
   }
 
-  async function collectSavedOutputs(output) {
+  async function collectSavedOutputs(output, plan) {
     const saved = [];
     const items = Array.isArray(output) ? output : [output];
     for (let i = 0; i < items.length; i++) {
-      const savedPath = await saveOutputItem(items[i], i, { fetch, fs, path, galleryDir, log, logEmoji });
-      if (savedPath) saved.push(savedPath);
+      const result = await saveOutputItem(items[i], i, { fetch, fs, path, galleryDir, log, logEmoji, plan });
+      if (!result) continue;
+      // result può essere { url, cleanUrl } oppure una stringa (fallback)
+      if (typeof result === 'string') {
+        saved.push({ url: result, cleanUrl: null });
+      } else {
+        saved.push(result);
+      }
     }
     return saved;
   }
@@ -139,17 +145,18 @@ function createGenerationService(deps) {
         log.info(logEmoji.generate, `[generate-model] prompt: ${cleanedPrompt}`);
         log.info(logEmoji.generate, `[generate-model] richiesta a Replicate avviata`);
         const output = await replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
-        const saved = await collectSavedOutputs(output);
+        const userPlanForSave = auth?.user?.plan || 'free';
+        const saved = await collectSavedOutputs(output, userPlanForSave);
         log.info(logEmoji.generate, `[generate-model] completata. File salvati: ${saved.length}`);
 
         if (getPool && auth?.isAuthenticated) {
           try {
             const pool = getPool();
-            for (const assetUrl of saved) {
-              if (assetUrl) {
+            for (const item of saved) {
+              if (item?.url) {
                 await pool.query(
-                  'INSERT INTO generations (user_id, asset_url, provider, resolution, style, credits_used, status) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-                  [auth.user.id, assetUrl, 'Replicate', '1K', 'model', 1, 'completed']
+                  'INSERT INTO generations (user_id, asset_url, asset_url_clean, provider, resolution, style, credits_used, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+                  [auth.user.id, item.url, item.cleanUrl || null, 'Replicate', '1K', 'model', 1, 'completed']
                 );
               }
             }
@@ -158,7 +165,7 @@ function createGenerationService(deps) {
           }
         }
 
-        return { output, saved };
+        return { output, saved: saved.map(s => s?.url || s) };
       } catch (error) {
         log.error(logEmoji.error, `Replicate generate-model failed`, error);
         throw createServiceError(500, `Replicate request failed`, error.message);
@@ -281,17 +288,18 @@ function createGenerationService(deps) {
               },
             }
           );
-          const saved = await collectSavedOutputs(output);
+          const userPlanForSave = auth?.user?.plan || 'free';
+          const saved = await collectSavedOutputs(output, userPlanForSave);
           log.info(logEmoji.generate, `[generate] completata. File salvati: ${saved.length}`);
 
           if (getPool && auth?.isAuthenticated) {
             try {
               const pool = getPool();
-              for (const assetUrl of saved) {
-                if (assetUrl) {
+              for (const item of saved) {
+                if (item?.url) {
                   await pool.query(
-                    'INSERT INTO generations (user_id, asset_url, provider, resolution, style, credits_used, status) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-                    [auth.user.id, assetUrl, providerName, resolution, input.style || rawBody.style || null, creditCost || 1, 'completed']
+                    'INSERT INTO generations (user_id, asset_url, asset_url_clean, provider, resolution, style, credits_used, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+                    [auth.user.id, item.url, item.cleanUrl || null, providerName, resolution, input.style || rawBody.style || null, creditCost || 1, 'completed']
                   );
                 }
               }
@@ -300,7 +308,8 @@ function createGenerationService(deps) {
             }
           }
 
-          return { type: 'json', status: 200, body: { output, saved } };
+          const savedUrls = saved.map(s => s?.url || s);
+          return { type: 'json', status: 200, body: { output, saved: savedUrls } };
         } catch (error) {
           // Errori 4xx (validazione, piano, crediti): non rimborsare — i crediti non erano stati scalati
           if (error.status && error.status < 500) throw error;

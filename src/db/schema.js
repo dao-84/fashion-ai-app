@@ -18,6 +18,8 @@ const CREATE_GENERATIONS = `
     user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     prompt TEXT,
     asset_url TEXT,
+    asset_url_clean TEXT,
+    watermark_removed BOOLEAN DEFAULT FALSE,
     provider VARCHAR(50),
     resolution VARCHAR(10),
     garment_type VARCHAR(50),

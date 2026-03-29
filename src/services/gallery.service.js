@@ -8,7 +8,7 @@ function createServiceError(status, message, details) {
 const r2 = require('../integrations/storage/r2.integration');
 
 function createGalleryService(deps) {
-  const { galleryDir, fs, path, log, logEmoji, getPool } = deps;
+  const { galleryDir, fs, path, log, logEmoji, getPool, creditService } = deps;
 
   return {
     async list({ userId } = {}) {
@@ -16,13 +16,20 @@ function createGalleryService(deps) {
         try {
           const pool = getPool();
           const result = await pool.query(
-            'SELECT asset_url, created_at FROM generations WHERE user_id = $1 ORDER BY created_at DESC',
+            'SELECT id, asset_url, asset_url_clean, watermark_removed, created_at FROM generations WHERE user_id = $1 ORDER BY created_at DESC',
             [userId]
           );
           const images = result.rows.map((row) => {
-            const url = row.asset_url;
+            const url = row.watermark_removed && row.asset_url_clean ? row.asset_url_clean : row.asset_url;
             const name = url.split('/').pop();
-            return { name, url, mtime: new Date(row.created_at).getTime() };
+            return {
+              id: row.id,
+              name,
+              url,
+              hasClean: !!row.asset_url_clean,
+              watermarkRemoved: row.watermark_removed,
+              mtime: new Date(row.created_at).getTime(),
+            };
           });
           return { files: images };
         } catch (error) {
@@ -91,6 +98,39 @@ function createGalleryService(deps) {
         log.error(logEmoji.error, '[gallery] delete failed', error);
         throw createServiceError(500, 'Delete failed', error.message);
       }
+    },
+
+    async removeWatermark({ generationId, userId }) {
+      if (!getPool || !creditService) throw createServiceError(500, 'Servizio non disponibile');
+      if (!generationId || !userId) throw createServiceError(400, 'Parametri mancanti');
+
+      const pool = getPool();
+
+      // Recupera la generazione e verifica che appartenga all'utente
+      const result = await pool.query(
+        'SELECT asset_url_clean, watermark_removed FROM generations WHERE id = $1 AND user_id = $2',
+        [generationId, userId]
+      );
+      if (!result.rows.length) throw createServiceError(404, 'Immagine non trovata');
+
+      const row = result.rows[0];
+      if (row.watermark_removed) return { cleanUrl: row.asset_url_clean };
+      if (!row.asset_url_clean) throw createServiceError(400, 'Versione pulita non disponibile per questa immagine');
+
+      // Scala 0,5 crediti
+      await creditService.consumeCredits({
+        userId,
+        amount: 0.5,
+        description: 'Rimozione watermark',
+      });
+
+      // Segna come rimossa nel DB
+      await pool.query(
+        'UPDATE generations SET watermark_removed = TRUE WHERE id = $1',
+        [generationId]
+      );
+
+      return { cleanUrl: row.asset_url_clean };
     },
   };
 }

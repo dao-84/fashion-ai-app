@@ -16,7 +16,7 @@ function registerMainRoutes(app, deps) {
   const appService = createAppService(deps);
   const creditService = createCreditService({ getPool: deps.getPool });
   const generationService = createGenerationService({ ...deps, falIntegration: deps.falIntegration, googleIntegration: deps.googleIntegration, creditService });
-  const galleryService = createGalleryService(deps);
+  const galleryService = createGalleryService({ ...deps, creditService });
   const publishService = createPublishService(deps);
   const trackService = createTrackService(deps);
 
@@ -41,8 +41,29 @@ function registerMainRoutes(app, deps) {
   app.post('/api/generate-model', requireAuth, generationController.generateModel);
   app.post('/api/generate', requireAuth, generationController.generate);
 
+  // Proxy download immagini (aggira CORS di R2)
+  app.get('/api/download', requireAuth, async (req, res) => {
+    const url = req.query.url;
+    if (!url || (!url.startsWith('https://') && !url.startsWith('http://'))) {
+      return res.status(400).json({ error: 'URL non valido' });
+    }
+    try {
+      const response = await deps.fetch(url);
+      if (!response.ok) return res.status(502).json({ error: 'Download fallito' });
+      const contentType = response.headers.get('content-type') || 'image/jpeg';
+      const filename = url.split('/').pop().split('?')[0] || 'immagine.jpg';
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      const buffer = Buffer.from(await response.arrayBuffer());
+      res.send(buffer);
+    } catch (err) {
+      res.status(500).json({ error: 'Errore download' });
+    }
+  });
+
   app.get('/api/gallery', requireAuth, galleryController.list);
   app.delete('/api/gallery/:name', requireAuth, galleryController.remove);
+  app.post('/api/gallery/:id/remove-watermark', requireAuth, galleryController.removeWatermark);
 
   app.get('*', appController.fallbackToIndex);
 }

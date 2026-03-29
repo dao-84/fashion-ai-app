@@ -52,6 +52,14 @@ async function initializeDatabase() {
       ALTER TABLE users ADD COLUMN IF NOT EXISTS credits_reset_at TIMESTAMP DEFAULT NOW()
     `).catch(() => {});
 
+    // Migrazione: aggiungi colonne watermark se non esistono
+    await pool.query(`
+      ALTER TABLE generations ADD COLUMN IF NOT EXISTS asset_url_clean TEXT
+    `).catch(() => {});
+    await pool.query(`
+      ALTER TABLE generations ADD COLUMN IF NOT EXISTS watermark_removed BOOLEAN DEFAULT FALSE
+    `).catch(() => {});
+
     databaseState = { initialized: true, provider: 'postgresql' };
     console.log('[db] PostgreSQL connesso e schema verificato');
   } catch (error) {
