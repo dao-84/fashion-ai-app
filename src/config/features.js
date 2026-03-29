@@ -2,7 +2,7 @@ const { env } = require('./env');
 
 const features = {
   enableAuth: true,
-  enableBilling: false,
+  enableBilling: true,
   enableCredits: true,
   enableDatabase: true,
   enableAuthDebugInfo: env.NODE_ENV !== 'production',

@@ -597,7 +597,7 @@
                     <li><i class="fas fa-xmark"></i><span data-i18n="custom_model">Modella personalizzata</span></li>
                     <li><i class="fas fa-check"></i><span>Nessun watermark</span></li>
                 </ul>
-                <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_start">Inizia ora</a>
+                <a href="#" class="plan-cta plan-cta--outline" data-price-key="starter_annual" data-i18n="cta_start">Inizia ora</a>
             </div>
 
             <!-- PRO (featured) -->
@@ -625,7 +625,7 @@
                     <li><i class="fas fa-check"></i><span data-i18n="priority_gen">Priorità di generazione</span></li>
                     <li><i class="fas fa-check"></i><span>Nessun watermark</span></li>
                 </ul>
-                <a href="#" class="plan-cta plan-cta--primary" data-i18n="cta_pro">Attiva Pro</a>
+                <a href="#" class="plan-cta plan-cta--primary" data-price-key="pro_annual" data-i18n="cta_pro">Attiva Pro</a>
             </div>
 
             <!-- ENTERPRISE -->
@@ -653,7 +653,7 @@
                     <li><i class="fas fa-check"></i><span data-i18n="dedicated_support">Supporto dedicato</span></li>
                     <li><i class="fas fa-check"></i><span>Nessun watermark</span></li>
                 </ul>
-                <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_enterprise">Contattaci</a>
+                <a href="mailto:info@shotless.ai" class="plan-cta plan-cta--outline" data-i18n="cta_enterprise">Contattaci</a>
             </div>
 
         </section>
@@ -668,21 +668,21 @@
                     <div class="credit-pack__label" data-i18n="credits">crediti</div>
                     <div class="credit-pack__price">€3,20</div>
                     <div class="credit-pack__unit">€0,32 / credito</div>
-                    <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
+                    <a href="#" class="plan-cta plan-cta--outline" data-price-key="credits_10" data-i18n="cta_buy">Acquista</a>
                 </div>
                 <div class="credit-pack">
                     <div class="credit-pack__amount">50</div>
                     <div class="credit-pack__label" data-i18n="credits">crediti</div>
                     <div class="credit-pack__price">€15</div>
                     <div class="credit-pack__unit">€0,30 / credito</div>
-                    <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
+                    <a href="#" class="plan-cta plan-cta--outline" data-price-key="credits_50" data-i18n="cta_buy">Acquista</a>
                 </div>
                 <div class="credit-pack">
                     <div class="credit-pack__amount">100</div>
                     <div class="credit-pack__label" data-i18n="credits">crediti</div>
                     <div class="credit-pack__price">€28</div>
                     <div class="credit-pack__unit">€0,28 / credito</div>
-                    <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
+                    <a href="#" class="plan-cta plan-cta--outline" data-price-key="credits_100" data-i18n="cta_buy">Acquista</a>
                 </div>
             </div>
         </section>
@@ -928,12 +928,79 @@
     <script src="waitlist.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.plan-cta').forEach(function (btn) {
-          btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            window.openWaitlistModal && window.openWaitlistModal('pricing');
+
+        // ── Banner pagamento success/cancelled ──
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('payment') === 'success') {
+          const banner = document.createElement('div');
+          banner.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1a3a1a;border:1px solid #4caf50;color:#81c784;padding:14px 28px;border-radius:10px;z-index:9999;font-size:0.95rem;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
+          banner.textContent = '✅ Pagamento completato! Il tuo piano è stato attivato.';
+          document.body.appendChild(banner);
+          setTimeout(() => banner.remove(), 6000);
+          window.history.replaceState({}, '', 'pricing.html');
+        }
+        if (params.get('payment') === 'cancelled') {
+          const banner = document.createElement('div');
+          banner.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#2a1a1a;border:1px solid #f44336;color:#e57373;padding:14px 28px;border-radius:10px;z-index:9999;font-size:0.95rem;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
+          banner.textContent = '❌ Pagamento annullato. Puoi riprovare quando vuoi.';
+          document.body.appendChild(banner);
+          setTimeout(() => banner.remove(), 5000);
+          window.history.replaceState({}, '', 'pricing.html');
+        }
+
+        // ── Toggle mensile/annuale per card ──
+        // Aggiorna data-price-key quando l'utente cambia il toggle
+        document.querySelectorAll('.card-billing-toggle').forEach(function(toggle) {
+          const card = toggle.closest('.plan-card');
+          if (!card) return;
+          const cta = card.querySelector('[data-price-key]');
+          if (!cta) return;
+          const baseKey = cta.dataset.priceKey?.replace('_monthly','').replace('_annual','');
+          if (!baseKey) return;
+
+          toggle.querySelectorAll('.card-billing-toggle__btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              const billing = btn.dataset.billing;
+              if (billing && baseKey) {
+                cta.dataset.priceKey = baseKey + '_' + billing;
+              }
+            });
           });
         });
+
+        // ── Checkout ──
+        async function startCheckout(priceKey) {
+          const token = localStorage.getItem('auth_token');
+          if (!token) {
+            // Non loggato: apri modal di login
+            window.openAuthModal?.();
+            return;
+          }
+          try {
+            const res = await fetch('/api/billing/checkout', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+              body: JSON.stringify({ priceKey }),
+            });
+            const data = await res.json();
+            if (data.url) {
+              window.location.href = data.url;
+            } else {
+              alert(data.error || 'Errore durante il checkout. Riprova.');
+            }
+          } catch (err) {
+            alert('Errore di rete. Riprova tra qualche istante.');
+          }
+        }
+
+        document.querySelectorAll('[data-price-key]').forEach(function(btn) {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const priceKey = btn.dataset.priceKey;
+            if (priceKey) startCheckout(priceKey);
+          });
+        });
+
       });
     </script>
 

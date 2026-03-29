@@ -4,12 +4,14 @@ const { createGalleryController } = require('../controllers/gallery.controller')
 const { createPublishController } = require('../controllers/publish.controller');
 const { createTrackController } = require('../controllers/track.controller');
 const { createWaitlistController } = require('../controllers/waitlist.controller');
+const { createBillingController } = require('../controllers/billing.controller');
 const { createAppService } = require('../services/app.service');
 const { createGenerationService } = require('../services/generation.service');
 const { createGalleryService } = require('../services/gallery.service');
 const { createPublishService } = require('../services/publish.service');
 const { createTrackService } = require('../services/track.service');
 const { createCreditService } = require('../services/credit.service');
+const { createBillingService } = require('../services/billing.service');
 const { requireAuth } = require('../middleware/auth.middleware');
 
 function registerMainRoutes(app, deps) {
@@ -19,6 +21,7 @@ function registerMainRoutes(app, deps) {
   const galleryService = createGalleryService({ ...deps, creditService });
   const publishService = createPublishService(deps);
   const trackService = createTrackService(deps);
+  const billingService = createBillingService({ getPool: deps.getPool, log: deps.log, logEmoji: deps.logEmoji });
 
   const appController = createAppController({
     appService,
@@ -30,6 +33,16 @@ function registerMainRoutes(app, deps) {
   const publishController = createPublishController({ publishService, creditService });
   const trackController = createTrackController({ trackService });
   const waitlistController = createWaitlistController();
+  const billingController = createBillingController({ billingService, env: deps.env });
+
+  // Stripe webhook — body raw obbligatorio per verifica firma
+  app.post('/api/billing/webhook',
+    require('express').raw({ type: 'application/json' }),
+    billingController.webhook
+  );
+
+  app.post('/api/billing/checkout', requireAuth, billingController.checkout);
+  app.post('/api/billing/portal', requireAuth, billingController.portal);
 
   app.post('/api/waitlist', waitlistController.submit);
   app.post('/api/openai/prepare', appController.prepareOpenAI);

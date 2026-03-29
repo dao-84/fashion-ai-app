@@ -71,6 +71,14 @@ async function initializeDatabase() {
       ALTER TABLE generations ADD COLUMN IF NOT EXISTS autocopy_language VARCHAR(10)
     `).catch(() => {});
 
+    // Migrazione: aggiungi colonne Stripe se non esistono
+    await pool.query(`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(100)
+    `).catch(() => {});
+    await pool.query(`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_subscription_id VARCHAR(100)
+    `).catch(() => {});
+
     databaseState = { initialized: true, provider: 'postgresql' };
     console.log('[db] PostgreSQL connesso e schema verificato');
   } catch (error) {
