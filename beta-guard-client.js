@@ -56,7 +56,7 @@
     overlay.innerHTML =
       '<div class="auth-modal__panel" role="dialog" aria-modal="true">' +
       '<div class="auth-modal__header">' +
-      '<div class="auth-modal__logo">Fashion AI</div>' +
+      '<div class="auth-modal__logo">Shotless.ai</div>' +
       '<button type="button" class="auth-modal__close" id="authClose" aria-label="Chiudi">&times;</button>' +
       '</div>' +
       '<div class="auth-modal__tabs">' +
