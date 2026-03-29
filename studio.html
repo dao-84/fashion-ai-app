@@ -362,7 +362,8 @@
                 <button class="image-viewer-btn image-viewer-btn--utility" id="studioOpen" data-i18n="studio_open">Apri</button>
                 <button class="image-viewer-btn image-viewer-btn--utility" id="studioPose" data-i18n="studio_pose">Cambia posa</button>
                 <button class="image-viewer-btn image-viewer-btn--enhance" id="studioRegen" data-i18n="studio_regen">Rigenera</button>
-                <button class="image-viewer-btn image-viewer-btn--download" id="studioDownload" title="Download image"><i class="fa fa-download" style="margin-right:6px;"></i><span data-i18n="studio_download">Scarica</span></button>
+                <button class="image-viewer-btn image-viewer-btn--utility" id="studioAutoCopy" title="AutoCopy"><i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i>AutoCopy</button>
+                <button class="image-viewer-btn image-viewer-btn--download" id="studioDownload" title="Scarica"><i class="fa fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -376,6 +377,172 @@
       </section>
     </div>
   </main>
+
+  <!-- Modal AutoCopy -->
+  <div class="studio-modal" id="autoCopyModal" hidden>
+    <div class="studio-modal__backdrop" id="autoCopyModalBackdrop"></div>
+    <div class="studio-modal__dialog autocopy-dialog" role="dialog" aria-modal="true" aria-labelledby="autoCopyTitle" style="overflow-y:auto;">
+      <div class="model-builder-layout autocopy-layout" style="padding:18px; width:100%; box-sizing:border-box;">
+        <div class="model-builder-controls">
+          <div class="model-builder-head">
+            <div>
+
+              <div class="model-builder-title" id="autoCopyTitle"><i class="fa fa-wand-magic-sparkles" style="margin-right:8px;"></i>AutoCopy <span style="font-size:0.75rem; font-weight:400; color:rgba(255,255,255,0.4); letter-spacing:0; text-transform:none;">— vendi con le parole</span></div>
+            </div>
+            <button type="button" class="model-builder-close" id="autoCopyClose" aria-label="Chiudi">X</button>
+          </div>
+
+          <div class="model-builder-section">
+            <div class="model-builder-label">Stile copy</div>
+            <div class="model-builder-grid" style="grid-template-columns:1fr 1fr;">
+              <label class="model-field">
+                <span>Stile</span>
+                <select id="autoCopyStyle">
+                  <option value="ecommerce">🛒 E-commerce SEO</option>
+                  <option value="social">📱 Social Engaging</option>
+                  <option value="editorial">✨ Luxury Editorial</option>
+                  <option value="marketplace">🏪 Marketplace Ready</option>
+                </select>
+              </label>
+              <label class="model-field">
+                <span>Lingua</span>
+                <select id="autoCopyLanguage">
+                  <option value="it">🇮🇹 Italiano</option>
+                  <option value="en">🇬🇧 English</option>
+                  <option value="es">🇪🇸 Español</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="model-builder-section">
+            <div class="model-builder-label">Info prodotto <span style="font-weight:400; text-transform:none; letter-spacing:0; color:rgba(255,255,255,0.3); font-size:0.75rem;">(opzionale — migliora la precisione)</span></div>
+            <textarea id="autoCopyUserText" rows="3" placeholder="Es: abito in lino 100%, colore sabbia, brand Zara, taglia S-XL, prezzo €89..." style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:10px; color:var(--text-primary); font-size:0.85rem; line-height:1.5; padding:10px 12px; resize:vertical; font-family:inherit; outline:none;"></textarea>
+          </div>
+
+          <button type="button" class="upload-action" id="autoCopyGenerate">
+            <i class="fa fa-wand-magic-sparkles" style="margin-right:8px;"></i>AutoCopy
+          </button>
+
+          <div id="autoCopyResult" style="display:none;">
+            <div class="model-builder-section">
+              <div class="model-builder-label" id="autoCopyTitleLabel">Titolo</div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <div id="autoCopyTitleResult" style="flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 14px; color:var(--text-primary); font-size:0.95rem;"></div>
+                <button type="button" class="image-viewer-btn image-viewer-btn--utility" id="autoCopyCopyTitle" title="Copia titolo"><i class="fa fa-copy"></i></button>
+              </div>
+            </div>
+            <div class="model-builder-section">
+              <div class="model-builder-label" id="autoCopyDescLabel">Descrizione</div>
+              <div style="display:flex; gap:8px; align-items:flex-start;">
+                <div id="autoCopyDescResult" style="flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 14px; color:var(--text-secondary); font-size:0.88rem; line-height:1.6; white-space:pre-line;"></div>
+                <button type="button" class="image-viewer-btn image-viewer-btn--utility" id="autoCopyCopyDesc" title="Copia descrizione"><i class="fa fa-copy"></i></button>
+              </div>
+            </div>
+            <div class="model-builder-section" id="autoCopyExtraSection" style="display:none;">
+              <div class="model-builder-label" id="autoCopyExtraLabel">Extra</div>
+              <div style="display:flex; gap:8px; align-items:flex-start;">
+                <div id="autoCopyExtraResult" style="flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 14px; color:var(--text-secondary); font-size:0.85rem; line-height:1.7;"></div>
+                <button type="button" class="image-viewer-btn image-viewer-btn--utility" id="autoCopyCopyExtra" title="Copia"><i class="fa fa-copy"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div id="autoCopyError" style="display:none; color:#e74c3c; font-size:0.88rem; margin-top:8px;"></div>
+        </div>
+
+        <div class="model-builder-preview" style="overflow-y:auto;">
+          <div id="autoCopyRefPanel">
+            <div class="model-builder-preview-label">Immagine di riferimento</div>
+            <div class="model-builder-preview-area">
+              <img id="autoCopyPreviewImg" src="" alt="Immagine di riferimento" style="max-width:100%; border-radius:8px; object-fit:contain;">
+            </div>
+          </div>
+
+          <!-- Preview E-commerce SEO -->
+          <div id="acPreviewEcommerce" style="display:none; font-family:inherit;">
+            <div style="font-size:0.7rem; letter-spacing:1px; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:12px;">🛒 E-commerce SEO Preview</div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; overflow:hidden;">
+              <div style="display:flex; gap:12px; padding:14px;">
+                <img id="acEcomImg" src="" style="width:100px; height:120px; object-fit:cover; border-radius:8px; flex-shrink:0;">
+                <div style="flex:1; min-width:0;">
+                  <div id="acEcomTitle" style="font-weight:700; font-size:0.9rem; color:var(--text-primary); margin-bottom:6px; line-height:1.3;"></div>
+                  <div id="acEcomDesc" style="font-size:0.78rem; color:var(--text-secondary); line-height:1.5; white-space:pre-line; margin-bottom:8px;"></div>
+                  <ul id="acEcomBullets" style="list-style:none; padding:0; margin:0; font-size:0.75rem; color:rgba(255,255,255,0.6);"></ul>
+                </div>
+              </div>
+              <div id="acEcomKeywordsWrap" style="padding:8px 14px 12px; border-top:1px solid rgba(255,255,255,0.06);">
+                <div style="font-size:0.68rem; color:rgba(255,255,255,0.35); margin-bottom:6px; letter-spacing:0.5px;">KEYWORDS SEO</div>
+                <div id="acEcomKeywords" style="display:flex; flex-wrap:wrap; gap:4px;"></div>
+              </div>
+            </div>
+            <div style="margin-top:10px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:10px 14px;">
+              <div style="font-size:0.68rem; color:rgba(255,255,255,0.35); margin-bottom:6px; letter-spacing:0.5px;">SEO PREVIEW — GOOGLE</div>
+              <div id="acEcomMetaTitle" style="color:#8ab4f8; font-size:0.82rem; font-weight:600; margin-bottom:3px;"></div>
+              <div id="acEcomMetaDesc" style="color:#bdc1c6; font-size:0.75rem; line-height:1.4;"></div>
+            </div>
+          </div>
+
+          <!-- Preview Social Engaging -->
+          <div id="acPreviewSocial" style="display:none;">
+            <div style="font-size:0.7rem; letter-spacing:1px; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:12px;">📱 Social Engaging Preview</div>
+            <div style="max-width:280px; margin:0 auto; background:#1a1a2e; border:1px solid rgba(255,255,255,0.12); border-radius:12px; overflow:hidden; font-family:sans-serif;">
+              <div style="display:flex; align-items:center; gap:8px; padding:8px 12px;">
+                <div style="width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#f6e8b1,#c9a84c); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.75rem; color:#000; flex-shrink:0;">S</div>
+                <span style="font-size:0.82rem; font-weight:600; color:#fff;">shotless.ai</span>
+              </div>
+              <img id="acSocialImg" src="" style="width:100%; aspect-ratio:1; object-fit:cover; display:block;">
+              <div style="padding:8px 12px 4px; display:flex; justify-content:space-between;">
+                <div style="display:flex; gap:12px; font-size:1.1rem;"><span>♡</span><span>💬</span><span>➤</span></div>
+                <span style="font-size:1.1rem;">🔖</span>
+              </div>
+              <div style="padding:4px 12px 8px; font-size:0.78rem; color:#fff; line-height:1.5;">
+                <span style="font-weight:700;">shotless.ai </span><span id="acSocialCaption"></span>
+              </div>
+              <div id="acSocialHashtags" style="padding:0 12px 12px; font-size:0.72rem; color:#8ab4f8; line-height:1.6;"></div>
+            </div>
+          </div>
+
+          <!-- Preview Luxury Editorial -->
+          <div id="acPreviewEditorial" style="display:none;">
+            <div style="font-size:0.7rem; letter-spacing:1px; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:12px;">✨ Luxury Editorial Preview</div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:20px 16px;">
+              <div id="acEditorialHeadline" style="font-size:1.15rem; font-weight:700; color:var(--text-primary); letter-spacing:2px; text-align:center; text-transform:uppercase; line-height:1.3; margin-bottom:6px;"></div>
+              <div id="acEditorialSub" style="font-size:0.78rem; color:rgba(255,255,255,0.45); text-align:center; margin-bottom:14px; font-style:italic;"></div>
+              <div style="display:flex; gap:12px; margin-bottom:14px;">
+                <img id="acEditorialImg" src="" style="width:110px; height:150px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+                <div id="acEditorialBody" style="font-size:0.78rem; color:var(--text-secondary); line-height:1.7; white-space:pre-line;"></div>
+              </div>
+              <blockquote id="acEditorialQuote" style="margin:0; padding:10px 14px; border-left:3px solid #c9a84c; font-style:italic; font-size:0.88rem; color:rgba(255,245,214,0.85); line-height:1.5;"></blockquote>
+              <div id="acEditorialTags" style="margin-top:12px; font-size:0.72rem; color:rgba(255,255,255,0.35); line-height:1.8;"></div>
+            </div>
+          </div>
+
+          <!-- Preview Marketplace Ready -->
+          <div id="acPreviewMarketplace" style="display:none;">
+            <div style="font-size:0.7rem; letter-spacing:1px; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:12px;">🏪 Marketplace Ready Preview</div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; overflow:hidden;">
+              <div style="display:flex; gap:12px; padding:14px;">
+                <img id="acMpImg" src="" style="width:100px; height:120px; object-fit:cover; border-radius:8px; flex-shrink:0;">
+                <div style="flex:1; min-width:0;">
+                  <div id="acMpTitle" style="font-weight:700; font-size:0.85rem; color:var(--text-primary); margin-bottom:6px; line-height:1.3;"></div>
+                  <div style="color:#f0d77b; font-size:0.75rem; margin-bottom:8px;">⭐⭐⭐⭐⭐</div>
+                  <ul id="acMpBullets" style="list-style:none; padding:0; margin:0; font-size:0.75rem; color:rgba(255,255,255,0.65);"></ul>
+                </div>
+              </div>
+              <div style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.06);">
+                <div id="acMpDesc" style="font-size:0.78rem; color:var(--text-secondary); line-height:1.5;"></div>
+              </div>
+              <div id="acMpAttrsWrap" style="padding:10px 14px; border-top:1px solid rgba(255,255,255,0.06); display:none;">
+                <div style="font-size:0.68rem; color:rgba(255,255,255,0.35); margin-bottom:6px; letter-spacing:0.5px;">ATTRIBUTI</div>
+                <div id="acMpAttrs" style="font-size:0.75rem; color:rgba(255,255,255,0.55); line-height:1.8;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="studio-modal" id="studioModelModal" hidden>
     <div class="studio-modal__backdrop" id="studioModelModalBackdrop"></div>
@@ -547,6 +714,7 @@
       const poseBtn = document.getElementById('studioPose');
       const regenBtn = document.getElementById('studioRegen');
       const studioDownloadBtn = document.getElementById('studioDownload');
+      const autoCopyBtn = document.getElementById('studioAutoCopy');
       const recentList = document.getElementById('studioRecent');
       const loader = document.getElementById('studioLoader');
 
@@ -1076,6 +1244,26 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
 
       loadCredit();
 
+      // Apertura automatica AutoCopy da gallery (?autocopy=<url>)
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const acUrl = params.get('autocopy');
+        if (!acUrl) return;
+        // Pulisce l'URL senza ricaricare la pagina
+        window.history.replaceState({}, '', 'studio.html');
+        // Aspetta che il DOM e il piano utente siano pronti, poi apre il modal
+        const tryOpen = (attempts = 0) => {
+          if (attempts > 20) return;
+          if (document.getElementById('autoCopyModal') && typeof lastImageUrl !== 'undefined') {
+            lastImageUrl = decodeURIComponent(acUrl);
+            document.getElementById('studioAutoCopy')?.click();
+          } else {
+            setTimeout(() => tryOpen(attempts + 1), 150);
+          }
+        };
+        setTimeout(() => tryOpen(), 400);
+      })();
+
       const setMainImage = (url) => {
         if (!url) return;
         lastImageUrl = url;
@@ -1120,6 +1308,9 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             <button class="studio-recent-btn" data-action="open" title="Open">
               <i class="fa fa-eye"></i>
             </button>
+            <button class="studio-recent-btn" data-action="autocopy" title="AutoCopy">
+              <i class="fa fa-wand-magic-sparkles"></i>
+            </button>
             <button class="studio-recent-btn" title="Download" data-download-url="${url}" data-download-name="${file.name}">
               <i class="fa fa-download"></i>
             </button>
@@ -1163,6 +1354,12 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
                 URL.revokeObjectURL(a.href);
               })
               .catch(() => window.open(dlUrl, '_blank'));
+            return;
+          }
+
+          if (action === 'autocopy') {
+            lastImageUrl = url;
+            document.getElementById('studioAutoCopy')?.click();
             return;
           }
 
@@ -2318,6 +2515,229 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
           window.open(lastImageUrl, '_blank');
         }
       });
+
+      // ── AutoCopy Modal ──────────────────────────────────────────
+      (() => {
+        const modal = document.getElementById('autoCopyModal');
+        const backdrop = document.getElementById('autoCopyModalBackdrop');
+        const closeBtn = document.getElementById('autoCopyClose');
+        const previewImg = document.getElementById('autoCopyPreviewImg');
+        const styleSelect = document.getElementById('autoCopyStyle');
+        const langSelect = document.getElementById('autoCopyLanguage');
+        const generateBtn = document.getElementById('autoCopyGenerate');
+        const resultEl = document.getElementById('autoCopyResult');
+        const errorEl = document.getElementById('autoCopyError');
+        const titleResult = document.getElementById('autoCopyTitleResult');
+        const titleLabel = document.getElementById('autoCopyTitleLabel');
+        const descResult = document.getElementById('autoCopyDescResult');
+        const descLabel = document.getElementById('autoCopyDescLabel');
+        const extraSection = document.getElementById('autoCopyExtraSection');
+        const extraLabel = document.getElementById('autoCopyExtraLabel');
+        const extraResult = document.getElementById('autoCopyExtraResult');
+        const copyTitleBtn = document.getElementById('autoCopyCopyTitle');
+        const copyDescBtn = document.getElementById('autoCopyCopyDesc');
+        const copyExtraBtn = document.getElementById('autoCopyCopyExtra');
+        const userTextEl = document.getElementById('autoCopyUserText');
+
+        const PAID_PLANS = ['free', 'starter'];
+
+        const updateGenerateBtn = () => {
+          const plan = window.currentUserPlan || 'free';
+          const label = PAID_PLANS.includes(plan)
+            ? '<i class="fa fa-wand-magic-sparkles" style="margin-right:8px;"></i>AutoCopy — 0,5 cr'
+            : '<i class="fa fa-wand-magic-sparkles" style="margin-right:8px;"></i>AutoCopy';
+          if (generateBtn) generateBtn.innerHTML = label;
+        };
+
+        const ALL_PREVIEWS = ['acPreviewEcommerce','acPreviewSocial','acPreviewEditorial','acPreviewMarketplace'];
+        const refPanel = document.getElementById('autoCopyRefPanel');
+
+        const hideAllPreviews = () => {
+          ALL_PREVIEWS.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+          if (refPanel) refPanel.style.display = 'block';
+        };
+
+        const showPreview = (style, result, imgUrl) => {
+          hideAllPreviews();
+          if (refPanel) refPanel.style.display = 'none';
+
+          if (style === 'ecommerce') {
+            document.getElementById('acEcomImg').src = imgUrl;
+            document.getElementById('acEcomTitle').textContent = result.titolo_prodotto || result.title || '';
+            document.getElementById('acEcomDesc').textContent = result.descrizione || result.description || '';
+            const bulletsEl = document.getElementById('acEcomBullets');
+            bulletsEl.innerHTML = '';
+            (result.bullet_points || []).forEach(b => {
+              const li = document.createElement('li');
+              li.style.cssText = 'padding:2px 0; border-bottom:1px solid rgba(255,255,255,0.05);';
+              li.textContent = '• ' + b;
+              bulletsEl.appendChild(li);
+            });
+            const kwEl = document.getElementById('acEcomKeywords');
+            kwEl.innerHTML = '';
+            (result.keywords_seo || []).forEach(k => {
+              const span = document.createElement('span');
+              span.style.cssText = 'background:rgba(255,255,255,0.07); border-radius:4px; padding:2px 7px; font-size:0.7rem; color:rgba(255,255,255,0.55);';
+              span.textContent = k;
+              kwEl.appendChild(span);
+            });
+            document.getElementById('acEcomMetaTitle').textContent = result.meta_title || '';
+            document.getElementById('acEcomMetaDesc').textContent = result.meta_description || '';
+            document.getElementById('acPreviewEcommerce').style.display = 'block';
+
+          } else if (style === 'social') {
+            document.getElementById('acSocialImg').src = imgUrl;
+            document.getElementById('acSocialCaption').textContent = result.caption_instagram || result.description || '';
+            const hashEl = document.getElementById('acSocialHashtags');
+            const hashtags = result.hashtag_set || result.hashtag || [];
+            hashEl.textContent = Array.isArray(hashtags) ? hashtags.join(' ') : hashtags;
+            document.getElementById('acPreviewSocial').style.display = 'block';
+
+          } else if (style === 'editorial') {
+            document.getElementById('acEditorialImg').src = imgUrl;
+            document.getElementById('acEditorialHeadline').textContent = result.headline || result.title || '';
+            document.getElementById('acEditorialSub').textContent = result.sottotitolo || '';
+            document.getElementById('acEditorialBody').textContent = result.corpo_editoriale || result.description || '';
+            document.getElementById('acEditorialQuote').textContent = result.quote_editoriale || result.quote || '';
+            const tagsEl = document.getElementById('acEditorialTags');
+            const tags = result.tags_mood || [];
+            tagsEl.textContent = Array.isArray(tags) ? tags.join('  ') : tags;
+            document.getElementById('acPreviewEditorial').style.display = 'block';
+
+          } else if (style === 'marketplace') {
+            document.getElementById('acMpImg').src = imgUrl;
+            document.getElementById('acMpTitle').textContent = result.titolo_marketplace || result.title || '';
+            const mpBullets = document.getElementById('acMpBullets');
+            mpBullets.innerHTML = '';
+            (result.bullet_features || result.bullet_points || []).forEach(b => {
+              const li = document.createElement('li');
+              li.style.cssText = 'padding:2px 0; display:flex; gap:6px;';
+              li.innerHTML = '<span style="color:#f0d77b; flex-shrink:0;">✓</span><span>' + b + '</span>';
+              mpBullets.appendChild(li);
+            });
+            document.getElementById('acMpDesc').textContent = result.descrizione_marketplace || result.description || '';
+            const attrs = result.attributi_strutturati;
+            if (attrs && Object.keys(attrs).length) {
+              const attrsEl = document.getElementById('acMpAttrs');
+              attrsEl.innerHTML = Object.entries(attrs)
+                .filter(([, v]) => v && v !== 'Non specificato')
+                .map(([k, v]) => `<span style="color:rgba(255,255,255,0.4);">${k.replace(/_/g,' ')}:</span> ${v}`)
+                .join('<br>');
+              document.getElementById('acMpAttrsWrap').style.display = 'block';
+            }
+            document.getElementById('acPreviewMarketplace').style.display = 'block';
+          }
+        };
+
+        const openModal = () => {
+          if (!lastImageUrl) return;
+          previewImg.src = lastImageUrl;
+          hideAllPreviews();
+          resultEl.style.display = 'none';
+          errorEl.style.display = 'none';
+          generateBtn.disabled = false;
+          updateGenerateBtn();
+          const siteLang = localStorage.getItem('lang') || 'it';
+          if (langSelect) langSelect.value = siteLang;
+          modal.hidden = false;
+        };
+
+        const closeModal = () => { modal.hidden = true; };
+
+        autoCopyBtn?.addEventListener('click', openModal);
+        closeBtn?.addEventListener('click', closeModal);
+        backdrop?.addEventListener('click', closeModal);
+
+        generateBtn?.addEventListener('click', async () => {
+          if (!lastImageUrl) return;
+          resultEl.style.display = 'none';
+          errorEl.style.display = 'none';
+          generateBtn.disabled = true;
+          generateBtn.innerHTML = '<i class="fa fa-spinner fa-spin" style="margin-right:8px;"></i>Generazione in corso...';
+
+          try {
+            const token = localStorage.getItem('authToken');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = 'Bearer ' + token;
+
+            const selectedStyle = styleSelect?.value || 'ecommerce';
+            const resp = await fetch('/api/publish/describe', {
+              method: 'POST',
+              headers,
+              body: JSON.stringify({
+                imageUrl: lastImageUrl,
+                style: selectedStyle,
+                language: langSelect?.value || 'it',
+                userText: userTextEl?.value?.trim() || '',
+              }),
+            });
+
+            const data = await resp.json();
+            if (!resp.ok) throw new Error(data.error || 'Errore generazione');
+
+            const result = data.result || {};
+
+            // Mappa campi per stile
+            const STYLE_LABELS = {
+              ecommerce:   { title: 'Titolo SEO', desc: 'Descrizione', extra: 'Bullet points', extraKey: 'bullet_points' },
+              social:      { title: 'Hook / Caption', desc: 'Caption Instagram', extra: 'Hashtag', extraKey: 'hashtag' },
+              editorial:   { title: 'Headline', desc: 'Corpo editoriale', extra: 'Quote', extraKey: 'quote' },
+              marketplace: { title: 'Titolo Marketplace', desc: 'Descrizione', extra: 'Bullet features', extraKey: 'bullet_points' },
+            };
+            const labels = STYLE_LABELS[selectedStyle] || STYLE_LABELS.ecommerce;
+
+            titleLabel.textContent = labels.title;
+            descLabel.textContent = labels.desc;
+            titleResult.textContent = result.title || result.headline || result.titolo_prodotto || result.titolo_marketplace || '';
+            descResult.textContent = result.description || result.corpo_editoriale || result.descrizione || result.caption_instagram || result.descrizione_marketplace || '';
+
+            // Campo extra (bullet points, hashtag, quote)
+            const extraData = result[labels.extraKey] || result.quote || null;
+            if (extraData) {
+              extraLabel.textContent = labels.extra;
+              if (Array.isArray(extraData)) {
+                extraResult.textContent = extraData.map(i => '• ' + i).join('\n');
+              } else {
+                extraResult.textContent = extraData;
+              }
+              extraSection.style.display = 'block';
+            } else {
+              extraSection.style.display = 'none';
+            }
+
+            resultEl.style.display = 'block';
+            // Mostra preview visiva nel pannello destro
+            showPreview(selectedStyle, result, lastImageUrl);
+            // Aggiorna saldo crediti
+            loadCredit?.();
+          } catch (err) {
+            errorEl.textContent = 'Errore: ' + err.message;
+            errorEl.style.display = 'block';
+          } finally {
+            generateBtn.disabled = false;
+            updateGenerateBtn();
+          }
+        });
+
+        copyTitleBtn?.addEventListener('click', () => {
+          navigator.clipboard?.writeText(titleResult.textContent || '');
+          copyTitleBtn.innerHTML = '<i class="fa fa-check"></i>';
+          setTimeout(() => { copyTitleBtn.innerHTML = '<i class="fa fa-copy"></i>'; }, 1500);
+        });
+
+        copyDescBtn?.addEventListener('click', () => {
+          navigator.clipboard?.writeText(descResult.textContent || '');
+          copyDescBtn.innerHTML = '<i class="fa fa-check"></i>';
+          setTimeout(() => { copyDescBtn.innerHTML = '<i class="fa fa-copy"></i>'; }, 1500);
+        });
+
+        copyExtraBtn?.addEventListener('click', () => {
+          navigator.clipboard?.writeText(extraResult.textContent || '');
+          copyExtraBtn.innerHTML = '<i class="fa fa-check"></i>';
+          setTimeout(() => { copyExtraBtn.innerHTML = '<i class="fa fa-copy"></i>'; }, 1500);
+        });
+      })();
+      // ── Fine AutoCopy Modal ─────────────────────────────────────
 
       setTimeout(() => mountGenAnimation(0), 200);
     })();

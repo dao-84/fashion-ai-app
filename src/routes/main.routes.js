@@ -27,7 +27,7 @@ function registerMainRoutes(app, deps) {
   });
   const generationController = createGenerationController({ generationService });
   const galleryController = createGalleryController({ galleryService });
-  const publishController = createPublishController({ publishService });
+  const publishController = createPublishController({ publishService, creditService });
   const trackController = createTrackController({ trackService });
   const waitlistController = createWaitlistController();
 
@@ -35,8 +35,8 @@ function registerMainRoutes(app, deps) {
   app.post('/api/openai/prepare', appController.prepareOpenAI);
   app.post('/api/track-event', trackController.event);
 
-  app.post('/api/publish/describe', publishController.describe);
-  app.post('/api/publish/rename', publishController.rename);
+  app.post('/api/publish/describe', requireAuth, publishController.describe);
+  app.post('/api/publish/rename', requireAuth, publishController.rename);
 
   app.post('/api/generate-model', requireAuth, generationController.generateModel);
   app.post('/api/generate', requireAuth, generationController.generate);

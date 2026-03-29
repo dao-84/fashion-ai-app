@@ -8,41 +8,48 @@ function createServiceError(status, message, details) {
 }
 
 function createPublishService(deps) {
-  const { openaiIntegration, galleryDir, fs, path, log, logEmoji } = deps;
+  const { openaiIntegration, galleryDir, fs, path, log, logEmoji, fetch } = deps;
 
   return {
-    async describe(filename, guideline, tone) {
+    async describe(imageSource, guideline, userText, language) {
       if (!openaiIntegration.isConfigured()) {
         throw createServiceError(500, 'OpenAI non configurato. Aggiungi OPENAI_API_KEY in .env');
       }
-      if (!filename) {
-        throw createServiceError(400, 'Missing filename');
-      }
-
-      const filePath = path.join(galleryDir, filename);
-      if (!fs.existsSync(filePath)) {
-        throw createServiceError(404, 'File not found');
+      if (!imageSource) {
+        throw createServiceError(400, 'Missing image source');
       }
 
       try {
-        const buffer = fs.readFileSync(filePath);
-        const ext = path.extname(filePath).replace('.', '') || 'jpg';
-        const dataUri = `data:image/${ext};base64,${buffer.toString('base64')}`;
+        let dataUri;
 
-        const content = await openaiIntegration.describeImage({
-          dataUri,
-          guideline,
-          tone,
-        });
+        if (imageSource.startsWith('http://') || imageSource.startsWith('https://')) {
+          // URL R2: scarica l'immagine e convertila in base64
+          const response = await fetch(imageSource);
+          if (!response.ok) throw new Error('Download immagine fallito');
+          const buffer = Buffer.from(await response.arrayBuffer());
+          const contentType = response.headers.get('content-type') || 'image/jpeg';
+          dataUri = `data:${contentType};base64,${buffer.toString('base64')}`;
+        } else {
+          // Fallback: nome file locale
+          const filePath = path.join(galleryDir, imageSource);
+          if (!fs.existsSync(filePath)) throw createServiceError(404, 'File not found');
+          const buffer = fs.readFileSync(filePath);
+          const ext = path.extname(filePath).replace('.', '') || 'jpg';
+          dataUri = `data:image/${ext};base64,${buffer.toString('base64')}`;
+        }
+
+        const content = await openaiIntegration.describeImage({ dataUri, style: guideline, userText, language });
         let parsed = null;
         try {
-          parsed = JSON.parse(content);
+          const jsonMatch = content.match(/\{[\s\S]*\}/);
+          parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
         } catch (_err) {
           parsed = null;
         }
 
         return { raw: content, result: parsed };
       } catch (error) {
+        if (error.status) throw error;
         log.error(logEmoji.error, '[publish] describe failed', error);
         throw createServiceError(500, 'Describe failed', error.message);
       }

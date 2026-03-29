@@ -230,6 +230,9 @@
             <button class="gallery-card-icon open" type="button" title="Apri in lightbox">
               <i class="fa fa-eye"></i>
             </button>
+            <button class="gallery-card-icon autocopy-link" data-url="${f.url}" type="button" title="AutoCopy">
+              <i class="fa fa-wand-magic-sparkles"></i>
+            </button>
             <button class="gallery-card-icon" title="Scarica" onclick="event.stopPropagation(); downloadImage('${f.url}', '${f.name}')">
               <i class="fa fa-download"></i>
             </button>
@@ -244,6 +247,12 @@
       openBtn?.addEventListener('click', (e) => {
         e.stopPropagation();
         showImageViewer(idx);
+      });
+
+      const acBtn = card.querySelector('.gallery-card-icon.autocopy-link');
+      acBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        window.location.href = `studio.html?autocopy=${encodeURIComponent(f.url)}`;
       });
 
       const deleteBtn = card.querySelector('.gallery-card-icon.ghost');
