@@ -35,11 +35,8 @@ function registerMainRoutes(app, deps) {
   const waitlistController = createWaitlistController();
   const billingController = createBillingController({ billingService, env: deps.env });
 
-  // Stripe webhook — body raw obbligatorio per verifica firma
-  app.post('/api/billing/webhook',
-    require('express').raw({ type: 'application/json' }),
-    billingController.webhook
-  );
+  // Stripe webhook — raw body gestito in app.js prima di express.json()
+  app.post('/api/billing/webhook', billingController.webhook);
 
   app.post('/api/billing/checkout', requireAuth, billingController.checkout);
   app.post('/api/billing/portal', requireAuth, billingController.portal);

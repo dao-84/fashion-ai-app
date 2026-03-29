@@ -131,6 +131,8 @@ app.use(
   })
 );
 
+// Webhook Stripe: raw body obbligatorio per verifica firma — deve essere PRIMA di express.json()
+app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(attachOptionalUser);
 
