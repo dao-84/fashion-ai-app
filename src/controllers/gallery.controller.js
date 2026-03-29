@@ -48,6 +48,10 @@ function createGalleryController(deps) {
         const generationId = req.params.id;
         const { result, style, language } = req.body || {};
         if (!result) return res.status(400).json({ error: 'Risultato AutoCopy mancante' });
+        const VALID_STYLES = ['ecommerce', 'social', 'editorial', 'marketplace'];
+        const VALID_LANGS = ['it', 'en', 'es'];
+        if (style && !VALID_STYLES.includes(style)) return res.status(400).json({ error: 'Stile non valido' });
+        if (language && !VALID_LANGS.includes(language)) return res.status(400).json({ error: 'Lingua non valida' });
         const saved = await galleryService.saveAutocopy({ generationId, userId, result, style, language });
         return res.status(200).json(saved);
       } catch (error) {
