@@ -200,6 +200,7 @@ registerRoutes(app, {
   proxyIntegration,
   getPool,
   JWT_SECRET,
+  features: require('./config/features').features,
 });
 
 app.use(notFoundHandler);

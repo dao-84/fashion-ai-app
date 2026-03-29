@@ -32,7 +32,7 @@
         <li><a href="studio.html" class="nav-link active" data-i18n="nav_studio">Studio</a></li>
         <li><a href="pricing.html" class="nav-link" data-i18n="nav_pricing">Prezzi</a></li>
         <li><a href="#" class="nav-link" data-auth-link data-auth-default="Accedi">Accedi</a></li>
-        <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Remaining credit">€50,00</span></li>
+        <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Remaining credit">—</span></li>
       </ul>
       <div class="lang-switcher">
         <button class="lang-selected" onclick="toggleLangDropdown(this)" aria-label="Cambia lingua">🇮🇹</button>
@@ -476,6 +476,18 @@
 
   <div id="studioResolutionWarning" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(20,16,8,.95);border:1px solid rgba(212,175,55,.5);border-radius:14px;padding:10px 20px;color:rgba(255,245,214,.9);font-size:13px;z-index:9999;text-align:center;backdrop-filter:blur(8px);" data-i18n="studio_resolution_warning">
     ⚠️ Risoluzione sperimentale — la generazione potrebbe fallire. Puoi riprovare.
+  </div>
+
+  <!-- Modal upgrade piano -->
+  <div id="upgradeModalBackdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10000;backdrop-filter:blur(4px);"></div>
+  <div id="upgradeModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;width:90%;max-width:420px;">
+    <div style="background:linear-gradient(180deg,rgba(15,15,18,.99),rgba(10,10,12,.99));border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:36px 32px 32px;position:relative;">
+      <button id="upgradeModalClose" style="position:absolute;top:16px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;line-height:1;" aria-label="Chiudi">✕</button>
+      <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.7);margin-bottom:10px;">Piano attuale</div>
+      <h2 style="font-size:22px;font-weight:700;color:#f4f0e6;margin:0 0 14px;font-family:'Orbitron','Rajdhani',sans-serif;">Funzione non disponibile</h2>
+      <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;margin:0 0 28px;">La generazione della modella personalizzata non è inclusa nel tuo piano attuale. Passa al piano <strong style="color:#d4af37;">Pro</strong> per sbloccarla.</p>
+      <a href="pricing.html" style="display:block;text-align:center;padding:13px;border-radius:999px;background:linear-gradient(135deg,#d4af37,#f6dd8a);color:#141414;font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;">Scopri il piano Pro</a>
+    </div>
   </div>
 
   <div class="gen-loader" id="studioLoader">
@@ -962,27 +974,104 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         if (loaderMsg) loaderMsg.textContent = 'Creating your result...';
       };
 
-      const CREDIT_START = 50;
-      const CREDIT_COST = 0.04;
-      let creditBalance = CREDIT_START;
+      // Risoluzioni permesse per piano (in sync con constants.js)
+      var PLAN_RESOLUTIONS = {
+        free: ['1K'],
+        starter: ['1K'],
+        pro: ['1K', '2K', '4K'],
+        enterprise: ['1K', '2K', '4K'],
+      };
 
-      const formatCurrency = (value) =>
-        new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
+      // Stili permessi per piano (null = tutti disponibili)
+      var PLAN_STYLES = {
+        free: null,
+        starter: ['ecommerce', 'minimal', 'ghostMannequin'],
+        pro: null,
+        enterprise: null,
+      };
+
+      var currentUserPlan = null;
+
+      var applyStyleRestrictions = function(plan) {
+        var allowed = PLAN_STYLES[plan]; // null = tutti
+        var allStyleBtns = Array.from(document.querySelectorAll('#studioStyleOptions .style-type-btn, .studio-progress-style-options .style-type-btn'));
+        allStyleBtns.forEach(function(btn) {
+          var style = btn.dataset.style;
+          if (allowed && !allowed.includes(style)) {
+            btn.classList.add('style-locked');
+          } else {
+            btn.classList.remove('style-locked');
+          }
+        });
+      };
+
+      var applyPlanRestrictions = function(plan) {
+        var allowed = PLAN_RESOLUTIONS[plan] || ['1K'];
+        resolutionMiniSelects.forEach(function(sel) {
+          Array.from(sel.options).forEach(function(opt) {
+            var res = opt.value;
+            if (!allowed.includes(res)) {
+              opt.disabled = true;
+              opt.text = res + ' 🔒';
+            } else {
+              opt.disabled = false;
+              opt.text = res;
+            }
+          });
+          // Se la risoluzione attiva non è permessa, torna a 1K
+          if (!allowed.includes(sel.value)) {
+            sel.value = '1K';
+            selectedResolution = '1K';
+          }
+        });
+      };
 
       const loadCredit = () => {
-        const saved = Number(localStorage.getItem('studioCredit') || CREDIT_START);
-        creditBalance = Number.isFinite(saved) ? saved : CREDIT_START;
-        if (creditBadge) creditBadge.textContent = formatCurrency(creditBalance);
+        const token = localStorage.getItem('auth_token');
+        if (!token || !creditBadge) return;
+        fetch('/api/auth/profile', { headers: { 'Authorization': 'Bearer ' + token } })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.user && data.user.credits_balance !== undefined) {
+              var bal = parseFloat(data.user.credits_balance);
+              creditBadge.textContent = (Number.isInteger(bal) ? bal : bal.toFixed(1)) + ' cr';
+
+              // Avviso crediti in esaurimento
+              creditBadge.classList.remove('is-low', 'is-critical');
+              if (bal < 1) {
+                creditBadge.classList.add('is-critical');
+              } else if (bal <= 2) {
+                creditBadge.classList.add('is-low');
+              }
+
+              // Blocco risoluzioni e stili in base al piano
+              var plan = (data.user.plan || 'free').toLowerCase();
+              currentUserPlan = plan;
+              applyPlanRestrictions(plan);
+              applyStyleRestrictions(plan);
+            }
+          })
+          .catch(function() {});
       };
 
-      const saveCredit = () => localStorage.setItem('studioCredit', creditBalance.toFixed(2));
+      // Modal upgrade piano
+      var upgradeModal = document.getElementById('upgradeModal');
+      var upgradeModalBackdrop = document.getElementById('upgradeModalBackdrop');
+      var upgradeModalClose = document.getElementById('upgradeModalClose');
 
-      const chargeCredits = (images = 1) => {
-        const cost = images * CREDIT_COST;
-        creditBalance = Math.max(0, creditBalance - cost);
-        if (creditBadge) creditBadge.textContent = formatCurrency(creditBalance);
-        saveCredit();
+      var showUpgradeModal = function() {
+        if (upgradeModal) upgradeModal.style.display = 'block';
+        if (upgradeModalBackdrop) upgradeModalBackdrop.style.display = 'block';
       };
+      var hideUpgradeModal = function() {
+        if (upgradeModal) upgradeModal.style.display = 'none';
+        if (upgradeModalBackdrop) upgradeModalBackdrop.style.display = 'none';
+      };
+      upgradeModalClose?.addEventListener('click', hideUpgradeModal);
+      upgradeModalBackdrop?.addEventListener('click', hideUpgradeModal);
+
+      // Dopo ogni generazione ricarica il saldo aggiornato dal server
+      const chargeCredits = () => loadCredit();
 
       loadCredit();
 
@@ -1604,6 +1693,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           .join('');
         styleOptions = Array.from(styleOptionsContainer.querySelectorAll('.style-type-btn'));
         renderProgressStyleOptions(nextOptions);
+        if (currentUserPlan) applyStyleRestrictions(currentUserPlan);
       };
       dressTypeOptions.forEach((btn) => {
         btn.addEventListener('click', (e) => {
@@ -1620,6 +1710,10 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         const btn = e.target.closest('.style-type-btn');
         if (!btn) return;
         e.preventDefault();
+        if (btn.classList.contains('style-locked')) {
+          showUpgradeModal();
+          return;
+        }
         const style = btn.dataset.style || null;
         setStyleValue(selectedStyle === style ? null : style);
       });
@@ -1655,6 +1749,10 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         const btn = e.target.closest('.style-type-btn');
         if (!btn) return;
         e.preventDefault();
+        if (btn.classList.contains('style-locked')) {
+          showUpgradeModal();
+          return;
+        }
         const style = btn.dataset.style || null;
         setStyleValue(selectedStyle === style ? null : style);
       });
@@ -1921,6 +2019,10 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             alert('Request limit reached. Please wait and try again.');
             return;
           }
+          if (resp.status === 403) {
+            showUpgradeModal();
+            return;
+          }
           if (!resp.ok) {
             const txt = await resp.text();
             throw new Error(`Errore API (${resp.status}): ${txt}`);
@@ -1990,6 +2092,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           image_input: imageInput,
           output_format: 'jpg',
           aspect_ratio: settings.aspect || '1:1',
+          style: settings.style,
           resolution: selectedResolution,
         };
         lastInput = input;
@@ -2009,6 +2112,11 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           });
           if (resp.status === 429) {
             alert('Request limit reached. Please wait and try again.');
+            return;
+          }
+          if (resp.status === 403) {
+            hideLoader();
+            showUpgradeModal();
             return;
           }
           if (!resp.ok) {

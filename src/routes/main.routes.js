@@ -9,10 +9,12 @@ const { createGenerationService } = require('../services/generation.service');
 const { createGalleryService } = require('../services/gallery.service');
 const { createPublishService } = require('../services/publish.service');
 const { createTrackService } = require('../services/track.service');
+const { createCreditService } = require('../services/credit.service');
 
 function registerMainRoutes(app, deps) {
   const appService = createAppService(deps);
-  const generationService = createGenerationService({ ...deps, falIntegration: deps.falIntegration, googleIntegration: deps.googleIntegration });
+  const creditService = createCreditService({ getPool: deps.getPool });
+  const generationService = createGenerationService({ ...deps, falIntegration: deps.falIntegration, googleIntegration: deps.googleIntegration, creditService });
   const galleryService = createGalleryService(deps);
   const publishService = createPublishService(deps);
   const trackService = createTrackService(deps);

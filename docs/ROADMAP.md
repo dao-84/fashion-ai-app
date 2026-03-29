@@ -84,7 +84,7 @@ Replicate presenta problemi di affidabilità ("service busy"). FAL.AI serve lo s
 - ✅ Attivare feature flag `enableAuth`
 - ✅ JWT_SECRET aggiunta in .env e su Railway
 - ✅ Creare pagina profilo utente (profile.html) — email, piano, crediti, cambia password, logout
-- ⬜ Ottimizzare visualizzazione profilo (UI/UX, dati aggiuntivi, esperienza mobile)
+- ✅ Ottimizzare visualizzazione profilo (UI/UX, dati aggiuntivi, esperienza mobile)
 - ⬜ (Opzionale) Reset password via email
 
 ---
@@ -92,24 +92,24 @@ Replicate presenta problemi di affidabilità ("service busy"). FAL.AI serve lo s
 ## FASE 03 — Sistema crediti
 **Durata:** 1-2 settimane | **Costo:** €0
 
-- ⬜ Completare credit.service.js con query database reali
-- ⬜ Definire piani in config/constants.js con tutte le regole:
+- ✅ Completare credit.service.js con query database reali
+- ✅ Definire piani in config/constants.js con tutte le regole:
   - Stili disponibili per piano
   - Risoluzioni disponibili per piano
   - Costo crediti per risoluzione per piano
   - Limite modelle personalizzate per piano
   - Listing Generator (sì/no per piano)
   - Batch (sì/no e limiti per piano)
-- ⬜ Check crediti in generation.service.js prima di chiamare il provider
-- ⬜ Scalare crediti dopo generazione (1/2/3 in base a risoluzione e piano)
+- ✅ Check crediti in generation.service.js prima di chiamare il provider
+- ✅ Scalare crediti dopo generazione (1/2/3 in base a risoluzione e piano)
 - ⬜ Logica sblocco stili per piano nel frontend
-- ⬜ Logica sblocco risoluzioni per piano nel frontend
-- ⬜ Limite generazione modelle per piano
+- ✅ Logica sblocco risoluzioni per piano nel frontend
+- ✅ Limite generazione modelle per piano
 - ⬜ Reset crediti a fine mese (job o check al login)
 - ⬜ Pacchetti crediti extra (10=€5, 50=€22, 100=€39)
-- ⬜ Mostrare saldo crediti nella navbar (sostituire "€50,00")
-- ⬜ Avviso crediti in esaurimento
-- ⬜ Attivare feature flag `enableCredits`
+- ✅ Mostrare saldo crediti nella navbar (sostituire "€50,00")
+- ✅ Avviso crediti in esaurimento
+- ✅ Attivare feature flag `enableCredits`
 
 ---
 

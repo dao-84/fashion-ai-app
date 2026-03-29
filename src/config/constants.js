@@ -1,5 +1,62 @@
-// Crediti assegnati all'utente alla registrazione — cambia questo valore per modificarlo
-const FREE_CREDITS_ON_REGISTER = 3;
+// Crediti assegnati all'utente alla registrazione (piano Free, una tantum)
+const FREE_CREDITS_ON_REGISTER = 12;
+
+// Regole per piano — fonte: docs/PRICING.md
+const PLANS = {
+  free: {
+    credits: 12,
+    renewMonthly: false,                  // crediti una tantum, non si rinnovano
+    resolutions: ['1K'],
+    creditCost: { '1K': 1, '2K': 1.5, '4K': 2 },
+    listingGeneratorCost: 0.5,            // in crediti (0 = gratuito)
+    customModel: false,
+    customBackground: true,
+    priorityGeneration: false,
+    batch: { available: false, comingSoon: false },
+    apiAccess: { available: false, comingSoon: false },
+    teamAccounts: { available: false, comingSoon: false },
+  },
+  starter: {
+    credits: 30,
+    renewMonthly: true,
+    resolutions: ['1K'],
+    styles: ['ecommerce', 'minimal', 'ghostMannequin'],
+    creditCost: { '1K': 1, '2K': 1.5, '4K': 2 },
+    listingGeneratorCost: 0.5,
+    customModel: false,
+    customBackground: true,
+    priorityGeneration: false,
+    batch: { available: false, comingSoon: false },
+    apiAccess: { available: false, comingSoon: false },
+    teamAccounts: { available: false, comingSoon: false },
+  },
+  pro: {
+    credits: 150,
+    renewMonthly: true,
+    resolutions: ['1K', '2K', '4K'],
+    creditCost: { '1K': 1, '2K': 1.5, '4K': 2 },
+    listingGeneratorCost: 0,
+    customModel: true,
+    customBackground: true,
+    priorityGeneration: true,
+    batch: { available: false, comingSoon: false },
+    apiAccess: { available: false, comingSoon: false },
+    teamAccounts: { available: false, comingSoon: false },
+  },
+  enterprise: {
+    credits: 500,
+    renewMonthly: true,
+    resolutions: ['1K', '2K', '4K'],
+    creditCost: { '1K': 1, '2K': 1.5, '4K': 2 },
+    listingGeneratorCost: 0,
+    customModel: true,
+    customBackground: true,
+    priorityGeneration: true,
+    batch: { available: false, comingSoon: true },
+    apiAccess: { available: false, comingSoon: true },
+    teamAccounts: { available: false, comingSoon: true },
+  },
+};
 
 const DEFAULTS = {
   port: 3000,
@@ -18,4 +75,5 @@ module.exports = {
   DEFAULTS,
   DEFAULT_MODEL_BASE_PROMPT,
   FREE_CREDITS_ON_REGISTER,
+  PLANS,
 };

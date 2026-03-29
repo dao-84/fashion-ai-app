@@ -54,6 +54,8 @@ function createGenerationService(deps) {
     fs,
     path,
     DEFAULT_MODEL_BASE_PROMPT,
+    creditService,
+    features,
   } = deps;
 
   // Converte immagini base64 in URL R2 pubblici (richiesto da FAL.AI)
@@ -85,7 +87,7 @@ function createGenerationService(deps) {
   }
 
   return {
-    async generateModel(input = {}) {
+    async generateModel(input = {}, _rawBody = {}, auth = {}) {
       if (!replicateIntegration.isConfigured()) {
         throw createServiceError(400, 'Replicate non configurato.');
       }
@@ -104,6 +106,25 @@ function createGenerationService(deps) {
       }
       if (hasBannedKeyword(cleanedPrompt)) {
         throw createServiceError(400, 'Richiesta non consentita: il prompt contiene termini non ammessi.');
+      }
+
+      // Controllo crediti per generazione modella (costo fisso 1 credito)
+      if (features?.enableCredits && auth?.isAuthenticated && creditService) {
+        const userId = auth.user.id;
+        const userPlan = auth.user.plan || 'free';
+        const planRules = creditService.getPlanRules({ plan: userPlan });
+
+        if (!planRules.customModel) {
+          throw createServiceError(403, 'La generazione della modella personalizzata non è disponibile nel tuo piano. Passa al piano Pro per sbloccarla.');
+        }
+
+        const creditCost = planRules.creditCost['1K'] || 1;
+        await creditService.consumeCredits({
+          userId,
+          amount: creditCost,
+          description: 'Generazione modella',
+        });
+        log.info(logEmoji.generate, `[generate-model] crediti scalati: ${creditCost} (utente ${userId}, piano ${userPlan})`);
       }
 
       const inputPayload = {
@@ -126,7 +147,7 @@ function createGenerationService(deps) {
       }
     },
 
-    async generate(input = {}, rawBody = {}) {
+    async generate(input = {}, rawBody = {}, auth = {}) {
       const requestedProvider = (rawBody.provider || input.provider || 'replicate').toLowerCase();
       const useFal = requestedProvider === 'fal' && falIntegration && falIntegration.isConfigured();
       const useGoogle = requestedProvider === 'google' && googleIntegration && googleIntegration.isConfigured();
@@ -144,6 +165,33 @@ function createGenerationService(deps) {
 
           const VALID_RESOLUTIONS = ['1K', '2K', '4K'];
           const resolution = VALID_RESOLUTIONS.includes(input.resolution) ? input.resolution : '1K';
+
+          // Controllo crediti (solo se enableCredits è attivo e l'utente è loggato)
+          let creditCost = 0;
+          if (features?.enableCredits && auth?.isAuthenticated && creditService) {
+            const userId = auth.user.id;
+            const userPlan = auth.user.plan || 'free';
+            const planRules = creditService.getPlanRules({ plan: userPlan });
+
+            // Verifica che il piano permetta la risoluzione richiesta
+            if (!planRules.resolutions.includes(resolution)) {
+              throw createServiceError(403, `La risoluzione ${resolution} non è disponibile nel tuo piano. Aggiorna il piano per sbloccarla.`);
+            }
+
+            // Verifica che il piano permetta lo stile selezionato
+            const requestedStyle = input.style || rawBody.style;
+            if (planRules.styles && requestedStyle && !planRules.styles.includes(requestedStyle)) {
+              throw createServiceError(403, `Lo stile selezionato non è disponibile nel tuo piano. Aggiorna il piano per sbloccare tutti gli stili.`);
+            }
+
+            creditCost = planRules.creditCost[resolution] || 1;
+            await creditService.consumeCredits({
+              userId,
+              amount: creditCost,
+              description: `Generazione ${resolution}`,
+            });
+            log.info(logEmoji.generate, `[generate] crediti scalati: ${creditCost} (utente ${userId}, piano ${userPlan})`);
+          }
 
           const inputPayload = {
             prompt: input.prompt,

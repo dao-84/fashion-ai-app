@@ -33,6 +33,20 @@ async function initializeDatabase() {
     await pool.query(CREATE_GENERATIONS);
     await pool.query(CREATE_CREDIT_TRANSACTIONS);
 
+    // Migrazione: converti colonne crediti da INTEGER a NUMERIC(8,2)
+    await pool.query(`
+      ALTER TABLE users
+        ALTER COLUMN credits_balance TYPE NUMERIC(8,2) USING credits_balance::NUMERIC(8,2)
+    `).catch(() => {});
+    await pool.query(`
+      ALTER TABLE generations
+        ALTER COLUMN credits_used TYPE NUMERIC(8,2) USING credits_used::NUMERIC(8,2)
+    `).catch(() => {});
+    await pool.query(`
+      ALTER TABLE credit_transactions
+        ALTER COLUMN amount TYPE NUMERIC(8,2) USING amount::NUMERIC(8,2)
+    `).catch(() => {});
+
     databaseState = { initialized: true, provider: 'postgresql' };
     console.log('[db] PostgreSQL connesso e schema verificato');
   } catch (error) {

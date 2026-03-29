@@ -4,7 +4,7 @@ function createGenerationController(deps) {
   return {
     generateModel: async (req, res) => {
       try {
-        const result = await generationService.generateModel(req.body?.input || req.body || {}, req.body || {});
+        const result = await generationService.generateModel(req.body?.input || req.body || {}, req.body || {}, req.auth || {});
         return res.status(200).json(result);
       } catch (error) {
         return res.status(error.status || 500).json({
@@ -16,7 +16,7 @@ function createGenerationController(deps) {
 
     generate: async (req, res) => {
       try {
-        const result = await generationService.generate(req.body?.input || req.body || {}, req.body || {});
+        const result = await generationService.generate(req.body?.input || req.body || {}, req.body || {}, req.auth || {});
         if (result?.type === 'text') {
           return res.status(result.status || 200).send(result.body);
         }

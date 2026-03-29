@@ -5,7 +5,7 @@ const CREATE_USERS = `
     password_hash VARCHAR(255),
     role VARCHAR(50) DEFAULT 'user',
     plan VARCHAR(50) DEFAULT 'free',
-    credits_balance INTEGER DEFAULT 3,
+    credits_balance NUMERIC(8,2) DEFAULT 12,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
   );
@@ -21,7 +21,7 @@ const CREATE_GENERATIONS = `
     resolution VARCHAR(10),
     garment_type VARCHAR(50),
     style VARCHAR(50),
-    credits_used INTEGER DEFAULT 1,
+    credits_used NUMERIC(8,2) DEFAULT 1,
     status VARCHAR(50) DEFAULT 'completed',
     created_at TIMESTAMP DEFAULT NOW()
   );
@@ -31,7 +31,7 @@ const CREATE_CREDIT_TRANSACTIONS = `
   CREATE TABLE IF NOT EXISTS credit_transactions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    amount INTEGER NOT NULL,
+    amount NUMERIC(8,2) NOT NULL,
     type VARCHAR(50) NOT NULL,
     description TEXT,
     created_at TIMESTAMP DEFAULT NOW()
