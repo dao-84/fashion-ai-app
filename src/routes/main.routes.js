@@ -47,6 +47,10 @@ function registerMainRoutes(app, deps) {
     if (!url || (!url.startsWith('https://') && !url.startsWith('http://'))) {
       return res.status(400).json({ error: 'URL non valido' });
     }
+    const r2PublicUrl = (deps.env?.R2_PUBLIC_URL || '').replace(/\/$/, '');
+    if (!r2PublicUrl || !url.startsWith(r2PublicUrl)) {
+      return res.status(403).json({ error: 'URL non autorizzato' });
+    }
     try {
       const response = await deps.fetch(url);
       if (!response.ok) return res.status(502).json({ error: 'Download fallito' });

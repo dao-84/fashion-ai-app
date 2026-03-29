@@ -211,6 +211,7 @@ registerRoutes(app, {
   proxyIntegration,
   getPool,
   JWT_SECRET,
+  env,
   features: require('./config/features').features,
 });
 
