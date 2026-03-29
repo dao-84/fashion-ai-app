@@ -11,7 +11,7 @@ function createAuthService(deps) {
     return jwt.sign(
       { id: user.id, email: user.email, plan: user.plan, role: user.role },
       JWT_SECRET,
-      { expiresIn: '30d' }
+      { expiresIn: '7d' }
     );
   }
 

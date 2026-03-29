@@ -10,6 +10,7 @@ const { createGalleryService } = require('../services/gallery.service');
 const { createPublishService } = require('../services/publish.service');
 const { createTrackService } = require('../services/track.service');
 const { createCreditService } = require('../services/credit.service');
+const { requireAuth } = require('../middleware/auth.middleware');
 
 function registerMainRoutes(app, deps) {
   const appService = createAppService(deps);
@@ -37,11 +38,11 @@ function registerMainRoutes(app, deps) {
   app.post('/api/publish/describe', publishController.describe);
   app.post('/api/publish/rename', publishController.rename);
 
-  app.post('/api/generate-model', generationController.generateModel);
-  app.post('/api/generate', generationController.generate);
+  app.post('/api/generate-model', requireAuth, generationController.generateModel);
+  app.post('/api/generate', requireAuth, generationController.generate);
 
-  app.get('/api/gallery', galleryController.list);
-  app.delete('/api/gallery/:name', galleryController.remove);
+  app.get('/api/gallery', requireAuth, galleryController.list);
+  app.delete('/api/gallery/:name', requireAuth, galleryController.remove);
 
   app.get('*', appController.fallbackToIndex);
 }

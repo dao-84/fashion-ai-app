@@ -164,6 +164,17 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
+// Rate limit stretto su login e registrazione — max 10 tentativi ogni 15 minuti per IP
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Troppi tentativi. Riprova tra 15 minuti.' },
+});
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+
 const openaiIntegration = createOpenAIIntegration({
   openai,
   OPENAI_MODEL,

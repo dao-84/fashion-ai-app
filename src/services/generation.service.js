@@ -155,6 +155,7 @@ function createGenerationService(deps) {
       const providerName = useGoogle ? 'Google AI' : useFal ? 'FAL.AI' : 'Replicate';
 
       if (activeIntegration.isConfigured()) {
+        let creditCost = 0;
         try {
           if (!input.prompt) {
             throw createServiceError(400, 'Missing prompt in input');
@@ -167,7 +168,6 @@ function createGenerationService(deps) {
           const resolution = VALID_RESOLUTIONS.includes(input.resolution) ? input.resolution : '1K';
 
           // Controllo crediti (solo se enableCredits è attivo e l'utente è loggato)
-          let creditCost = 0;
           if (features?.enableCredits && auth?.isAuthenticated && creditService) {
             const userId = auth.user.id;
             const userPlan = auth.user.plan || 'free';
@@ -267,6 +267,24 @@ function createGenerationService(deps) {
           log.info(logEmoji.generate, `[generate] completata. File salvati: ${saved.length}`);
           return { type: 'json', status: 200, body: { output, saved } };
         } catch (error) {
+          // Errori 4xx (validazione, piano, crediti): non rimborsare — i crediti non erano stati scalati
+          if (error.status && error.status < 500) throw error;
+
+          // Errore del provider: rimborsa i crediti se erano stati scalati
+          if (creditCost > 0 && features?.enableCredits && auth?.isAuthenticated && creditService) {
+            try {
+              await creditService.addCredits({
+                userId: auth.user.id,
+                amount: creditCost,
+                type: 'refund',
+                description: `Rimborso automatico — errore provider ${providerName}`,
+              });
+              log.info(logEmoji.generate, `[generate] crediti rimborsati: ${creditCost} (errore provider)`);
+            } catch (refundErr) {
+              log.error(logEmoji.error, `[generate] rimborso crediti fallito`, refundErr);
+            }
+          }
+
           if (isRetryableProviderOverload(error)) {
             throw createServiceError(
               503,
@@ -275,7 +293,6 @@ function createGenerationService(deps) {
               'MODEL_BUSY'
             );
           }
-          if (error.status) throw error;
           log.error(logEmoji.error, `${providerName} dice no.`, error);
           throw createServiceError(500, `${providerName} request failed`, error.message);
         }
