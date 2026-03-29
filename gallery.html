@@ -83,7 +83,6 @@
           <div class="image-viewer-count" id="imageViewerCount"></div>
         </div>
         <div class="image-viewer-actions">
-          <a class="image-viewer-btn" id="imageViewerLink" href="#" target="_blank" rel="noopener noreferrer" data-i18n="gallery_open">Apri immagine</a>
           <a class="image-viewer-btn" id="imageViewerDownload" href="#" download><i class="fa fa-download" style="margin-right:6px;"></i><span data-i18n="gallery_download">Scarica</span></a>
         </div>
       </div>
@@ -98,7 +97,6 @@
     const emptyEl = document.getElementById('galleryEmpty');
     const viewer = document.getElementById('imageViewer');
     const viewerImg = document.getElementById('imageViewerImg');
-    const viewerLink = document.getElementById('imageViewerLink');
     const viewerClose = document.getElementById('imageViewerClose');
     const viewerBackdrop = document.getElementById('imageViewerBackdrop');
     const loadMoreWrap = document.getElementById('galleryLoadMore');
@@ -119,17 +117,15 @@
       viewer?.setAttribute('aria-hidden', 'true');
       currentIndex = -1;
       if (viewerImg) viewerImg.src = '';
-      if (viewerLink) viewerLink.href = '#';
     };
 
     const setViewerContent = (index) => {
-      if (!viewer || !viewerImg || !viewerLink) return;
+      if (!viewer || !viewerImg) return;
       if (index < 0 || index >= allFiles.length) return;
       currentIndex = index;
       const file = allFiles[index];
       viewerImg.src = file.url;
       viewerImg.alt = file.name || 'Immagine generata';
-      viewerLink.href = file.url;
       if (viewerDownload) {
         viewerDownload.href = file.url;
         viewerDownload.download = file.name || 'immagine.jpg';
