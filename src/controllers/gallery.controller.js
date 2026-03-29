@@ -2,9 +2,10 @@ function createGalleryController(deps) {
   const { galleryService } = deps;
 
   return {
-    list: (_req, res) => {
+    list: async (req, res) => {
       try {
-        const result = galleryService.list();
+        const userId = req.auth?.user?.id;
+        const result = await galleryService.list({ userId });
         return res.status(200).json(result);
       } catch (error) {
         return res.status(error.status || 500).json({
@@ -16,7 +17,8 @@ function createGalleryController(deps) {
 
     remove: async (req, res) => {
       try {
-        const result = await galleryService.remove(req.params.name);
+        const userId = req.auth?.user?.id;
+        const result = await galleryService.remove(req.params.name, { userId });
         return res.status(200).json(result);
       } catch (error) {
         return res.status(error.status || 500).json({

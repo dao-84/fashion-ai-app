@@ -56,6 +56,7 @@ function createGenerationService(deps) {
     DEFAULT_MODEL_BASE_PROMPT,
     creditService,
     features,
+    getPool,
   } = deps;
 
   // Converte immagini base64 in URL R2 pubblici (richiesto da FAL.AI)
@@ -140,6 +141,23 @@ function createGenerationService(deps) {
         const output = await replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
         const saved = await collectSavedOutputs(output);
         log.info(logEmoji.generate, `[generate-model] completata. File salvati: ${saved.length}`);
+
+        if (getPool && auth?.isAuthenticated) {
+          try {
+            const pool = getPool();
+            for (const assetUrl of saved) {
+              if (assetUrl) {
+                await pool.query(
+                  'INSERT INTO generations (user_id, asset_url, provider, resolution, style, credits_used, status) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                  [auth.user.id, assetUrl, 'Replicate', '1K', 'model', 1, 'completed']
+                );
+              }
+            }
+          } catch (dbError) {
+            log.warn(logEmoji.warn, `[generate-model] DB insert generazione fallita: ${dbError.message}`);
+          }
+        }
+
         return { output, saved };
       } catch (error) {
         log.error(logEmoji.error, `Replicate generate-model failed`, error);
@@ -265,6 +283,23 @@ function createGenerationService(deps) {
           );
           const saved = await collectSavedOutputs(output);
           log.info(logEmoji.generate, `[generate] completata. File salvati: ${saved.length}`);
+
+          if (getPool && auth?.isAuthenticated) {
+            try {
+              const pool = getPool();
+              for (const assetUrl of saved) {
+                if (assetUrl) {
+                  await pool.query(
+                    'INSERT INTO generations (user_id, asset_url, provider, resolution, style, credits_used, status) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                    [auth.user.id, assetUrl, providerName, resolution, input.style || rawBody.style || null, creditCost || 1, 'completed']
+                  );
+                }
+              }
+            } catch (dbError) {
+              log.warn(logEmoji.warn, `[generate] DB insert generazione fallita: ${dbError.message}`);
+            }
+          }
+
           return { type: 'json', status: 200, body: { output, saved } };
         } catch (error) {
           // Errori 4xx (validazione, piano, crediti): non rimborsare — i crediti non erano stati scalati

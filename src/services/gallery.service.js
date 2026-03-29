@@ -8,10 +8,30 @@ function createServiceError(status, message, details) {
 const r2 = require('../integrations/storage/r2.integration');
 
 function createGalleryService(deps) {
-  const { galleryDir, fs, path, log, logEmoji } = deps;
+  const { galleryDir, fs, path, log, logEmoji, getPool } = deps;
 
   return {
-    list() {
+    async list({ userId } = {}) {
+      if (getPool && userId) {
+        try {
+          const pool = getPool();
+          const result = await pool.query(
+            'SELECT asset_url, created_at FROM generations WHERE user_id = $1 ORDER BY created_at DESC',
+            [userId]
+          );
+          const images = result.rows.map((row) => {
+            const url = row.asset_url;
+            const name = url.split('/').pop();
+            return { name, url, mtime: new Date(row.created_at).getTime() };
+          });
+          return { files: images };
+        } catch (error) {
+          log.error(logEmoji.error, '[gallery] DB listing failed', error);
+          throw createServiceError(500, 'Gallery listing failed', error.message);
+        }
+      }
+
+      // Fallback filesystem (utente non autenticato o DB non disponibile)
       try {
         const entries = fs.readdirSync(galleryDir, { withFileTypes: true });
         const images = entries
@@ -20,11 +40,7 @@ function createGalleryService(deps) {
           .map((e) => {
             const full = path.join(galleryDir, e.name);
             const stat = fs.statSync(full);
-            return {
-              name: e.name,
-              url: `/generated/${e.name}`,
-              mtime: stat.mtimeMs,
-            };
+            return { name: e.name, url: `/generated/${e.name}`, mtime: stat.mtimeMs };
           })
           .sort((a, b) => b.mtime - a.mtime);
         return { files: images };
@@ -34,7 +50,7 @@ function createGalleryService(deps) {
       }
     },
 
-    async remove(filename) {
+    async remove(filename, { userId } = {}) {
       if (!filename) {
         throw createServiceError(400, 'Missing filename');
       }
@@ -54,6 +70,18 @@ function createGalleryService(deps) {
             await r2.remove(filename);
           } catch (r2Error) {
             log.warn(logEmoji.warn, `[gallery] eliminazione R2 fallita: ${r2Error.message}`);
+          }
+        }
+
+        if (getPool && userId) {
+          try {
+            const pool = getPool();
+            await pool.query(
+              'DELETE FROM generations WHERE user_id = $1 AND asset_url LIKE $2',
+              [userId, `%${filename}`]
+            );
+          } catch (dbError) {
+            log.warn(logEmoji.warn, `[gallery] DB delete fallita: ${dbError.message}`);
           }
         }
 
