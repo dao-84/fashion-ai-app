@@ -1341,7 +1341,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             <button class="studio-recent-btn" data-action="open" title="Open">
               <i class="fa fa-eye"></i>
             </button>
-            <button class="studio-recent-btn" data-action="autocopy" title="${file.hasAutocopy ? 'AutoCopy salvato' : 'AutoCopy'}" ${file.hasAutocopy ? 'style="color:#c9a84c;"' : ''}>
+            <button class="studio-recent-btn" data-action="autocopy" data-generation-id="${file.id || ''}" title="${file.hasAutocopy ? 'AutoCopy salvato' : 'AutoCopy'}" ${file.hasAutocopy ? 'style="color:#c9a84c;"' : ''}>
               <i class="fa fa-wand-magic-sparkles"></i>
             </button>
             <button class="studio-recent-btn" title="Download" data-download-url="${url}" data-download-name="${file.name}">
@@ -2786,11 +2786,27 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
             showPreview(selectedStyle, result, lastImageUrl);
             // Salva AutoCopy nel DB se abbiamo un generationId
             if (lastGenerationId) {
+              const savedLang = langSelect?.value || 'it';
               fetch(`/api/gallery/${lastGenerationId}/autocopy`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
-                body: JSON.stringify({ result, style: selectedStyle, language: langSelect?.value || 'it' }),
-              }).catch(() => {}); // silenzioso — non blocca l'UX
+                body: JSON.stringify({ result, style: selectedStyle, language: savedLang }),
+              }).then(() => {
+                // Aggiorna l'array locale e l'icona nella miniatura senza ricaricare la pagina
+                const fileObj = recentGalleryItems.find(f => f.id === lastGenerationId);
+                if (fileObj) {
+                  fileObj.hasAutocopy = true;
+                  fileObj.autocopyResult = result;
+                  fileObj.autocopyStyle = selectedStyle;
+                  fileObj.autocopyLanguage = savedLang;
+                  // Aggiorna l'icona nella miniatura corrispondente
+                  const btn = recentList?.querySelector(`[data-generation-id="${lastGenerationId}"]`);
+                  if (btn) {
+                    btn.style.color = '#c9a84c';
+                    btn.title = 'AutoCopy salvato';
+                  }
+                }
+              }).catch(() => {});
             }
             // Aggiorna saldo crediti
             loadCredit?.();
