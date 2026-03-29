@@ -457,11 +457,37 @@
             border-radius: 999px;
             margin-bottom: 6px;
         }
-        body.annual-billing .plan-price__annual { display: block; }
-        body.annual-billing .plan-price__monthly { display: none; }
-        body.annual-billing .plan-price__monthly-strike { display: block; }
-        body.annual-billing .plan-price__annual-note { display: block; }
-        body.annual-billing .plan-discount-badge { display: inline-block; }
+        .plan-card[data-billing="annual"] .plan-price__annual { display: block; }
+        .plan-card[data-billing="annual"] .plan-price__monthly { display: none; }
+        .plan-card[data-billing="annual"] .plan-price__monthly-strike { display: block; }
+        .plan-card[data-billing="annual"] .plan-price__annual-note { display: block; }
+        .plan-card[data-billing="annual"] .plan-discount-badge { display: inline-block; }
+
+        /* ── Toggle per-card mensile/annuale ── */
+        .card-billing-toggle {
+            display: flex;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 14px;
+            width: fit-content;
+        }
+        .card-billing-toggle__btn {
+            padding: 4px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .card-billing-toggle__btn.is-active {
+            background: rgba(212,175,55,0.15);
+            color: var(--accent-red);
+        }
 
         /* ── Responsive ── */
         @media (max-width: 768px) {
@@ -537,15 +563,6 @@
             <p class="pricing-hero__subtitle" data-i18n="hero_subtitle">
                 Inizia gratis. Passa a un piano superiore quando ne hai bisogno. Nessun contratto, cancelli quando vuoi.
             </p>
-            <div class="billing-toggle">
-                <span class="billing-toggle__label is-active" id="labelMonthly" data-i18n="toggle_monthly">Mensile</span>
-                <label class="billing-toggle__switch">
-                    <input type="checkbox" id="billingToggle">
-                    <span class="billing-toggle__track"></span>
-                </label>
-                <span class="billing-toggle__label" id="labelAnnual" data-i18n="toggle_annual">Annuale</span>
-                <span class="billing-toggle__save" data-i18n="toggle_save">Risparmia fino al 15%</span>
-            </div>
         </section>
 
         <!-- Card piani -->
@@ -571,6 +588,10 @@
             <!-- STARTER -->
             <div class="plan-card">
                 <p class="plan-name">Starter</p>
+                <div class="card-billing-toggle">
+                    <button class="card-billing-toggle__btn" data-billing="monthly" data-i18n="toggle_monthly">Mensile</button>
+                    <button class="card-billing-toggle__btn is-active" data-billing="annual" data-i18n="toggle_annual">Annuale</button>
+                </div>
                 <div class="plan-price__monthly-strike">€7,89<span data-i18n="per_month">/mese</span></div>
                 <div class="plan-discount-badge">-12%</div>
                 <div class="plan-price plan-price__monthly">€7,89<span data-i18n="per_month">/mese</span></div>
@@ -593,6 +614,10 @@
             <div class="plan-card plan-card--featured">
                 <div class="plan-badge" data-i18n="badge_popular">BEST VALUE</div>
                 <p class="plan-name">Pro</p>
+                <div class="card-billing-toggle">
+                    <button class="card-billing-toggle__btn" data-billing="monthly" data-i18n="toggle_monthly">Mensile</button>
+                    <button class="card-billing-toggle__btn is-active" data-billing="annual" data-i18n="toggle_annual">Annuale</button>
+                </div>
                 <div class="plan-price__monthly-strike">€29<span data-i18n="per_month">/mese</span></div>
                 <div class="plan-discount-badge">-15%</div>
                 <div class="plan-price plan-price__monthly">€29<span data-i18n="per_month">/mese</span></div>
@@ -615,6 +640,10 @@
             <!-- ENTERPRISE -->
             <div class="plan-card">
                 <p class="plan-name">Enterprise</p>
+                <div class="card-billing-toggle">
+                    <button class="card-billing-toggle__btn" data-billing="monthly" data-i18n="toggle_monthly">Mensile</button>
+                    <button class="card-billing-toggle__btn is-active" data-billing="annual" data-i18n="toggle_annual">Annuale</button>
+                </div>
                 <div class="plan-price__monthly-strike">€99<span data-i18n="per_month">/mese</span></div>
                 <div class="plan-discount-badge">-12%</div>
                 <div class="plan-price plan-price__monthly">€99<span data-i18n="per_month">/mese</span></div>
@@ -635,6 +664,35 @@
                 <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_enterprise">Contattaci</a>
             </div>
 
+        </section>
+
+        <!-- Crediti extra -->
+        <section class="credits-section">
+            <h2 class="section-title" data-i18n="extra_title">Crediti extra</h2>
+            <p class="section-subtitle" data-i18n="extra_subtitle">Non scadono. Seguono le regole del tuo piano attivo.</p>
+            <div class="credits-grid">
+                <div class="credit-pack">
+                    <div class="credit-pack__amount">10</div>
+                    <div class="credit-pack__label" data-i18n="credits">crediti</div>
+                    <div class="credit-pack__price">€3,20</div>
+                    <div class="credit-pack__unit">€0,32 / credito</div>
+                    <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
+                </div>
+                <div class="credit-pack">
+                    <div class="credit-pack__amount">50</div>
+                    <div class="credit-pack__label" data-i18n="credits">crediti</div>
+                    <div class="credit-pack__price">€15</div>
+                    <div class="credit-pack__unit">€0,30 / credito</div>
+                    <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
+                </div>
+                <div class="credit-pack">
+                    <div class="credit-pack__amount">100</div>
+                    <div class="credit-pack__label" data-i18n="credits">crediti</div>
+                    <div class="credit-pack__price">€28</div>
+                    <div class="credit-pack__unit">€0,28 / credito</div>
+                    <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
+                </div>
+            </div>
         </section>
 
         <!-- Tabella comparativa -->
@@ -761,35 +819,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </section>
-
-        <!-- Crediti extra -->
-        <section class="credits-section">
-            <h2 class="section-title" data-i18n="extra_title">Crediti extra</h2>
-            <p class="section-subtitle" data-i18n="extra_subtitle">Non scadono. Seguono le regole del tuo piano attivo.</p>
-            <div class="credits-grid">
-                <div class="credit-pack">
-                    <div class="credit-pack__amount">10</div>
-                    <div class="credit-pack__label" data-i18n="credits">crediti</div>
-                    <div class="credit-pack__price">€3,20</div>
-                    <div class="credit-pack__unit">€0,32 / credito</div>
-                    <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
-                </div>
-                <div class="credit-pack">
-                    <div class="credit-pack__amount">50</div>
-                    <div class="credit-pack__label" data-i18n="credits">crediti</div>
-                    <div class="credit-pack__price">€15</div>
-                    <div class="credit-pack__unit">€0,30 / credito</div>
-                    <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
-                </div>
-                <div class="credit-pack">
-                    <div class="credit-pack__amount">100</div>
-                    <div class="credit-pack__label" data-i18n="credits">crediti</div>
-                    <div class="credit-pack__price">€28</div>
-                    <div class="credit-pack__unit">€0,28 / credito</div>
-                    <a href="#" class="plan-cta plan-cta--outline" data-i18n="cta_buy">Acquista</a>
-                </div>
             </div>
         </section>
 
@@ -1154,27 +1183,19 @@
             },
         };
 
-        // ── Toggle mensile/annuale ──
-        const billingToggle = document.getElementById('billingToggle');
-        const labelMonthly = document.getElementById('labelMonthly');
-        const labelAnnual = document.getElementById('labelAnnual');
-
-        // Default: annuale
-        billingToggle.checked = true;
-        document.body.classList.add('annual-billing');
-        labelMonthly.classList.remove('is-active');
-        labelAnnual.classList.add('is-active');
-
-        billingToggle.addEventListener('change', function () {
-            if (this.checked) {
-                document.body.classList.add('annual-billing');
-                labelMonthly.classList.remove('is-active');
-                labelAnnual.classList.add('is-active');
-            } else {
-                document.body.classList.remove('annual-billing');
-                labelMonthly.classList.add('is-active');
-                labelAnnual.classList.remove('is-active');
-            }
+        // ── Toggle mensile/annuale per card ──
+        document.querySelectorAll('.card-billing-toggle').forEach(function(toggle) {
+            var card = toggle.closest('.plan-card');
+            card.dataset.billing = 'annual'; // default annuale
+            toggle.querySelectorAll('.card-billing-toggle__btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    card.dataset.billing = this.dataset.billing;
+                    toggle.querySelectorAll('.card-billing-toggle__btn').forEach(function(b) {
+                        b.classList.remove('is-active');
+                    });
+                    this.classList.add('is-active');
+                });
+            });
         });
 
         let currentLang = localStorage.getItem('fashionai_lang') || 'it';
