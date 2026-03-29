@@ -5,7 +5,7 @@ const { FREE_CREDITS_ON_REGISTER } = require('../config/constants');
 const SALT_ROUNDS = 10;
 
 function createAuthService(deps) {
-  const { getPool, JWT_SECRET } = deps;
+  const { getPool, JWT_SECRET, creditService } = deps;
 
   function generateToken(user) {
     return jwt.sign(
@@ -76,8 +76,20 @@ function createAuthService(deps) {
         throw err;
       }
 
+      // Controlla e resetta i crediti se sono passati 30 giorni
+      if (creditService) {
+        await creditService.checkAndResetCredits({ userId: user.id, plan: user.plan }).catch(() => {});
+      }
+
+      // Rileggi il saldo aggiornato dopo eventuale reset
+      const refreshed = await pool.query(
+        'SELECT credits_balance FROM users WHERE id = $1',
+        [user.id]
+      );
+      const credits_balance = refreshed.rows[0]?.credits_balance ?? user.credits_balance;
+
       const token = generateToken(user);
-      return { token, user: { id: user.id, email: user.email, plan: user.plan, role: user.role, credits_balance: user.credits_balance } };
+      return { token, user: { id: user.id, email: user.email, plan: user.plan, role: user.role, credits_balance } };
     },
 
     async verifySession({ token } = {}) {

@@ -65,6 +65,33 @@ function createCreditService(deps) {
       }
     },
 
+    // Controlla se sono passati 30 giorni e resetta i crediti mensili
+    async checkAndResetCredits({ userId, plan }) {
+      const planRules = PLANS[plan] || PLANS['free'];
+      if (!planRules.renewMonthly) return; // Free: crediti una tantum, non si rinnovano
+
+      const pool = getPool();
+      const result = await pool.query(
+        'SELECT credits_reset_at FROM users WHERE id = $1',
+        [userId]
+      );
+      if (!result.rows.length) return;
+
+      const lastReset = new Date(result.rows[0].credits_reset_at);
+      const daysSinceReset = (Date.now() - lastReset.getTime()) / (1000 * 60 * 60 * 24);
+      if (daysSinceReset < 30) return; // Non ancora 30 giorni
+
+      // Resetta i crediti al valore del piano
+      await pool.query(
+        'UPDATE users SET credits_balance = $1, credits_reset_at = NOW(), updated_at = NOW() WHERE id = $2',
+        [planRules.credits, userId]
+      );
+      await pool.query(
+        'INSERT INTO credit_transactions (user_id, amount, type, description) VALUES ($1, $2, $3, $4)',
+        [userId, planRules.credits, 'reset', `Rinnovo mensile piano ${plan}`]
+      );
+    },
+
     // Aggiunge crediti (al login, acquisto pacchetto, ecc.)
     async addCredits({ userId, amount, type, description }) {
       const pool = getPool();

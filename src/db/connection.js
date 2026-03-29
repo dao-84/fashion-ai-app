@@ -47,6 +47,11 @@ async function initializeDatabase() {
         ALTER COLUMN amount TYPE NUMERIC(8,2) USING amount::NUMERIC(8,2)
     `).catch(() => {});
 
+    // Migrazione: aggiungi colonna reset crediti se non esiste
+    await pool.query(`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS credits_reset_at TIMESTAMP DEFAULT NOW()
+    `).catch(() => {});
+
     databaseState = { initialized: true, provider: 'postgresql' };
     console.log('[db] PostgreSQL connesso e schema verificato');
   } catch (error) {

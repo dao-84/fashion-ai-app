@@ -6,6 +6,7 @@ const CREATE_USERS = `
     role VARCHAR(50) DEFAULT 'user',
     plan VARCHAR(50) DEFAULT 'free',
     credits_balance NUMERIC(8,2) DEFAULT 12,
+    credits_reset_at TIMESTAMP DEFAULT NOW(),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
   );
