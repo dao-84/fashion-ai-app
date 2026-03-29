@@ -1,5 +1,5 @@
 function createBillingController({ billingService, env }) {
-  const frontendUrl = process.env.FRONTEND_URL || env?.PUBLIC_BASE_URL || 'http://localhost:3000';
+  const frontendUrl = (process.env.FRONTEND_URL || env?.PUBLIC_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
 
   return {
     checkout: async (req, res) => {

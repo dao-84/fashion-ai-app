@@ -46,7 +46,7 @@ function createBillingService({ getPool, log, logEmoji }) {
         customer: customerId,
         line_items: [{ price: priceId, quantity: 1 }],
         mode: isSubscription ? 'subscription' : 'payment',
-        success_url: `${successUrl}?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${successUrl}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: cancelUrl,
         metadata: { userId: String(userId), priceKey },
         locale: 'it',
