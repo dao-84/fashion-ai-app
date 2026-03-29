@@ -137,8 +137,9 @@ app.use(attachOptionalUser);
 function betaGuard(req, res, next) {
   if (!req.path.startsWith('/api/')) return next();
 
-  // Le route di autenticazione sono sempre pubbliche
+  // Le route di autenticazione e webhook Stripe sono sempre pubbliche
   if (req.path.startsWith('/api/auth/')) return next();
+  if (req.path === '/api/billing/webhook') return next();
 
   // Con auth attivo: accetta JWT valido (già verificato da attachOptionalUser)
   const { features } = require('./config/features');
