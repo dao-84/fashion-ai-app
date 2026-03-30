@@ -8,13 +8,16 @@ function createCreditService(deps) {
     async getUserCredits({ userId }) {
       const pool = getPool();
       const result = await pool.query(
-        'SELECT credits_balance, plan FROM users WHERE id = $1',
+        'SELECT credits_plan, credits_pack, plan FROM users WHERE id = $1',
         [userId]
       );
       if (!result.rows.length) throw new Error('Utente non trovato');
+      const row = result.rows[0];
       return {
-        balance: parseFloat(result.rows[0].credits_balance),
-        plan: result.rows[0].plan,
+        balance: parseFloat(row.credits_plan) + parseFloat(row.credits_pack),
+        credits_plan: parseFloat(row.credits_plan),
+        credits_pack: parseFloat(row.credits_pack),
+        plan: row.plan,
       };
     },
 
@@ -23,7 +26,7 @@ function createCreditService(deps) {
       return PLANS[plan] || PLANS['free'];
     },
 
-    // Scala i crediti dopo una generazione (transazione atomica con FOR UPDATE)
+    // Scala i crediti dopo una generazione — consuma prima i crediti pack, poi quelli piano
     async consumeCredits({ userId, amount, description }) {
       const pool = getPool();
       const client = await pool.connect();
@@ -33,21 +36,27 @@ function createCreditService(deps) {
 
         // FOR UPDATE blocca la riga — impedisce race condition su richieste simultanee
         const result = await client.query(
-          'SELECT credits_balance FROM users WHERE id = $1 FOR UPDATE',
+          'SELECT credits_plan, credits_pack FROM users WHERE id = $1 FOR UPDATE',
           [userId]
         );
         if (!result.rows.length) {
           const err = new Error('Utente non trovato'); err.status = 404; throw err;
         }
-        const balance = parseFloat(result.rows[0].credits_balance);
-        if (balance < amount) {
+        const plan_bal = parseFloat(result.rows[0].credits_plan);
+        const pack_bal = parseFloat(result.rows[0].credits_pack);
+        const total = plan_bal + pack_bal;
+
+        if (total < amount) {
           const err = new Error('Crediti insufficienti'); err.status = 402; throw err;
         }
 
-        // Scala i crediti
+        // Consuma prima dal pack, poi dal piano
+        let fromPack = Math.min(pack_bal, amount);
+        let fromPlan = amount - fromPack;
+
         await client.query(
-          'UPDATE users SET credits_balance = credits_balance - $1, updated_at = NOW() WHERE id = $2',
-          [amount, userId]
+          'UPDATE users SET credits_pack = credits_pack - $1, credits_plan = credits_plan - $2, updated_at = NOW() WHERE id = $3',
+          [fromPack, fromPlan, userId]
         );
 
         // Registra la transazione
@@ -65,7 +74,7 @@ function createCreditService(deps) {
       }
     },
 
-    // Controlla se sono passati 30 giorni e resetta i crediti mensili
+    // Controlla se sono passati 30 giorni e resetta i soli crediti piano (pack non toccati)
     async checkAndResetCredits({ userId, plan }) {
       const planRules = PLANS[plan] || PLANS['free'];
       if (!planRules.renewMonthly) return; // Free: crediti una tantum, non si rinnovano
@@ -81,9 +90,9 @@ function createCreditService(deps) {
       const daysSinceReset = (Date.now() - lastReset.getTime()) / (1000 * 60 * 60 * 24);
       if (daysSinceReset < 30) return; // Non ancora 30 giorni
 
-      // Resetta i crediti al valore del piano
+      // Resetta solo i crediti piano al valore del piano — pack invariati
       await pool.query(
-        'UPDATE users SET credits_balance = $1, credits_reset_at = NOW(), updated_at = NOW() WHERE id = $2',
+        'UPDATE users SET credits_plan = $1, credits_reset_at = NOW(), updated_at = NOW() WHERE id = $2',
         [planRules.credits, userId]
       );
       await pool.query(
@@ -92,20 +101,42 @@ function createCreditService(deps) {
       );
     },
 
-    // Aggiunge crediti (al login, acquisto pacchetto, ecc.)
-    async addCredits({ userId, amount, type, description }) {
+    // Aggiunge crediti piano (acquisto abbonamento — sovrascrive solo credits_plan)
+    async setPlanCredits({ userId, amount, description }) {
       const pool = getPool();
-
-      // Aggiunge i crediti
       await pool.query(
-        'UPDATE users SET credits_balance = credits_balance + $1, updated_at = NOW() WHERE id = $2',
+        'UPDATE users SET credits_plan = $1, updated_at = NOW() WHERE id = $2',
         [amount, userId]
       );
-
-      // Registra la transazione
       await pool.query(
         'INSERT INTO credit_transactions (user_id, amount, type, description) VALUES ($1, $2, $3, $4)',
-        [userId, amount, type || 'add', description || 'Aggiunta crediti']
+        [userId, amount, 'plan', description || 'Aggiornamento piano']
+      );
+    },
+
+    // Aggiunge crediti pack (acquisto one-time — si sommano a credits_pack)
+    async addPackCredits({ userId, amount, description }) {
+      const pool = getPool();
+      await pool.query(
+        'UPDATE users SET credits_pack = credits_pack + $1, updated_at = NOW() WHERE id = $2',
+        [amount, userId]
+      );
+      await pool.query(
+        'INSERT INTO credit_transactions (user_id, amount, type, description) VALUES ($1, $2, $3, $4)',
+        [userId, amount, 'pack', description || 'Pacchetto crediti']
+      );
+    },
+
+    // Rimborso crediti dopo errore provider (aggiunge a credits_plan)
+    async refundCredits({ userId, amount, description }) {
+      const pool = getPool();
+      await pool.query(
+        'UPDATE users SET credits_plan = credits_plan + $1, updated_at = NOW() WHERE id = $2',
+        [amount, userId]
+      );
+      await pool.query(
+        'INSERT INTO credit_transactions (user_id, amount, type, description) VALUES ($1, $2, $3, $4)',
+        [userId, amount, 'refund', description || 'Rimborso generazione fallita']
       );
     },
   };

@@ -21,7 +21,7 @@ function registerMainRoutes(app, deps) {
   const galleryService = createGalleryService({ ...deps, creditService });
   const publishService = createPublishService(deps);
   const trackService = createTrackService(deps);
-  const billingService = createBillingService({ getPool: deps.getPool, log: deps.log, logEmoji: deps.logEmoji });
+  const billingService = createBillingService({ getPool: deps.getPool, log: deps.log, logEmoji: deps.logEmoji, creditService });
 
   const appController = createAppController({
     appService,

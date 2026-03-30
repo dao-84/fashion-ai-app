@@ -79,6 +79,18 @@ async function initializeDatabase() {
       ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_subscription_id VARCHAR(100)
     `).catch(() => {});
 
+    // Migrazione: sistema crediti a due colonne (credits_plan + credits_pack)
+    await pool.query(`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS credits_plan NUMERIC(8,2) DEFAULT 3
+    `).catch(() => {});
+    await pool.query(`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS credits_pack NUMERIC(8,2) DEFAULT 0
+    `).catch(() => {});
+    // Copia i crediti esistenti in credits_plan se la colonna era vuota
+    await pool.query(`
+      UPDATE users SET credits_plan = credits_balance WHERE credits_plan = 3 AND credits_balance != 3
+    `).catch(() => {});
+
     databaseState = { initialized: true, provider: 'postgresql' };
     console.log('[db] PostgreSQL connesso e schema verificato');
   } catch (error) {

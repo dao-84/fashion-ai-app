@@ -38,13 +38,14 @@ function createAuthService(deps) {
 
       const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
       const result = await pool.query(
-        `INSERT INTO users (email, password_hash, plan, credits_balance)
-         VALUES ($1, $2, 'free', $3)
-         RETURNING id, email, plan, role, credits_balance, created_at`,
+        `INSERT INTO users (email, password_hash, plan, credits_plan, credits_pack)
+         VALUES ($1, $2, 'free', $3, 0)
+         RETURNING id, email, plan, role, credits_plan, credits_pack, created_at`,
         [email.toLowerCase(), passwordHash, FREE_CREDITS_ON_REGISTER]
       );
 
       const user = result.rows[0];
+      user.credits_balance = parseFloat(user.credits_plan) + parseFloat(user.credits_pack);
       const token = generateToken(user);
       return { token, user };
     },
@@ -58,7 +59,7 @@ function createAuthService(deps) {
 
       const pool = getPool();
       const result = await pool.query(
-        'SELECT id, email, password_hash, plan, role, credits_balance FROM users WHERE email = $1',
+        'SELECT id, email, password_hash, plan, role, credits_plan, credits_pack FROM users WHERE email = $1',
         [email.toLowerCase()]
       );
 
@@ -83,10 +84,12 @@ function createAuthService(deps) {
 
       // Rileggi il saldo aggiornato dopo eventuale reset
       const refreshed = await pool.query(
-        'SELECT credits_balance FROM users WHERE id = $1',
+        'SELECT credits_plan, credits_pack FROM users WHERE id = $1',
         [user.id]
       );
-      const credits_balance = refreshed.rows[0]?.credits_balance ?? user.credits_balance;
+      const credits_plan = parseFloat(refreshed.rows[0]?.credits_plan ?? user.credits_plan);
+      const credits_pack = parseFloat(refreshed.rows[0]?.credits_pack ?? user.credits_pack);
+      const credits_balance = credits_plan + credits_pack;
 
       const token = generateToken(user);
       return { token, user: { id: user.id, email: user.email, plan: user.plan, role: user.role, credits_balance } };
@@ -105,7 +108,7 @@ function createAuthService(deps) {
     async getProfile({ userId } = {}) {
       const pool = getPool();
       const result = await pool.query(
-        'SELECT id, email, plan, role, credits_balance, created_at FROM users WHERE id = $1',
+        'SELECT id, email, plan, role, credits_plan, credits_pack, created_at FROM users WHERE id = $1',
         [userId]
       );
       if (result.rows.length === 0) {
@@ -113,7 +116,9 @@ function createAuthService(deps) {
         err.status = 404;
         throw err;
       }
-      return result.rows[0];
+      const row = result.rows[0];
+      row.credits_balance = parseFloat(row.credits_plan) + parseFloat(row.credits_pack);
+      return row;
     },
 
     async changePassword({ userId, currentPassword, newPassword } = {}) {

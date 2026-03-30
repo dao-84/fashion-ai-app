@@ -14,7 +14,7 @@ const PLAN_CREDITS = {
   free:       0,
 };
 
-function createBillingService({ getPool, log, logEmoji }) {
+function createBillingService({ getPool, log, logEmoji, creditService }) {
   const pool = () => getPool();
 
   return {
@@ -95,19 +95,19 @@ function createBillingService({ getPool, log, logEmoji }) {
           if (!planInfo) break;
 
           if (planInfo.type === 'subscription') {
-            // Aggiorna piano e crediti utente
+            // Aggiorna piano, subscription ID e somma i crediti piano ai crediti esistenti
             await db.query(
-              'UPDATE users SET plan = $1, credits_balance = $2, stripe_subscription_id = $3 WHERE id = $4',
+              'UPDATE users SET plan = $1, credits_plan = credits_plan + $2, stripe_subscription_id = $3 WHERE id = $4',
               [planInfo.plan, planInfo.credits, session.subscription || null, userId]
             );
-            log.info(logEmoji.auth, `[billing] piano aggiornato a ${planInfo.plan} per utente ${userId}`);
+            log.info(logEmoji.auth, `[billing] piano aggiornato a ${planInfo.plan} per utente ${userId}, +${planInfo.credits} credits_plan`);
           } else {
-            // Pacchetto crediti one-time
+            // Pacchetto crediti one-time — aggiunge a credits_pack (non scadono mai)
             await db.query(
-              'UPDATE users SET credits_balance = credits_balance + $1 WHERE id = $2',
+              'UPDATE users SET credits_pack = credits_pack + $1 WHERE id = $2',
               [planInfo.credits, userId]
             );
-            log.info(logEmoji.auth, `[billing] +${planInfo.credits} crediti per utente ${userId}`);
+            log.info(logEmoji.auth, `[billing] +${planInfo.credits} credits_pack per utente ${userId}`);
           }
 
           // Registra transazione
@@ -131,23 +131,24 @@ function createBillingService({ getPool, log, logEmoji }) {
           const credits = PLAN_CREDITS[user.plan] || 0;
           if (!credits) break;
 
+          // Rinnovo: resetta solo credits_plan al valore del piano — credits_pack invariati
           await db.query(
-            'UPDATE users SET credits_balance = $1, credits_reset_at = NOW() WHERE id = $2',
+            'UPDATE users SET credits_plan = $1, credits_reset_at = NOW() WHERE id = $2',
             [credits, user.id]
           );
-          log.info(logEmoji.auth, `[billing] rinnovo: ${credits} crediti per utente ${user.id} (piano ${user.plan})`);
+          log.info(logEmoji.auth, `[billing] rinnovo: credits_plan = ${credits} per utente ${user.id} (piano ${user.plan})`);
           break;
         }
 
         case 'customer.subscription.deleted': {
-          // Abbonamento cancellato → downgrade a Free
+          // Abbonamento cancellato → downgrade a Free — i crediti rimangono invariati
           const subscription = event.data.object;
           const customerId = subscription.customer;
           await db.query(
             'UPDATE users SET plan = $1, stripe_subscription_id = NULL WHERE stripe_customer_id = $2',
             ['free', customerId]
           );
-          log.info(logEmoji.warn, `[billing] abbonamento cancellato per customer ${customerId} → piano free`);
+          log.info(logEmoji.warn, `[billing] abbonamento cancellato per customer ${customerId} → piano free (crediti invariati)`);
           break;
         }
 
