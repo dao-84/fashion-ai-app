@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { FREE_CREDITS_ON_REGISTER } = require('../config/constants');
 
-const SALT_ROUNDS = 10;
+const SALT_ROUNDS = 12;
 
 function createAuthService(deps) {
   const { getPool, JWT_SECRET, creditService } = deps;

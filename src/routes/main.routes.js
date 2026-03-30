@@ -42,7 +42,7 @@ function registerMainRoutes(app, deps) {
   app.post('/api/billing/portal', requireAuth, billingController.portal);
 
   app.post('/api/waitlist', waitlistController.submit);
-  app.post('/api/openai/prepare', appController.prepareOpenAI);
+  app.post('/api/openai/prepare', requireAuth, appController.prepareOpenAI);
   app.post('/api/track-event', trackController.event);
 
   app.post('/api/publish/describe', requireAuth, publishController.describe);

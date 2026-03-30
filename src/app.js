@@ -6,6 +6,7 @@ const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 const Replicate = require('replicate');
 const { registerRoutes } = require('./routes');
 const { env, rootDir } = require('./config/env');
@@ -124,6 +125,7 @@ function logProvider() {
   }
 }
 
+app.use(helmet());
 app.use(
   cors({
     origin: ALLOWED_ORIGINS.length ? ALLOWED_ORIGINS : '*',

@@ -317,10 +317,9 @@ function createGenerationService(deps) {
           // Errore del provider: rimborsa i crediti se erano stati scalati
           if (creditCost > 0 && features?.enableCredits && auth?.isAuthenticated && creditService) {
             try {
-              await creditService.addCredits({
+              await creditService.refundCredits({
                 userId: auth.user.id,
                 amount: creditCost,
-                type: 'refund',
                 description: `Rimborso automatico — errore provider ${providerName}`,
               });
               log.info(logEmoji.generate, `[generate] crediti rimborsati: ${creditCost} (errore provider)`);
