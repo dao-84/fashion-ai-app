@@ -2723,8 +2723,27 @@ body::after {
 
 .gallery-page {
 	min-height: 100vh;
-	padding: 120px 22px 60px;
+	padding: 90px 22px 60px;
 	background: var(--primary-black);
+}
+
+.gallery-retention-banner {
+	max-width: 1400px;
+	margin: 0 auto 20px;
+	padding: 12px 20px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	background: rgba(212,175,55,0.07);
+	border: 1px solid rgba(212,175,55,0.25);
+	border-radius: 10px;
+	font-size: 13px;
+	color: rgba(212,175,55,0.85);
+}
+
+.gallery-retention-banner i {
+	flex-shrink: 0;
+	font-size: 14px;
 }
 
 .gallery-compact-grid {
@@ -2793,6 +2812,10 @@ body::after {
 	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
+.gallery-card:hover .gallery-card-footer {
+	opacity: 1;
+}
+
 .gallery-card-image {
 	position: relative;
 	width: 100%;
@@ -2816,34 +2839,33 @@ body::after {
 }
 
 .gallery-card-footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	gap: 8px;
-	padding: 10px 10px 8px;
+	justify-content: center;
+	padding: 16px 8px 12px;
+	background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+	border-radius: 0 0 12px 12px;
 }
 
 .gallery-card-title {
-	font-size: 12px;
-	font-weight: 800;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	color: var(--text-primary);
-	line-height: 1.2;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+	display: none;
 }
 
 .gallery-card-actions {
 	display: flex;
-	gap: 6px;
+	gap: 4px;
 }
 
 .gallery-card-icon {
-	width: 34px;
-	height: 34px;
-	border-radius: 10px;
+	width: 28px;
+	height: 28px;
+	border-radius: 8px;
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	background: rgba(255, 255, 255, 0.04);
 	color: var(--text-primary);
@@ -3526,8 +3548,9 @@ body::after {
 }
 
 .image-viewer-title {
-	font-size: 18px;
-	font-weight: 800;
+	font-size: 13px;
+	font-weight: 500;
+	color: rgba(255,255,255,0.5);
 	margin: 0;
 }
 
@@ -3566,6 +3589,16 @@ body::after {
 .image-viewer-btn:hover {
 	border-color: var(--accent-purple);
 	color: var(--accent-purple);
+}
+
+.image-viewer-btn--danger {
+	border-color: rgba(220, 80, 80, 0.45);
+	color: #f1b3b3;
+}
+
+.image-viewer-btn--danger:hover {
+	border-color: #ff9c9c;
+	color: #ffc1c1;
 }
 
 @media (max-width: 700px) {

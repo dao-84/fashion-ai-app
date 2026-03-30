@@ -190,6 +190,7 @@
       /* ── GALLERY ── */
       gallery_title: 'Gallery',
       gallery_subtitle: 'Immagini generate e salvate nella tua sessione',
+      gallery_retention_notice: 'Le immagini generate vengono eliminate automaticamente dopo 30 giorni. Scarica quelle che vuoi conservare.',
       gallery_empty: 'Nessuna immagine trovata. Genera un look per popolare la gallery.',
       gallery_load_more: 'Mostra altre',
       gallery_open: 'Apri immagine',
@@ -648,6 +649,7 @@
 
       gallery_title: 'Gallery',
       gallery_subtitle: 'Images generated and saved in your session',
+      gallery_retention_notice: 'Generated images are automatically deleted after 30 days. Download the ones you want to keep.',
       gallery_empty: 'No images found. Generate a look to populate the gallery.',
       gallery_load_more: 'Show more',
       gallery_open: 'Open image',
@@ -1100,6 +1102,7 @@
 
       gallery_title: 'Galería',
       gallery_subtitle: 'Imágenes generadas y guardadas en tu sesión',
+      gallery_retention_notice: 'Las imágenes generadas se eliminan automáticamente después de 30 días. Descarga las que quieras conservar.',
       gallery_empty: 'No se encontraron imágenes. Genera un look para llenar la galería.',
       gallery_load_more: 'Ver más',
       gallery_open: 'Abrir imagen',

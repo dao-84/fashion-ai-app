@@ -26,9 +26,13 @@
   </header>
 
   <main class="gallery-page">
-    <div class="section-header" style="padding-top:120px;">
+    <div class="section-header" style="padding-top:20px;">
       <h2 class="section-title" data-i18n="gallery_title">Gallery</h2>
       <p class="section-subtitle" data-i18n="gallery_subtitle">Immagini generate e salvate nella tua sessione</p>
+    </div>
+    <div class="gallery-retention-banner">
+      <i class="fa fa-clock"></i>
+      <span data-i18n="gallery_retention_notice">Le immagini generate vengono eliminate automaticamente dopo 30 giorni. Scarica quelle che vuoi conservare.</span>
     </div>
     <div class="gallery-compact-grid" id="galleryList"></div>
     <div class="gallery-load-more" id="galleryLoadMore" style="display:none;">
@@ -63,7 +67,9 @@
           <button class="image-viewer-btn" id="imageViewerWatermarkBtn" style="display:none; cursor:pointer; border:none;">
             <i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i><span data-i18n="gallery_remove_watermark">Rimuovi watermark — 0,5 cr</span>
           </button>
+          <button class="image-viewer-btn" id="imageViewerAutocopy" style="cursor:pointer; border:none;" title="AutoCopy"><i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i><span>AutoCopy</span></button>
           <button class="image-viewer-btn" id="imageViewerDownload" style="cursor:pointer; border:none;"><i class="fa fa-download" style="margin-right:6px;"></i><span data-i18n="gallery_download">Scarica</span></button>
+          <button class="image-viewer-btn image-viewer-btn--danger" id="imageViewerDelete" style="cursor:pointer; border:none;"><i class="fa fa-trash" style="margin-right:6px;"></i><span data-i18n="gallery_btn_delete">Elimina</span></button>
         </div>
       </div>
     </div>
@@ -87,6 +93,8 @@
     const viewerNext = document.getElementById('imageViewerNext');
     const viewerDownload = document.getElementById('imageViewerDownload');
     const viewerWatermarkBtn = document.getElementById('imageViewerWatermarkBtn');
+    const viewerAutocopy = document.getElementById('imageViewerAutocopy');
+    const viewerDelete = document.getElementById('imageViewerDelete');
 
     let allFiles = [];
     let currentIndex = -1;
@@ -113,7 +121,8 @@
         viewerDownload.href = file.url;
         viewerDownload.download = file.name || 'immagine.jpg';
       }
-      viewerCaption.textContent = readableName(file);
+      const d = new Date(file.mtime || file.created_at || 0);
+      viewerCaption.textContent = isNaN(d) ? '' : d.toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
       viewerCount.textContent = `${index + 1} / ${allFiles.length}`;
 
       // Mostra bottone rimozione watermark solo per Free con versione pulita disponibile
@@ -166,6 +175,43 @@
     viewerDownload?.addEventListener('click', () => {
       const file = allFiles[currentIndex];
       if (file) window.downloadImage(file.url, file.name);
+    });
+
+    viewerAutocopy?.addEventListener('click', () => {
+      const file = allFiles[currentIndex];
+      if (!file) return;
+      let dest = `studio.html?autocopy=${encodeURIComponent(file.url)}`;
+      if (file.id) dest += `&generationId=${file.id}`;
+      if (file.hasAutocopy && file.autocopyResult) {
+        dest += `&savedCopy=${encodeURIComponent(JSON.stringify(file.autocopyResult))}&savedStyle=${file.autocopyStyle || 'ecommerce'}&savedLang=${file.autocopyLanguage || 'it'}`;
+      }
+      window.location.href = dest;
+    });
+
+    viewerDelete?.addEventListener('click', async () => {
+      const file = allFiles[currentIndex];
+      if (!file) return;
+      const ok = confirm(`${FashionAI.i18n.t('gallery_confirm_delete')} "${file.name}"?`);
+      if (!ok) return;
+      try {
+        const resp = await fetch(`/api/gallery/${encodeURIComponent(file.name)}`, { method: 'DELETE' });
+        if (resp.ok) {
+          const idx = currentIndex;
+          allFiles = allFiles.filter((x) => x.name !== file.name);
+          if (!allFiles.length) {
+            hideImageViewer();
+            emptyEl.style.display = 'block';
+          } else {
+            setViewerContent(Math.min(idx, allFiles.length - 1));
+          }
+          renderGallery();
+          updateLoadMoreVisibility();
+        } else {
+          alert(FashionAI.i18n.t('gallery_error_delete_file') + resp.status);
+        }
+      } catch (err) {
+        alert(FashionAI.i18n.t('gallery_error_delete'));
+      }
     });
 
     viewerClose?.addEventListener('click', hideImageViewer);
