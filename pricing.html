@@ -521,6 +521,7 @@
                 <li><a href="studio.html" class="nav-link">Studio</a></li>
                 <li><a href="pricing.html" class="nav-link active" data-i18n="nav_pricing">Prezzi</a></li>
                 <li><a href="#" class="nav-link" data-auth-link data-auth-default="Accedi">Accedi</a></li>
+                <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Remaining credit"></span></li>
             </ul>
 
             <!-- Switcher lingua -->
@@ -1338,6 +1339,24 @@
         // ── Inizializzazione ──
         applyTranslations();
         updateLangSwitchers();
+
+        // Badge crediti navbar
+        (function() {
+          var token = localStorage.getItem('auth_token');
+          var badge = document.getElementById('studioCredit');
+          if (!token || !badge) return;
+          fetch('/api/auth/profile', { headers: { 'Authorization': 'Bearer ' + token } })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              if (data.user && data.user.credits_balance !== undefined) {
+                var bal = parseFloat(data.user.credits_balance);
+                badge.textContent = (Number.isInteger(bal) ? bal : bal.toFixed(1)) + ' cr';
+                badge.classList.remove('is-low', 'is-critical');
+                if (bal < 1) badge.classList.add('is-critical');
+                else if (bal <= 2) badge.classList.add('is-low');
+              }
+            }).catch(function() {});
+        })();
     </script>
 </body>
 </html>
