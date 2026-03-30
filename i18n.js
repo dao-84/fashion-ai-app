@@ -32,7 +32,7 @@
       hero_title: 'Da un capo a una foto fashion professionale. In secondi.',
       hero_desc: 'Nessuno studio. Nessun fotografo. Solo immagini pronte da pubblicare per il tuo brand.',
       hero_btn_primary: 'Apri lo Studio',
-      hero_btn_secondary: 'Prova ora',
+      hero_btn_secondary: '12 crediti gratis →',
       hero_workflow_label: 'Flusso AI',
       hero_quality_badge: 'Qualità Studio',
       hero_step1_title: 'Carica il capo',
@@ -408,6 +408,14 @@
       profile_pwd_btn: 'Salva nuova password',
       profile_logout: "Esci dall'account",
 
+      /* ── AUTOCOPY SHOWCASE (homepage) ── */
+      autocopy_section_eyebrow: 'AUTOCOPY — ESCLUSIVO SHOTLESS.AI',
+      autocopy_section_title: 'Scatti l\'immagine.<br>Noi scriviamo come venderla.',
+      autocopy_section_subtitle: 'Titolo SEO, caption Instagram, descrizione e-commerce — generati in un click. In italiano, inglese, spagnolo e francese. Nessun copywriter. Nessuna agenzia.',
+      autocopy_section_badge1: '✦ 4 stili di copy',
+      autocopy_section_badge2: '✦ 4 lingue',
+      autocopy_section_badge3: '✦ Incluso dal piano Pro',
+
       /* ── AUTOCOPY / STUDIO MODAL ── */
       autocopy_subtitle: '— vendi con le parole',
       autocopy_product_info_label: 'Info prodotto',
@@ -461,7 +469,7 @@
       hero_title: 'Create realistic fashion images from a single garment photo',
       hero_desc: 'Upload a garment photo, choose a model and scene, and create ready-to-use fashion images in seconds. Built for fashion brands, e-commerce teams, and boutiques.',
       hero_btn_primary: 'Open Studio',
-      hero_btn_secondary: 'Try now',
+      hero_btn_secondary: '12 free credits →',
       hero_workflow_label: 'AI Workflow',
       hero_quality_badge: 'Studio Quality',
       hero_step1_title: 'Upload garment',
@@ -820,6 +828,14 @@
       profile_pwd_btn: 'Save new password',
       profile_logout: 'Log out',
 
+      /* ── AUTOCOPY SHOWCASE (homepage) ── */
+      autocopy_section_eyebrow: 'AUTOCOPY — EXCLUSIVE TO SHOTLESS.AI',
+      autocopy_section_title: 'You shoot the image.<br>We write how to sell it.',
+      autocopy_section_subtitle: 'SEO title, Instagram caption, e-commerce description — generated in one click. In Italian, English, Spanish and French. No copywriter. No agency.',
+      autocopy_section_badge1: '✦ 4 copy styles',
+      autocopy_section_badge2: '✦ 4 languages',
+      autocopy_section_badge3: '✦ Included from Pro plan',
+
       /* ── AUTOCOPY / STUDIO MODAL ── */
       autocopy_subtitle: '— sell with words',
       autocopy_product_info_label: 'Product info',
@@ -873,7 +889,7 @@
       hero_title: 'De prenda a foto de moda profesional. En segundos.',
       hero_desc: 'Sin estudio. Sin fotógrafo. Solo fotos listas para publicar para tu marca.',
       hero_btn_primary: 'Abrir el Estudio',
-      hero_btn_secondary: 'Prueba ahora',
+      hero_btn_secondary: '12 créditos gratis →',
       hero_workflow_label: 'Flujo IA',
       hero_quality_badge: 'Calidad Estudio',
       hero_step1_title: 'Sube la prenda',
@@ -1231,6 +1247,14 @@
       profile_pwd_confirm: 'Confirmar nueva contraseña',
       profile_pwd_btn: 'Guardar nueva contraseña',
       profile_logout: 'Cerrar sesión',
+
+      /* ── AUTOCOPY SHOWCASE (homepage) ── */
+      autocopy_section_eyebrow: 'AUTOCOPY — EXCLUSIVO DE SHOTLESS.AI',
+      autocopy_section_title: 'Tú disparas la imagen.<br>Nosotros escribimos cómo venderla.',
+      autocopy_section_subtitle: 'Título SEO, caption de Instagram, descripción e-commerce — generados en un clic. En italiano, inglés, español y francés. Sin copywriter. Sin agencia.',
+      autocopy_section_badge1: '✦ 4 estilos de copy',
+      autocopy_section_badge2: '✦ 4 idiomas',
+      autocopy_section_badge3: '✦ Incluido desde el plan Pro',
 
       /* ── AUTOCOPY / STUDIO MODAL ── */
       autocopy_subtitle: '— vende con palabras',
