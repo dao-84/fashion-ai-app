@@ -3676,6 +3676,47 @@ body::after {
 	transform: translateX(4px);
 }
 
+/* ── COOKIE BANNER ── */
+#cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: rgba(10, 10, 10, 0.97);
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+#cookie-banner p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(246, 232, 177, 0.75);
+  line-height: 1.5;
+}
+#cookie-banner p a {
+  color: rgba(212, 175, 55, 0.85);
+  text-decoration: underline;
+}
+#cookie-banner button {
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: rgb(212, 175, 55);
+  padding: 7px 22px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+#cookie-banner button:hover {
+  background: rgba(212, 175, 55, 0.28);
+}
+
 .footer-bottom {
 	padding-top: 22px;
 	border-top: 1px solid rgba(246, 232, 177, 0.1);

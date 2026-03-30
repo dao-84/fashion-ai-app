@@ -125,7 +125,7 @@ function logProvider() {
   }
 }
 
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(
   cors({
     origin: ALLOWED_ORIGINS.length ? ALLOWED_ORIGINS : '*',
