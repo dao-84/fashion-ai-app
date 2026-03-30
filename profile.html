@@ -136,7 +136,7 @@
           document.getElementById('profileLoading').style.display = 'none';
           document.getElementById('profileContent').style.display = 'block';
         })
-        .catch(function (err) { document.getElementById('profileLoading').textContent = 'Errore di rete: ' + (err && err.message ? err.message : String(err)); });
+        .catch(function (err) { document.getElementById('profileLoading').textContent = FashionAI.i18n.t('profile_err_loading_prefix') + (err && err.message ? err.message : String(err)); });
 
       // Cambia password
       document.getElementById('savePwdBtn').addEventListener('click', function () {
@@ -146,13 +146,13 @@
         var statusEl = document.getElementById('pwdStatus');
 
         statusEl.className = 'profile-status';
-        if (!current || !newPwd || !confirm) { statusEl.textContent = 'Compila tutti i campi.'; statusEl.classList.add('is-error'); return; }
-        if (newPwd !== confirm) { statusEl.textContent = 'Le password non coincidono.'; statusEl.classList.add('is-error'); return; }
-        if (newPwd.length < 6) { statusEl.textContent = 'La nuova password deve avere almeno 6 caratteri.'; statusEl.classList.add('is-error'); return; }
+        if (!current || !newPwd || !confirm) { statusEl.textContent = FashionAI.i18n.t('profile_err_fill_all'); statusEl.classList.add('is-error'); return; }
+        if (newPwd !== confirm) { statusEl.textContent = FashionAI.i18n.t('profile_err_pwd_match'); statusEl.classList.add('is-error'); return; }
+        if (newPwd.length < 6) { statusEl.textContent = FashionAI.i18n.t('profile_err_pwd_short'); statusEl.classList.add('is-error'); return; }
 
         var btn = document.getElementById('savePwdBtn');
         btn.disabled = true;
-        statusEl.textContent = 'Salvataggio...';
+        statusEl.textContent = FashionAI.i18n.t('profile_pwd_saving');
 
         fetch('/api/auth/change-password', {
           method: 'POST',
@@ -166,7 +166,7 @@
               statusEl.textContent = data.error;
               statusEl.classList.add('is-error');
             } else {
-              statusEl.textContent = 'Password aggiornata con successo.';
+              statusEl.textContent = FashionAI.i18n.t('profile_pwd_success');
               statusEl.classList.add('is-success');
               document.getElementById('currentPassword').value = '';
               document.getElementById('newPassword').value = '';
@@ -175,7 +175,7 @@
           })
           .catch(function () {
             btn.disabled = false;
-            statusEl.textContent = 'Errore di rete. Riprova.';
+            statusEl.textContent = FashionAI.i18n.t('profile_err_network');
             statusEl.classList.add('is-error');
           });
       });

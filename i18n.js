@@ -407,6 +407,36 @@
       profile_pwd_confirm: 'Conferma nuova password',
       profile_pwd_btn: 'Salva nuova password',
       profile_logout: "Esci dall'account",
+
+      /* ── AUTOCOPY / STUDIO MODAL ── */
+      autocopy_subtitle: '— vendi con le parole',
+      autocopy_product_info_label: 'Info prodotto',
+      autocopy_product_info_hint: '(opzionale — migliora la precisione)',
+      studio_model_locked_text: 'La generazione della modella personalizzata non è inclusa nel tuo piano attuale. Passa al piano <strong style="color:#d4af37;">Pro</strong> per sbloccarla.',
+      studio_model_locked_btn: 'Scopri il piano Pro',
+
+      /* ── GALLERY ── */
+      gallery_remove_watermark: 'Rimuovi watermark — 0,5 cr',
+      gallery_confirm_delete: "Vuoi eliminare l'immagine",
+      gallery_error_delete_file: 'Impossibile eliminare il file: ',
+      gallery_error_delete: "Errore durante l'eliminazione. Riprova.",
+      gallery_btn_open: 'Apri in lightbox',
+      gallery_btn_autocopy_saved: 'AutoCopy salvato',
+      gallery_btn_delete: 'Elimina',
+      gallery_image_preview: 'Anteprima immagine',
+
+      /* ── PRICING ── */
+      pricing_watermark_yes: 'Sì (rimozione 0,5 cr)',
+      extra_subtitle: 'Non scadono. Seguono le regole del tuo piano attivo.',
+
+      /* ── PROFILE — messaggi JS ── */
+      profile_err_fill_all: 'Compila tutti i campi.',
+      profile_err_pwd_match: 'Le password non coincidono.',
+      profile_err_pwd_short: 'La nuova password deve avere almeno 6 caratteri.',
+      profile_pwd_saving: 'Salvataggio...',
+      profile_pwd_success: 'Password aggiornata con successo.',
+      profile_err_network: 'Errore di rete. Riprova.',
+      profile_err_loading_prefix: 'Errore di rete: ',
     },
 
     /* ════════════════════════════════════
@@ -789,6 +819,36 @@
       profile_pwd_confirm: 'Confirm new password',
       profile_pwd_btn: 'Save new password',
       profile_logout: 'Log out',
+
+      /* ── AUTOCOPY / STUDIO MODAL ── */
+      autocopy_subtitle: '— sell with words',
+      autocopy_product_info_label: 'Product info',
+      autocopy_product_info_hint: '(optional — improves accuracy)',
+      studio_model_locked_text: 'Custom model generation is not included in your current plan. Upgrade to <strong style="color:#d4af37;">Pro</strong> to unlock it.',
+      studio_model_locked_btn: 'Discover Pro plan',
+
+      /* ── GALLERY ── */
+      gallery_remove_watermark: 'Remove watermark — 0.5 cr',
+      gallery_confirm_delete: 'Do you want to delete the image',
+      gallery_error_delete_file: 'Unable to delete the file: ',
+      gallery_error_delete: 'Error during deletion. Please try again.',
+      gallery_btn_open: 'Open in lightbox',
+      gallery_btn_autocopy_saved: 'AutoCopy saved',
+      gallery_btn_delete: 'Delete',
+      gallery_image_preview: 'Image preview',
+
+      /* ── PRICING ── */
+      pricing_watermark_yes: 'Yes (0.5 cr removal)',
+      extra_subtitle: "They don't expire. They follow the rules of your active plan.",
+
+      /* ── PROFILE — JS messages ── */
+      profile_err_fill_all: 'Please fill in all fields.',
+      profile_err_pwd_match: 'Passwords do not match.',
+      profile_err_pwd_short: 'The new password must be at least 6 characters.',
+      profile_pwd_saving: 'Saving...',
+      profile_pwd_success: 'Password updated successfully.',
+      profile_err_network: 'Network error. Please try again.',
+      profile_err_loading_prefix: 'Network error: ',
     },
 
     /* ════════════════════════════════════
@@ -1171,6 +1231,36 @@
       profile_pwd_confirm: 'Confirmar nueva contraseña',
       profile_pwd_btn: 'Guardar nueva contraseña',
       profile_logout: 'Cerrar sesión',
+
+      /* ── AUTOCOPY / STUDIO MODAL ── */
+      autocopy_subtitle: '— vende con palabras',
+      autocopy_product_info_label: 'Info del producto',
+      autocopy_product_info_hint: '(opcional — mejora la precisión)',
+      studio_model_locked_text: 'La generación de modelo personalizada no está incluida en tu plan actual. Pasa al plan <strong style="color:#d4af37;">Pro</strong> para desbloquearlo.',
+      studio_model_locked_btn: 'Descubre el plan Pro',
+
+      /* ── GALLERY ── */
+      gallery_remove_watermark: 'Eliminar marca de agua — 0,5 cr',
+      gallery_confirm_delete: '¿Quieres eliminar la imagen',
+      gallery_error_delete_file: 'No se puede eliminar el archivo: ',
+      gallery_error_delete: 'Error durante la eliminación. Vuelve a intentarlo.',
+      gallery_btn_open: 'Abrir en lightbox',
+      gallery_btn_autocopy_saved: 'AutoCopy guardado',
+      gallery_btn_delete: 'Eliminar',
+      gallery_image_preview: 'Vista previa de imagen',
+
+      /* ── PRICING ── */
+      pricing_watermark_yes: 'Sí (eliminación 0,5 cr)',
+      extra_subtitle: 'No caducan. Siguen las reglas de tu plan activo.',
+
+      /* ── PROFILE — mensajes JS ── */
+      profile_err_fill_all: 'Completa todos los campos.',
+      profile_err_pwd_match: 'Las contraseñas no coinciden.',
+      profile_err_pwd_short: 'La nueva contraseña debe tener al menos 6 caracteres.',
+      profile_pwd_saving: 'Guardando...',
+      profile_pwd_success: 'Contraseña actualizada con éxito.',
+      profile_err_network: 'Error de red. Vuelve a intentarlo.',
+      profile_err_loading_prefix: 'Error de red: ',
     },
   };
 
