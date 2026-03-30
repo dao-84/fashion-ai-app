@@ -335,6 +335,20 @@
             </div>
           </div>
           <div class="studio-viewer-body" id="studioViewerBody">
+            <div class="gen-loader" id="studioLoader">
+              <div class="gen-loader-backdrop"></div>
+              <div class="gen-loader-content" aria-label="Generation in progress">
+                <div class="loader-prism">
+                  <div class="prism-face"></div>
+                  <div class="prism-face"></div>
+                  <div class="prism-face"></div>
+                </div>
+                <div class="quote-loader-wrap">
+                  <p id="quoteText" class="quote-loader-text"></p>
+                  <p id="quoteAuthor" class="quote-loader-author"></p>
+                </div>
+              </div>
+            </div>
             <img id="studioMainImg" alt="Generated fashion result">
             <div class="studio-viewer-empty">
               <div class="studio-viewer-empty__title" data-i18n="studio_result_empty_title">Il tuo risultato apparirà qui</div>
@@ -637,18 +651,6 @@
       <h2 style="font-size:22px;font-weight:700;color:#f4f0e6;margin:0 0 14px;font-family:'Orbitron','Rajdhani',sans-serif;">Funzione non disponibile</h2>
       <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;margin:0 0 28px;" data-i18n="studio_model_locked_text">La generazione della modella personalizzata non è inclusa nel tuo piano attuale. Passa al piano <strong style="color:#d4af37;">Pro</strong> per sbloccarla.</p>
       <a href="pricing.html" style="display:block;text-align:center;padding:13px;border-radius:999px;background:linear-gradient(135deg,#d4af37,#f6dd8a);color:#141414;font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;" data-i18n="studio_model_locked_btn">Scopri il piano Pro</a>
-    </div>
-  </div>
-
-  <div class="gen-loader" id="studioLoader">
-    <div class="gen-loader-backdrop"></div>
-    <div class="gen-loader-content" aria-label="Generation in progress">
-      <div class="loader-prism">
-        <div class="prism-face"></div>
-        <div class="prism-face"></div>
-        <div class="prism-face"></div>
-      </div>
-      <div id="studioLoaderMsg" style="margin-top:10px;color:var(--accent-purple);" data-i18n="studio_loader_msg">Creazione in corso...</div>
     </div>
   </div>
 
@@ -1116,14 +1118,13 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       let recentGallerySignature = '';
       let recentImageObserver = null;
 
-      const loaderMsg = document.getElementById('studioLoaderMsg');
-      const showLoader = (msg) => {
-        if (loaderMsg) loaderMsg.textContent = msg || 'Creating your result...';
+      const showLoader = () => {
         loader?.classList.add('active');
+        startQuoteTypewriter();
       };
       const hideLoader = () => {
         loader?.classList.remove('active');
-        if (loaderMsg) loaderMsg.textContent = 'Creating your result...';
+        stopQuoteTypewriter();
       };
 
       // Risoluzioni permesse per piano (in sync con constants.js)
@@ -2417,7 +2418,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           if (!resp.ok) {
             const errData = await resp.json().catch(() => ({}));
             if (resp.status === 503 && errData?.code === 'MODEL_BUSY') {
-              showLoader('Model busy, retrying...');
+              showLoader();
             }
             throw new Error(errData?.error || `Errore API (${resp.status})`);
           }
@@ -2837,6 +2838,166 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
       // ── Fine AutoCopy Modal ─────────────────────────────────────
 
       setTimeout(() => mountGenAnimation(0), 200);
+    })();
+  </script>
+  <script>
+    /* ── QUOTE TYPEWRITER ─────────────────────────────────────── */
+    (function () {
+      var QUOTES = {
+        it: [
+          { text: 'La moda non è qualcosa che esiste solo nei vestiti. La moda è nel cielo, per strada, la moda ha a che fare con le idee.', author: '— Coco Chanel' },
+          { text: 'La moda passa, lo stile resta.', author: '— Yves Saint Laurent' },
+          { text: 'Vestiti male e noteranno il vestito. Vestiti elegantemente e noteranno la persona.', author: '— Coco Chanel' },
+          { text: 'La moda è architettura: è una questione di proporzioni.', author: '— Coco Chanel' },
+          { text: 'Un abito non ha senso a meno che non viva e non si muova e non si adatti alla vita di ogni giorno.', author: '— Hubert de Givenchy' },
+          { text: 'La moda è la forma più immediata di comunicazione.', author: '— Miuccia Prada' },
+          { text: 'Non esiste bruttezza. È solo una questione di trovare la giusta prospettiva.', author: '— Karl Lagerfeld' },
+          { text: 'La moda ha a che fare con la libertà.', author: '— Stella McCartney' },
+          { text: 'Il lusso è una necessità che inizia dove finisce la necessità.', author: '— Coco Chanel' },
+          { text: 'Quello che indossi è come ti presenti al mondo, specialmente oggi, quando i contatti umani sono così veloci.', author: '— Giorgio Armani' },
+          { text: 'La fotografia è l\'arte di congelare il tempo.', author: '— Henri Cartier-Bresson' },
+          { text: 'Fotografare è mettere sulla stessa linea di mira la testa, l\'occhio e il cuore.', author: '— Henri Cartier-Bresson' },
+          { text: 'Una fotografia è un segreto su un segreto. Più ti dice, meno sai.', author: '— Diane Arbus' },
+          { text: 'La fotografia è verità. E il cinema è verità ventiquattro volte al secondo.', author: '— Jean-Luc Godard' },
+          { text: 'Ogni fotografia è un certificato di presenza.', author: '— Roland Barthes' },
+          { text: 'La macchina fotografica è uno strumento che insegna alle persone come vedere senza una macchina fotografica.', author: '— Dorothea Lange' },
+          { text: 'In fotografia c\'è una realtà così sottile che diventa più reale della realtà stessa.', author: '— Alfred Stieglitz' },
+          { text: 'Una grande fotografia cattura pienamente un\'emozione o un\'atmosfera irripetibile.', author: '— Anne Geddes' },
+          { text: 'La luce è il colore della fotografia.', author: '— Richard Avedon' },
+          { text: 'La fotografia è poesia visiva.', author: '— Scott Lorenzo' },
+          { text: 'L\'IA non sostituirà i fotografi. I fotografi che usano l\'IA sostituiranno quelli che non la usano.', author: '— Pete Rates' },
+          { text: 'La creatività artificiale non è l\'opposto della creatività umana — è la sua amplificazione.', author: '— Refik Anadol' },
+          { text: 'L\'intelligenza artificiale è il nuovo elettricità.', author: '— Andrew Ng' },
+          { text: 'L\'IA è uno strumento. La domanda è: chi lo tiene in mano?', author: '— Anonimo' },
+          { text: 'Il futuro della creatività è collaborativo: umani e macchine che si completano.', author: '— Joi Ito' },
+          { text: 'L\'IA non ha gusto. Ma può aiutarti a trovare il tuo.', author: '— Anonimo' },
+          { text: 'Quello che distingue l\'uomo dalla macchina è la storia che mette nell\'immagine.', author: '— Anonimo' },
+          { text: 'L\'intelligenza artificiale è la nuova rivoluzione industriale — e questa volta riguarda la mente.', author: '— Kai-Fu Lee' },
+          { text: 'Con l\'IA, ogni brand può avere il fotografo che si merita.', author: '— Anonimo' },
+          { text: 'La tecnologia diventa arte quando non si vede più la tecnologia.', author: '— Anonimo' },
+        ],
+        en: [
+          { text: 'Fashion is not something that exists in dresses only. Fashion is in the sky, in the street, fashion has to do with ideas.', author: '— Coco Chanel' },
+          { text: 'Fashion fades, only style remains.', author: '— Yves Saint Laurent' },
+          { text: 'Dress shabbily and they remember the dress; dress impeccably and they remember the person.', author: '— Coco Chanel' },
+          { text: 'Fashion is architecture: it is a matter of proportions.', author: '— Coco Chanel' },
+          { text: 'A dress has no meaning unless it lives and moves and is part of everyday life.', author: '— Hubert de Givenchy' },
+          { text: 'Fashion is the most immediate form of communication.', author: '— Miuccia Prada' },
+          { text: 'There is no ugliness. It is only a matter of finding the right perspective.', author: '— Karl Lagerfeld' },
+          { text: 'Fashion is about freedom.', author: '— Stella McCartney' },
+          { text: 'Luxury is a necessity that begins where necessity ends.', author: '— Coco Chanel' },
+          { text: 'What you wear is how you present yourself to the world, especially today, when human contacts are so quick.', author: '— Giorgio Armani' },
+          { text: 'Photography is the art of freezing time.', author: '— Henri Cartier-Bresson' },
+          { text: 'To photograph is to put on the same line of sight the head, the eye and the heart.', author: '— Henri Cartier-Bresson' },
+          { text: 'A photograph is a secret about a secret. The more it tells you, the less you know.', author: '— Diane Arbus' },
+          { text: 'Photography is truth. And cinema is truth twenty-four times per second.', author: '— Jean-Luc Godard' },
+          { text: 'Every photograph is a certificate of presence.', author: '— Roland Barthes' },
+          { text: 'The camera is an instrument that teaches people how to see without a camera.', author: '— Dorothea Lange' },
+          { text: 'In photography there is a reality so subtle that it becomes more real than reality itself.', author: '— Alfred Stieglitz' },
+          { text: 'A great photograph fully captures an emotion or an unrepeatable atmosphere.', author: '— Anne Geddes' },
+          { text: 'Light is the color of photography.', author: '— Richard Avedon' },
+          { text: 'Photography is visual poetry.', author: '— Scott Lorenzo' },
+          { text: 'AI won\'t replace photographers. Photographers who use AI will replace those who don\'t.', author: '— Pete Rates' },
+          { text: 'Artificial creativity is not the opposite of human creativity — it is its amplification.', author: '— Refik Anadol' },
+          { text: 'Artificial intelligence is the new electricity.', author: '— Andrew Ng' },
+          { text: 'AI is a tool. The question is: who holds it?', author: '— Anonymous' },
+          { text: 'The future of creativity is collaborative: humans and machines complementing each other.', author: '— Joi Ito' },
+          { text: 'AI has no taste. But it can help you find yours.', author: '— Anonymous' },
+          { text: 'What distinguishes humans from machines is the story they put into the image.', author: '— Anonymous' },
+          { text: 'Artificial intelligence is the new industrial revolution — and this time it\'s about the mind.', author: '— Kai-Fu Lee' },
+          { text: 'With AI, every brand can have the photographer it deserves.', author: '— Anonymous' },
+          { text: 'Technology becomes art when you can no longer see the technology.', author: '— Anonymous' },
+        ],
+        es: [
+          { text: 'La moda no es algo que existe solo en los vestidos. La moda está en el cielo, en la calle, la moda tiene que ver con las ideas.', author: '— Coco Chanel' },
+          { text: 'La moda pasa, el estilo permanece.', author: '— Yves Saint Laurent' },
+          { text: 'Vístete mal y recordarán el vestido; vístete impecablemente y recordarán a la persona.', author: '— Coco Chanel' },
+          { text: 'La moda es arquitectura: es una cuestión de proporciones.', author: '— Coco Chanel' },
+          { text: 'Un vestido no tiene sentido a menos que viva y se mueva y sea parte de la vida cotidiana.', author: '— Hubert de Givenchy' },
+          { text: 'La moda es la forma más inmediata de comunicación.', author: '— Miuccia Prada' },
+          { text: 'No existe la fealdad. Solo es cuestión de encontrar la perspectiva correcta.', author: '— Karl Lagerfeld' },
+          { text: 'La moda tiene que ver con la libertad.', author: '— Stella McCartney' },
+          { text: 'El lujo es una necesidad que comienza donde termina la necesidad.', author: '— Coco Chanel' },
+          { text: 'Lo que vistes es cómo te presentas al mundo, especialmente hoy, cuando los contactos humanos son tan rápidos.', author: '— Giorgio Armani' },
+          { text: 'La fotografía es el arte de congelar el tiempo.', author: '— Henri Cartier-Bresson' },
+          { text: 'Fotografiar es poner en la misma línea de mira la cabeza, el ojo y el corazón.', author: '— Henri Cartier-Bresson' },
+          { text: 'Una fotografía es un secreto sobre un secreto. Cuanto más te dice, menos sabes.', author: '— Diane Arbus' },
+          { text: 'La fotografía es verdad. Y el cine es verdad veinticuatro veces por segundo.', author: '— Jean-Luc Godard' },
+          { text: 'Cada fotografía es un certificado de presencia.', author: '— Roland Barthes' },
+          { text: 'La cámara es un instrumento que enseña a las personas a ver sin una cámara.', author: '— Dorothea Lange' },
+          { text: 'En fotografía hay una realidad tan sutil que se vuelve más real que la realidad misma.', author: '— Alfred Stieglitz' },
+          { text: 'Una gran fotografía capta plenamente una emoción o una atmósfera irrepetible.', author: '— Anne Geddes' },
+          { text: 'La luz es el color de la fotografía.', author: '— Richard Avedon' },
+          { text: 'La fotografía es poesía visual.', author: '— Scott Lorenzo' },
+          { text: 'La IA no reemplazará a los fotógrafos. Los fotógrafos que usan IA reemplazarán a los que no.', author: '— Pete Rates' },
+          { text: 'La creatividad artificial no es lo opuesto de la creatividad humana — es su amplificación.', author: '— Refik Anadol' },
+          { text: 'La inteligencia artificial es la nueva electricidad.', author: '— Andrew Ng' },
+          { text: 'La IA es una herramienta. La pregunta es: ¿quién la sostiene?', author: '— Anónimo' },
+          { text: 'El futuro de la creatividad es colaborativo: humanos y máquinas que se complementan.', author: '— Joi Ito' },
+          { text: 'La IA no tiene gusto. Pero puede ayudarte a encontrar el tuyo.', author: '— Anónimo' },
+          { text: 'Lo que distingue al humano de la máquina es la historia que pone en la imagen.', author: '— Anónimo' },
+          { text: 'La inteligencia artificial es la nueva revolución industrial — y esta vez se trata de la mente.', author: '— Kai-Fu Lee' },
+          { text: 'Con la IA, cada marca puede tener el fotógrafo que merece.', author: '— Anónimo' },
+          { text: 'La tecnología se convierte en arte cuando ya no se ve la tecnología.', author: '— Anónimo' },
+        ],
+      };
+
+      var twTimer = null;
+      var cycleTimer = null;
+      var usedIndexes = {};
+
+      function getRandomQuote(lang) {
+        var list = QUOTES[lang] || QUOTES['en'];
+        if (!usedIndexes[lang]) usedIndexes[lang] = [];
+        if (usedIndexes[lang].length >= list.length) usedIndexes[lang] = [];
+        var available = list.map(function(_, i) { return i; }).filter(function(i) { return usedIndexes[lang].indexOf(i) === -1; });
+        var idx = available[Math.floor(Math.random() * available.length)];
+        usedIndexes[lang].push(idx);
+        return list[idx];
+      }
+
+      function typewrite(el, text, speed, onDone) {
+        el.textContent = '';
+        var i = 0;
+        twTimer = setInterval(function () {
+          el.textContent += text[i];
+          i++;
+          if (i >= text.length) {
+            clearInterval(twTimer);
+            twTimer = null;
+            if (onDone) onDone();
+          }
+        }, speed);
+      }
+
+      function showNextQuote() {
+        var lang = (window.FashionAI && window.FashionAI.i18n) ? window.FashionAI.i18n.getLang() : 'en';
+        if (!QUOTES[lang]) lang = 'en';
+        var q = getRandomQuote(lang);
+        var textEl = document.getElementById('quoteText');
+        var authorEl = document.getElementById('quoteAuthor');
+        if (!textEl || !authorEl) return;
+        authorEl.style.opacity = '0';
+        typewrite(textEl, q.text, 35, function () {
+          authorEl.textContent = q.author;
+          authorEl.style.opacity = '1';
+          cycleTimer = setTimeout(showNextQuote, 4000);
+        });
+      }
+
+      window.startQuoteTypewriter = function () {
+        stopQuoteTypewriter();
+        showNextQuote();
+      };
+
+      window.stopQuoteTypewriter = function () {
+        if (twTimer) { clearInterval(twTimer); twTimer = null; }
+        if (cycleTimer) { clearTimeout(cycleTimer); cycleTimer = null; }
+        var textEl = document.getElementById('quoteText');
+        var authorEl = document.getElementById('quoteAuthor');
+        if (textEl) textEl.textContent = '';
+        if (authorEl) authorEl.textContent = '';
+      };
     })();
   </script>
   <script>

@@ -3326,12 +3326,13 @@ body::after {
 }
 
 .gen-loader {
-	position: fixed;
+	position: absolute;
 	inset: 0;
 	display: none;
 	align-items: center;
 	justify-content: center;
-	z-index: 14000;
+	z-index: 10;
+	border-radius: inherit;
 }
 
 .gen-loader.active {
@@ -3343,6 +3344,7 @@ body::after {
 	inset: 0;
 	background: rgba(0, 0, 0, 0.6);
 	backdrop-filter: blur(4px);
+	border-radius: 18px;
 }
 
 .gen-loader-content {
@@ -3350,6 +3352,43 @@ body::after {
 	width: 160px;
 	height: 160px;
 	z-index: 1;
+}
+
+.quote-loader-wrap {
+	margin-top: 24px;
+	width: 260px;
+	text-align: center;
+}
+
+.quote-loader-text {
+	font-style: italic;
+	font-size: 13px;
+	line-height: 1.6;
+	color: rgba(246, 232, 177, 0.9);
+	margin: 0 0 8px 0;
+	min-height: 44px;
+}
+
+.quote-loader-text::after {
+	content: '|';
+	display: inline-block;
+	margin-left: 2px;
+	color: rgba(212, 175, 55, 0.8);
+	animation: quote-cursor 0.8s step-end infinite;
+}
+
+@keyframes quote-cursor {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0; }
+}
+
+.quote-loader-author {
+	font-style: normal;
+	font-size: 11px;
+	letter-spacing: 0.08em;
+	color: rgba(212, 175, 55, 0.7);
+	margin: 0;
+	transition: opacity 0.4s ease;
 }
 
 .gen-loader-content svg {
