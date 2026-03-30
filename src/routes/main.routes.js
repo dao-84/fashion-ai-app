@@ -41,6 +41,15 @@ function registerMainRoutes(app, deps) {
   app.post('/api/billing/checkout', requireAuth, billingController.checkout);
   app.post('/api/billing/portal', requireAuth, billingController.portal);
 
+  app.get('/api/credits/transactions', requireAuth, async (req, res) => {
+    try {
+      const transactions = await creditService.getTransactionHistory({ userId: req.auth.user.id, limit: 10 });
+      res.json({ transactions });
+    } catch (err) {
+      res.status(500).json({ error: 'Errore nel caricamento delle transazioni' });
+    }
+  });
+
   app.post('/api/waitlist', waitlistController.submit);
   app.post('/api/openai/prepare', requireAuth, appController.prepareOpenAI);
   app.post('/api/track-event', trackController.event);

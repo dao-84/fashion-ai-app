@@ -127,6 +127,16 @@ function createCreditService(deps) {
       );
     },
 
+    // Ultime N transazioni dell'utente
+    async getTransactionHistory({ userId, limit = 10 }) {
+      const pool = getPool();
+      const result = await pool.query(
+        'SELECT amount, type, description, created_at FROM credit_transactions WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2',
+        [userId, limit]
+      );
+      return result.rows;
+    },
+
     // Rimborso crediti dopo errore provider (aggiunge a credits_plan)
     async refundCredits({ userId, amount, description }) {
       const pool = getPool();
