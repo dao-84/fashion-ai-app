@@ -1267,7 +1267,13 @@
   /* ─────────────────────────────────────────────────────────────
      LOGICA
   ───────────────────────────────────────────────────────────── */
-  var currentLang = localStorage.getItem('fashionai_lang') || 'it';
+  function detectBrowserLang() {
+    var nav = (navigator.language || navigator.userLanguage || 'it').toLowerCase();
+    if (nav.startsWith('it')) return 'it';
+    if (nav.startsWith('es')) return 'es';
+    return 'en';
+  }
+  var currentLang = localStorage.getItem('fashionai_lang') || detectBrowserLang();
 
   function t(key) {
     var lang = T[currentLang] || T['it'];
