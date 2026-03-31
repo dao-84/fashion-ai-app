@@ -2392,6 +2392,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           hasCustomBackground: Boolean(customBackgroundPrompt),
         }));
 
+        const generateStartTime = Date.now();
         showLoader();
         try {
           const resp = await fetch('/api/generate', {
@@ -2432,7 +2433,11 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           trackEvent('image_generated_failed', getTrackingMetadata({
             errorMessage: err?.message || 'generate failed',
           }));
-          alert(err?.message || 'Unable to create your result. Please try again.');
+          if (Date.now() - generateStartTime > 20000) {
+            alert('La generazione è in corso ma ci vuole più tempo del previsto.\n\nControlla la gallery tra qualche secondo — le immagini potrebbero già essere pronte.');
+          } else {
+            alert(err?.message || 'Unable to create your result. Please try again.');
+          }
         } finally {
           hideLoader();
         }
@@ -2447,6 +2452,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           return;
         }
         trackEvent('regenerate_clicked', getTrackingMetadata());
+        const regenStartTime = Date.now();
         showLoader();
         try {
           const resp = await fetch('/api/generate', {
@@ -2476,7 +2482,11 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             action: 'regenerate',
             errorMessage: err?.message || 'regeneration failed',
           }));
-          alert('Regeneration failed.');
+          if (Date.now() - regenStartTime > 20000) {
+            alert('La generazione è in corso ma ci vuole più tempo del previsto.\n\nControlla la gallery tra qualche secondo — le immagini potrebbero già essere pronte.');
+          } else {
+            alert('Regeneration failed.');
+          }
         } finally {
           hideLoader();
         }
@@ -2526,6 +2536,7 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
           output_format: 'jpg',
           aspect_ratio: lastInput?.aspect_ratio || '1:1',
         };
+        const poseStartTime = Date.now();
         showLoader();
         try {
           const resp = await fetch('/api/generate', {
@@ -2555,7 +2566,11 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
             action: 'change_pose',
             errorMessage: err?.message || 'pose change failed',
           }));
-          alert('Pose change failed.');
+          if (Date.now() - poseStartTime > 20000) {
+            alert('La generazione è in corso ma ci vuole più tempo del previsto.\n\nControlla la gallery tra qualche secondo — le immagini potrebbero già essere pronte.');
+          } else {
+            alert('Pose change failed.');
+          }
         } finally {
           hideLoader();
         }
