@@ -563,6 +563,7 @@
                     <li><i class="fas fa-check"></i><span data-i18n="custom_bg">Sfondo personalizzato</span></li>
                     <li><i class="fas fa-xmark"></i><span data-i18n="custom_model">Modella personalizzata</span></li>
                     <li><i class="fas fa-droplet"></i><span>Watermark <strong>(rimozione 0,5 cr)</strong></span></li>
+                    <li><i class="fas fa-xmark"></i><span data-i18n="parallel_queue">Coda parallela — genera mentre aspetti</span></li>
                 </ul>
                 <a href="studio.html" class="plan-cta plan-cta--outline" data-i18n="cta_free">Prova gratis</a>
             </div>
@@ -589,6 +590,7 @@
                     <li><i class="fas fa-check"></i><span data-i18n="custom_bg">Sfondo personalizzato</span></li>
                     <li><i class="fas fa-xmark"></i><span data-i18n="custom_model">Modella personalizzata</span></li>
                     <li><i class="fas fa-check"></i><span>Nessun watermark</span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="parallel_queue">Coda parallela — genera mentre aspetti</span></li>
                 </ul>
                 <a href="#" class="plan-cta plan-cta--outline" data-price-key="starter_annual" data-i18n="cta_start">Inizia ora</a>
             </div>
@@ -617,6 +619,7 @@
                     <li><i class="fas fa-check"></i><span data-i18n="custom_bg">Sfondo personalizzato</span></li>
                     <li><i class="fas fa-check"></i><span data-i18n="priority_gen">Priorità di generazione</span></li>
                     <li><i class="fas fa-check"></i><span>Nessun watermark</span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="parallel_queue">Coda parallela — genera mentre aspetti</span></li>
                 </ul>
                 <a href="#" class="plan-cta plan-cta--primary" data-price-key="pro_annual" data-i18n="cta_pro">Attiva Pro</a>
             </div>
@@ -645,6 +648,7 @@
                     <li><i class="fas fa-check"></i><span data-i18n="team_accounts">Account team multipli</span></li>
                     <li><i class="fas fa-check"></i><span data-i18n="dedicated_support">Supporto dedicato</span></li>
                     <li><i class="fas fa-check"></i><span>Nessun watermark</span></li>
+                    <li><i class="fas fa-check"></i><span data-i18n="parallel_queue">Coda parallela — genera mentre aspetti</span></li>
                 </ul>
                 <a href="#" class="plan-cta plan-cta--outline" data-price-key="enterprise_annual" data-i18n="cta_start">Inizia ora</a>
             </div>
@@ -782,6 +786,13 @@
                             <td><i class="fas fa-check check"></i></td>
                         </tr>
                         <tr>
+                            <td data-i18n="col_parallel_queue">Coda parallela</td>
+                            <td><i class="fas fa-xmark cross"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                            <td class="featured-val"><i class="fas fa-check check"></i></td>
+                            <td><i class="fas fa-check check"></i></td>
+                        </tr>
+                        <tr>
                             <td data-i18n="col_api">API Access</td>
                             <td><i class="fas fa-xmark cross"></i></td>
                             <td><i class="fas fa-xmark cross"></i></td>
@@ -825,7 +836,7 @@
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer" data-i18n="faq1_a">
-                    Ogni generazione di immagine costa crediti. La quantità dipende dalla risoluzione scelta: 1K costa 1 credito, 2K costa 2 crediti (o 1 con il piano Business), 4K costa 3 crediti (o 1 con Business). I crediti mensili si azzerano a inizio mese e non si accumulano.
+                    Ogni generazione di immagine costa crediti. La quantità dipende dalla risoluzione scelta: 1K costa 1 credito, 2K costa 1,5 crediti, 4K costa 2 crediti (solo Pro ed Enterprise). I crediti mensili si azzerano a inizio mese e non si accumulano.
                 </div>
             </div>
 
@@ -861,11 +872,11 @@
 
             <div class="faq-item">
                 <div class="faq-question" onclick="toggleFaq(this)">
-                    <span data-i18n="faq5_q">Come funziona il piano Business rispetto al Pro?</span>
+                    <span data-i18n="faq5_q">Come funziona il piano Enterprise rispetto al Pro?</span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer" data-i18n="faq5_a">
-                    La differenza chiave è il costo delle risoluzioni alte. Con Pro, una generazione 4K costa 3 crediti. Con Business costa sempre 1 credito, indipendentemente dalla risoluzione. Per chi genera molte immagini in alta qualità, Business è molto più conveniente.
+                    Il piano Enterprise aggiunge la risoluzione 4K, 500 crediti al mese, API Access, account team multipli, supporto dedicato e coda parallela illimitata. È pensato per brand con volumi elevati o team che lavorano insieme.
                 </div>
             </div>
         </section>
