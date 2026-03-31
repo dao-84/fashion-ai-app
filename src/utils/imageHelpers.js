@@ -131,7 +131,7 @@ async function applyWatermark(buffer) {
   const h = meta.height || 1024;
 
   const logoPath = path.join(__dirname, '../../images/logo-shotless.png');
-  const logoW = Math.round(w * 0.60);
+  const logoW = Math.round(w * 0.90);
 
   // Ridimensiona logo e assicura canale alpha
   const logoResized = await sharp(logoPath)
