@@ -23,6 +23,12 @@
         <li><a href="#" class="nav-link" data-auth-link data-auth-default="Accedi">Accedi</a></li>
         <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Remaining credit">—</span></li>
       </ul>
+
+      <div class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </nav>
   </header>
 
@@ -345,10 +351,10 @@
           <div class="studio-actions">
             <div class="studio-actions-group studio-actions-group--single">
               <div class="studio-actions-group__buttons">
-                <button class="image-viewer-btn image-viewer-btn--utility" id="studioOpen" data-i18n="studio_open">Apri</button>
+                <button class="image-viewer-btn image-viewer-btn--utility" id="studioOpen" title="Apri"><i class="fa fa-eye"></i></button>
                 <button class="image-viewer-btn image-viewer-btn--utility" id="studioPose" data-i18n="studio_pose">Cambia posa</button>
-                <button class="image-viewer-btn image-viewer-btn--enhance" id="studioRegen" data-i18n="studio_regen">Rigenera</button>
-                <button class="image-viewer-btn image-viewer-btn--utility" id="studioAutoCopy" title="AutoCopy"><i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i>AutoCopy</button>
+                <button class="image-viewer-btn image-viewer-btn--enhance" id="studioRegen" title="Rigenera"><i class="fa fa-rotate"></i></button>
+                <button class="image-viewer-btn image-viewer-btn--utility" id="studioAutoCopy" title="AutoCopy"><i class="fa fa-wand-magic-sparkles"></i></button>
                 <button class="image-viewer-btn image-viewer-btn--download" id="studioDownload" title="Scarica"><i class="fa fa-download"></i></button>
               </div>
             </div>
@@ -421,7 +427,7 @@
             <div class="model-builder-section">
               <div class="model-builder-label" id="autoCopyDescLabel">Descrizione</div>
               <div style="display:flex; gap:8px; align-items:flex-start;">
-                <div id="autoCopyDescResult" style="flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 14px; color:var(--text-secondary); font-size:0.88rem; line-height:1.6; white-space:pre-line;"></div>
+                <div id="autoCopyDescResult" style="flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 14px; color:var(--text-secondary); font-size:0.78rem; line-height:1.6; white-space:pre-line;"></div>
                 <button type="button" class="image-viewer-btn image-viewer-btn--utility" id="autoCopyCopyDesc" title="Copia descrizione"><i class="fa fa-copy"></i></button>
               </div>
             </div>
