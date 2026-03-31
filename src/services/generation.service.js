@@ -269,6 +269,17 @@ function createGenerationService(deps) {
 
           // ASYNC PATH: FAL.AI usa la coda — risponde subito con jobId
           if (useFal) {
+            // Piano free: blocca se ha già un job attivo
+            const userPlan = auth?.user?.plan || 'free';
+            if (userPlan === 'free' && auth?.isAuthenticated) {
+              const userId = auth.user.id;
+              for (const [, job] of jobCache) {
+                if (job.auth?.user?.id === userId && (job.status === 'queued' || job.status === 'processing')) {
+                  throw createServiceError(429, 'Hai già una generazione in corso.');
+                }
+              }
+            }
+
             const requestId = await falIntegration.submitToQueue(REPLICATE_MODEL_VERSION, inputPayload);
             log.info(logEmoji.generate, `[generate] job FAL.AI in coda: ${requestId}`);
             jobCache.set(requestId, {
