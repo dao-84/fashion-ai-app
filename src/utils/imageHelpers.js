@@ -131,7 +131,7 @@ async function applyWatermark(buffer) {
   const h = meta.height || 1024;
 
   const logoPath = path.join(__dirname, '../../images/logo-shotless.png');
-  const logoW = Math.round(w * 0.90);
+  const logoW = Math.round(w * 0.22);
 
   // Ridimensiona logo e assicura canale alpha
   const logoResized = await sharp(logoPath)
@@ -144,22 +144,35 @@ async function applyWatermark(buffer) {
   const lw = logoMeta.width;
   const lh = logoMeta.height;
 
-  // Applica opacità al 40% moltiplicando il canale alpha
+  // Applica opacità al 55%
   const logoWithAlpha = await sharp(logoResized)
     .composite([{
       input: {
-        create: { width: lw, height: lh, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0.75 } }
+        create: { width: lw, height: lh, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0.55 } }
       },
       blend: 'dest-in',
     }])
     .png()
     .toBuffer();
 
-  const left = Math.round((w - lw) / 2);
-  const top = Math.round((h - lh) / 2);
+  // Griglia diagonale: righe alternate sfalsate di metà colonna
+  const colGap = Math.round(lw * 1.4);
+  const rowGap = Math.round(lh * 2.2);
+  const composites = [];
+
+  for (let row = 0; row * rowGap < h + lh; row++) {
+    const top = Math.round(row * rowGap);
+    const xOffset = (row % 2) * Math.round(colGap / 2);
+    for (let col = 0; col * colGap + xOffset - Math.round(colGap / 2) < w + lw; col++) {
+      const left = Math.round(col * colGap + xOffset - Math.round(colGap / 2));
+      if (left + lw >= 0 && left < w && top < h) {
+        composites.push({ input: logoWithAlpha, left: Math.max(0, left), top: Math.max(0, top), blend: 'over' });
+      }
+    }
+  }
 
   return sharp(buffer)
-    .composite([{ input: logoWithAlpha, left, top, blend: 'over' }])
+    .composite(composites)
     .jpeg({ quality: 90 })
     .toBuffer();
 }
