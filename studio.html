@@ -2790,7 +2790,7 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
       });
 
       openBtn?.addEventListener('click', () => {
-        if (lastImageUrl) window.open(lastImageUrl, '_blank');
+        if (lastImageUrl) window.openStudioViewer(lastImageUrl, lastImageUrl.split('/').pop());
       });
       backgroundPrompt?.addEventListener('focus', () => trackEvent('change_scene_clicked', getTrackingMetadata({ source: 'background_input' })));
       progressBackgroundPrompt?.addEventListener('focus', () => trackEvent('change_scene_clicked', getTrackingMetadata({ source: 'progress_background_input' })));
