@@ -2756,6 +2756,7 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
         };
         const poseStartTime = Date.now();
         showLoader();
+        let poseIsAsync = false;
         try {
           const resp = await fetch('/api/generate', {
             method: 'POST',
@@ -2767,6 +2768,35 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
             throw new Error(`Errore API (${resp.status}): ${txt}`);
           }
           const data = await resp.json();
+
+          if (data.jobId) {
+            // Risposta asincrona — avvia polling
+            poseIsAsync = true;
+            createPendingJobCard(data.jobId);
+            startPolling(data.jobId, {
+              onStatusChange: (status) => updatePendingJobCard(data.jobId, status),
+              onSuccess: (result) => {
+                removePendingJobCard(data.jobId);
+                const saved = result?.saved || [];
+                const output = result?.output || [];
+                const first = saved[0] || output[0];
+                if (first) {
+                  const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+                  trackEvent('image_generated_success', getTrackingMetadata({ action: 'change_pose', imageUrl: full }));
+                  applyGeneratedResult(full, saved.length || output.length || 1);
+                }
+                hideLoader();
+              },
+              onError: (err) => {
+                removePendingJobCard(data.jobId);
+                hideLoader();
+                alert('Pose change failed: ' + err.message);
+              },
+            });
+            return;
+          }
+
+          // Risposta sincrona
           const saved = data?.saved || [];
           const output = data?.output || [];
           const first = saved[0] || output[0];
@@ -2790,7 +2820,7 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
             alert('Pose change failed.');
           }
         } finally {
-          hideLoader();
+          if (!poseIsAsync) hideLoader();
         }
       });
 
