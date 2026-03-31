@@ -125,34 +125,41 @@ function normalizeImageInput(item, deps) {
 
 async function applyWatermark(buffer) {
   const sharp = require('sharp');
+  const path = require('path');
   const meta = await sharp(buffer).metadata();
   const w = meta.width || 1024;
   const h = meta.height || 1024;
 
-  const text = 'shotless.ai';
-  const fontSize = Math.round(w * 0.05);
-  const colGap = Math.round(fontSize * 9);
-  const rowGap = Math.round(fontSize * 5);
-  const angle = -35;
-  const diagonal = Math.ceil(Math.sqrt(w * w + h * h));
+  const logoPath = path.join(__dirname, '../../images/logo-shotless.png');
+  const logoW = Math.round(w * 0.30);
 
-  const svgTiles = [];
-  for (let y = -diagonal; y < diagonal * 2; y += rowGap) {
-    for (let x = -diagonal; x < diagonal * 2; x += colGap) {
-      svgTiles.push(`<text x="${x}" y="${y}" font-size="${fontSize}" fill="rgba(255,255,255,0.50)" font-family="Arial, sans-serif" font-weight="bold" letter-spacing="2">${text}</text>`);
-    }
-  }
+  // Ridimensiona logo e assicura canale alpha
+  const logoResized = await sharp(logoPath)
+    .resize(logoW, null, { fit: 'inside' })
+    .ensureAlpha()
+    .png()
+    .toBuffer();
 
-  const svg = Buffer.from(`
-    <svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <g transform="rotate(${angle}, ${w / 2}, ${h / 2})">
-        ${svgTiles.join('\n')}
-      </g>
-    </svg>
-  `);
+  const logoMeta = await sharp(logoResized).metadata();
+  const lw = logoMeta.width;
+  const lh = logoMeta.height;
+
+  // Applica opacità al 40% moltiplicando il canale alpha
+  const logoWithAlpha = await sharp(logoResized)
+    .composite([{
+      input: {
+        create: { width: lw, height: lh, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0.40 } }
+      },
+      blend: 'dest-in',
+    }])
+    .png()
+    .toBuffer();
+
+  const left = Math.round((w - lw) / 2);
+  const top = Math.round((h - lh) / 2);
 
   return sharp(buffer)
-    .composite([{ input: svg, top: 0, left: 0 }])
+    .composite([{ input: logoWithAlpha, left, top, blend: 'over' }])
     .jpeg({ quality: 90 })
     .toBuffer();
 }
