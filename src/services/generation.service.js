@@ -4,6 +4,9 @@ const { cleanTextInput } = require('../utils/stringHelpers');
 const { retryAsync } = require('../utils/asyncRetry');
 const r2 = require('../integrations/storage/r2.integration');
 
+// Cache in memoria per i job FAL.AI asincroni
+const jobCache = new Map();
+
 function createServiceError(status, message, details, code) {
   const error = new Error(message);
   error.status = status;
@@ -264,6 +267,25 @@ function createGenerationService(deps) {
           log.info(logEmoji.generate, `[generate] aspect_ratio: ${inputPayload.aspect_ratio}`);
           log.info(logEmoji.generate, `[generate] resolution: ${inputPayload.resolution}`);
 
+          // ASYNC PATH: FAL.AI usa la coda — risponde subito con jobId
+          if (useFal) {
+            const requestId = await falIntegration.submitToQueue(REPLICATE_MODEL_VERSION, inputPayload);
+            log.info(logEmoji.generate, `[generate] job FAL.AI in coda: ${requestId}`);
+            jobCache.set(requestId, {
+              status: 'queued',
+              createdAt: Date.now(),
+              auth,
+              plan: auth?.user?.plan || 'free',
+              resolution,
+              style: input.style || rawBody.style || null,
+              creditCost,
+              providerName: 'FAL.AI',
+              result: null,
+              error: null,
+            });
+            return { type: 'json', status: 202, body: { jobId: requestId, status: 'queued' } };
+          }
+
           const output = await retryAsync(
             () => activeIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload),
             {
@@ -364,6 +386,81 @@ function createGenerationService(deps) {
         log.error(logEmoji.error, 'Proxy error:', error);
         throw createServiceError(500, 'Proxy request failed', error.message);
       }
+    },
+
+    async getJobStatus(jobId) {
+      const cached = jobCache.get(jobId);
+      if (!cached) {
+        throw createServiceError(404, 'Job non trovato o scaduto.');
+      }
+
+      // Risultato già in cache — non rielaborare
+      if (cached.status === 'done') {
+        return { status: 'done', saved: cached.result.saved, output: cached.result.output };
+      }
+      if (cached.status === 'error') {
+        return { status: 'error', message: cached.error };
+      }
+
+      // Chiedi a FAL lo stato attuale
+      let falStatus;
+      try {
+        falStatus = await falIntegration.getQueueStatus(jobId);
+      } catch (err) {
+        throw createServiceError(500, 'Errore nel controllo stato job FAL.AI', err.message);
+      }
+
+      const status = falStatus?.status;
+
+      if (status === 'IN_QUEUE') {
+        return { status: 'queued' };
+      }
+      if (status === 'IN_PROGRESS') {
+        cached.status = 'processing';
+        return { status: 'processing' };
+      }
+      if (status === 'FAILED') {
+        cached.status = 'error';
+        cached.error = 'Generazione fallita su FAL.AI';
+        return { status: 'error', message: cached.error };
+      }
+      if (status === 'COMPLETED') {
+        try {
+          const output = await falIntegration.getQueueResult(jobId);
+          const plan = cached.plan || 'free';
+          const saved = await collectSavedOutputs(output, plan);
+          const savedUrls = saved.map((s) => s?.url || s);
+
+          // DB insert se utente loggato
+          if (getPool && cached.auth?.isAuthenticated) {
+            try {
+              const pool = getPool();
+              for (const item of saved) {
+                if (item?.url) {
+                  await pool.query(
+                    'INSERT INTO generations (user_id, asset_url, asset_url_clean, provider, resolution, style, credits_used, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+                    [cached.auth.user.id, item.url, item.cleanUrl || null, 'FAL.AI', cached.resolution, cached.style, cached.creditCost || 0, 'completed']
+                  );
+                }
+              }
+            } catch (dbErr) {
+              log.warn(logEmoji.warn, `[job-status] DB insert fallita: ${dbErr.message}`);
+            }
+          }
+
+          cached.status = 'done';
+          cached.result = { saved: savedUrls, output };
+          log.info(logEmoji.generate, `[job-status] job ${jobId} completato. File salvati: ${savedUrls.length}`);
+          return { status: 'done', saved: savedUrls, output };
+        } catch (err) {
+          cached.status = 'error';
+          cached.error = err.message;
+          throw createServiceError(500, 'Errore nel salvataggio immagine', err.message);
+        }
+      }
+
+      // Status sconosciuto — consideralo in elaborazione
+      return { status: 'processing' };
     },
 
   };

@@ -340,6 +340,7 @@
                   <p id="quoteText" class="quote-loader-text"></p>
                   <p id="quoteAuthor" class="quote-loader-author"></p>
                 </div>
+                <p id="jobStatusText" class="job-status-text"></p>
               </div>
             </div>
             <img id="studioMainImg" alt="Generated fashion result">
@@ -634,6 +635,9 @@
   <div id="studioResolutionWarning" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(20,16,8,.95);border:1px solid rgba(212,175,55,.5);border-radius:14px;padding:10px 20px;color:rgba(255,245,214,.9);font-size:13px;z-index:9999;text-align:center;backdrop-filter:blur(8px);" data-i18n="studio_resolution_warning">
     ⚠️ Risoluzione sperimentale — la generazione potrebbe fallire. Puoi riprovare.
   </div>
+
+  <!-- Toast notifica non bloccante -->
+  <div id="studioToast" class="studio-toast"></div>
 
   <!-- Modal upgrade piano -->
   <div id="upgradeModalBackdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10000;backdrop-filter:blur(4px);"></div>
@@ -1110,6 +1114,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       let recentRenderedCount = 0;
       let recentGallerySignature = '';
       let recentImageObserver = null;
+      const activeJobs = new Map(); // jobId → 'queued' | 'processing'
 
       const showLoader = () => {
         loader?.classList.add('active');
@@ -1118,7 +1123,111 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       const hideLoader = () => {
         loader?.classList.remove('active');
         stopQuoteTypewriter();
+        const statusEl = document.getElementById('jobStatusText');
+        if (statusEl) statusEl.textContent = '';
       };
+
+      // Toast non bloccante
+      let toastTimer = null;
+      function showStudioToast(msg, durationMs = 4000) {
+        const el = document.getElementById('studioToast');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add('is-visible');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove('is-visible'), durationMs);
+      }
+
+      // Persistenza job attivi su localStorage
+      function loadPendingJobsFromStorage() {
+        try {
+          const stored = JSON.parse(localStorage.getItem('studio_pending_jobs') || '[]');
+          const MAX_AGE = 20 * 60 * 1000; // 20 minuti
+          return stored.filter((j) => j.jobId && (Date.now() - j.startedAt) < MAX_AGE);
+        } catch { return []; }
+      }
+
+      function savePendingJobsToStorage() {
+        const jobs = [];
+        activeJobs.forEach((status, jobId) => jobs.push({ jobId, startedAt: Date.now() }));
+        localStorage.setItem('studio_pending_jobs', JSON.stringify(jobs));
+      }
+
+      // Card placeholder per job in corso nella lista risultati
+      function _buildPendingCard(jobId, statusText) {
+        const card = document.createElement('div');
+        card.className = 'studio-recent-item';
+        card.id = `pending-${jobId}`;
+        card.innerHTML = `
+          <div class="studio-recent-thumb studio-pending-thumb">
+            <div class="pending-job-status">
+              <div class="pending-job-spinner"></div>
+              <span class="pending-job-text" id="pending-text-${jobId}">${statusText}</span>
+            </div>
+          </div>`;
+        return card;
+      }
+
+      function createPendingJobCard(jobId) {
+        if (!recentList) return;
+        activeJobs.set(jobId, 'queued');
+        savePendingJobsToStorage();
+        recentList.insertBefore(_buildPendingCard(jobId, 'In coda...'), recentList.firstChild);
+      }
+
+      function updatePendingJobCard(jobId, status) {
+        activeJobs.set(jobId, status);
+        const el = document.getElementById(`pending-text-${jobId}`);
+        if (el) el.textContent = status === 'processing' ? 'Elaborazione...' : 'In coda...';
+      }
+
+      function removePendingJobCard(jobId) {
+        activeJobs.delete(jobId);
+        savePendingJobsToStorage();
+        const card = document.getElementById(`pending-${jobId}`);
+        if (card) card.remove();
+      }
+
+      // Polling asincrono stato job FAL.AI
+      function startPolling(jobId, { onStatusChange, onSuccess, onError }) {
+        const MAX_POLLS = 300; // 300 * 3 secondi = 15 minuti max
+        let pollCount = 0;
+        let pollTimer = null;
+        let lastStatus = null;
+
+        function stopPolling() {
+          if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+        }
+
+        onStatusChange?.('queued');
+
+        pollTimer = setInterval(async () => {
+          pollCount++;
+          if (pollCount > MAX_POLLS) {
+            stopPolling();
+            onError(new Error('La generazione ha impiegato troppo tempo. Controlla la gallery — le immagini potrebbero essere pronte.'));
+            return;
+          }
+          try {
+            const resp = await fetch(`/api/job-status/${encodeURIComponent(jobId)}`);
+            const data = await resp.json();
+            if (data.status === 'queued' || data.status === 'processing') {
+              if (data.status !== lastStatus) {
+                lastStatus = data.status;
+                onStatusChange?.(data.status);
+              }
+            } else if (data.status === 'done') {
+              stopPolling();
+              onSuccess(data);
+            } else if (data.status === 'error') {
+              stopPolling();
+              onError(new Error(data.message || 'Errore durante la generazione.'));
+            }
+          } catch (_err) {
+            // Errore di rete durante il poll — riprova al prossimo ciclo
+          }
+        }, 6000);
+      }
 
       // Risoluzioni permesse per piano (in sync con constants.js)
       var PLAN_RESOLUTIONS = {
@@ -2253,6 +2362,13 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             return;
           }
           appendRecentBatch();
+          // Re-aggiungi card dei job in corso (sopravvivono al rebuild della lista)
+          activeJobs.forEach((status, jobId) => {
+            if (!document.getElementById(`pending-${jobId}`)) {
+              const statusText = status === 'processing' ? 'Elaborazione...' : 'In coda...';
+              recentList.insertBefore(_buildPendingCard(jobId, statusText), recentList.firstChild);
+            }
+          });
           requestAnimationFrame(() => {
             recentList.scrollLeft = Math.min(prevScrollLeft, Math.max(0, recentList.scrollWidth - recentList.clientWidth));
             handleRecentScrollLoad();
@@ -2266,6 +2382,28 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       recentList?.addEventListener('scroll', handleRecentScrollLoad, { passive: true });
       setInterval(refreshRecent, 20000);
       refreshRecent();
+
+      // Ripristina job in corso da sessione precedente (cambio pagina / refresh)
+      loadPendingJobsFromStorage().forEach(({ jobId }) => {
+        if (activeJobs.has(jobId)) return;
+        createPendingJobCard(jobId);
+        startPolling(jobId, {
+          onStatusChange: (status) => updatePendingJobCard(jobId, status),
+          onSuccess: (result) => {
+            removePendingJobCard(jobId);
+            const saved = result.saved || [];
+            const output = result.output || [];
+            const first = saved[0] || output[0];
+            if (first) {
+              const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+              applyGeneratedResult(full, saved.length || output.length || 1);
+              showStudioToast('✦ Immagine pronta!', 3000);
+            }
+          },
+          onError: () => removePendingJobCard(jobId),
+        });
+      });
+
       if (aspectSelect) {
         aspectSelect.value = '3:4';
       }
@@ -2393,6 +2531,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         }));
 
         const generateStartTime = Date.now();
+        let asyncPolling = false;
         showLoader();
         try {
           const resp = await fetch('/api/generate', {
@@ -2417,6 +2556,37 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             throw new Error(errData?.error || `Errore API (${resp.status})`);
           }
           const data = await resp.json();
+
+          // ASYNC PATH: il server ha restituito un jobId — parte il polling
+          if (data?.jobId) {
+            asyncPolling = true; // blocca hideLoader() nel finally
+            hideLoader(); // nascondi subito il loader — l'utente è libero
+            createPendingJobCard(data.jobId);
+            showStudioToast('✦ Generazione avviata — puoi continuare a lavorare!');
+            startPolling(data.jobId, {
+              onStatusChange: (status) => updatePendingJobCard(data.jobId, status),
+              onSuccess: (result) => {
+                removePendingJobCard(data.jobId);
+                const saved = result.saved || [];
+                const output = result.output || [];
+                const first = saved[0] || output[0];
+                if (first) {
+                  const full = first.startsWith('http') ? first : `${window.location.origin}/${first.replace(/^\/+/, '')}`;
+                  trackEvent('image_generated_success', getTrackingMetadata({ imageUrl: full, imageCount: saved.length || output.length || 1 }));
+                  applyGeneratedResult(full, saved.length || output.length || 1);
+                  showStudioToast('✦ Immagine pronta!', 3000);
+                }
+              },
+              onError: (err) => {
+                removePendingJobCard(data.jobId);
+                trackEvent('image_generated_failed', getTrackingMetadata({ errorMessage: err?.message || 'polling failed' }));
+                alert(err?.message || 'Errore durante la generazione. Controlla la gallery.');
+              },
+            });
+            return; // finally vedrà asyncPolling=true e non chiuderà il loader di nuovo
+          }
+
+          // SYNC PATH: risposta diretta (Replicate o altri provider)
           const saved = data?.saved || [];
           const output = data?.output || [];
           const first = saved[0] || output[0];
@@ -2439,7 +2609,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
             alert(err?.message || 'Unable to create your result. Please try again.');
           }
         } finally {
-          hideLoader();
+          if (!asyncPolling) hideLoader();
         }
       };
 

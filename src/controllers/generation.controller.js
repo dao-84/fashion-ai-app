@@ -44,6 +44,19 @@ function createGenerationController(deps) {
       }
     },
 
+    getJobStatus: async (req, res) => {
+      try {
+        const { jobId } = req.params;
+        if (!jobId) return res.status(400).json({ error: 'jobId mancante' });
+        const result = await generationService.getJobStatus(jobId);
+        return res.status(200).json(result);
+      } catch (error) {
+        return res.status(error.status || 500).json({
+          error: error.message || 'Errore nel controllo stato job',
+        });
+      }
+    },
+
   };
 }
 

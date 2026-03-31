@@ -47,6 +47,44 @@ function createFalIntegration(deps) {
 
       throw new Error('FAL.AI: nessuna immagine ricevuta nella risposta');
     },
+
+    async submitToQueue(_modelId, input) {
+      if (!fal) {
+        throw new Error('FAL.AI non configurato: aggiungi FAL_KEY in .env');
+      }
+
+      const falInput = { ...input };
+      if (falInput.image_input !== undefined) {
+        falInput.image_urls = falInput.image_input;
+        delete falInput.image_input;
+      }
+      if (falInput.output_format === 'jpg') {
+        falInput.output_format = 'jpeg';
+      }
+
+      const { request_id } = await fal.queue.submit(FAL_MODEL_ID, { input: falInput });
+      return request_id;
+    },
+
+    async getQueueStatus(requestId) {
+      if (!fal) {
+        throw new Error('FAL.AI non configurato: aggiungi FAL_KEY in .env');
+      }
+      return fal.queue.status(FAL_MODEL_ID, { requestId, logs: false });
+    },
+
+    async getQueueResult(requestId) {
+      if (!fal) {
+        throw new Error('FAL.AI non configurato: aggiungi FAL_KEY in .env');
+      }
+      const result = await fal.queue.result(FAL_MODEL_ID, { requestId });
+      const images = result?.images ?? result?.data?.images ?? [];
+      if (images.length > 0) {
+        return images.map((img) => img.url ?? img);
+      }
+      if (Array.isArray(result)) return result;
+      throw new Error('FAL.AI: nessuna immagine ricevuta nella risposta');
+    },
   };
 }
 

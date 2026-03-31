@@ -59,6 +59,7 @@ function registerMainRoutes(app, deps) {
 
   app.post('/api/generate-model', requireAuth, generationController.generateModel);
   app.post('/api/generate', requireAuth, generationController.generate);
+  app.get('/api/job-status/:jobId', requireAuth, generationController.getJobStatus);
 
   // Proxy download immagini (aggira CORS di R2)
   app.get('/api/download', requireAuth, async (req, res) => {
