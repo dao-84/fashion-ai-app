@@ -148,7 +148,7 @@ async function applyWatermark(buffer) {
   const logoWithAlpha = await sharp(logoResized)
     .composite([{
       input: {
-        create: { width: lw, height: lh, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0.40 } }
+        create: { width: lw, height: lh, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0.75 } }
       },
       blend: 'dest-in',
     }])
