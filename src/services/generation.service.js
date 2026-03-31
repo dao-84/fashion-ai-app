@@ -267,15 +267,29 @@ function createGenerationService(deps) {
           log.info(logEmoji.generate, `[generate] aspect_ratio: ${inputPayload.aspect_ratio}`);
           log.info(logEmoji.generate, `[generate] resolution: ${inputPayload.resolution}`);
 
-          // ASYNC PATH: FAL.AI usa la coda — risponde subito con jobId
+          // FAL.AI: sincrono per piano Free, asincrono (coda) per tutti gli altri piani
           if (useFal) {
+            const userPlan = auth?.user?.plan || 'free';
+            const isFreeSync = userPlan === 'free';
+
+            if (isFreeSync) {
+              // SYNC PATH: Free — attende il risultato direttamente
+              log.info(logEmoji.generate, `[generate] FAL.AI sincrono (piano free)`);
+              const output = await falIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
+              const saved = await collectSavedOutputs(output, userPlan);
+              log.info(logEmoji.generate, `[generate] completata (FAL sync). File salvati: ${saved.length}`);
+              const savedUrls = saved.map((s) => s?.url || s);
+              return { type: 'json', status: 200, body: { output: savedUrls, saved: savedUrls } };
+            }
+
+            // ASYNC PATH: piani paganti — risponde subito con jobId
             const requestId = await falIntegration.submitToQueue(REPLICATE_MODEL_VERSION, inputPayload);
             log.info(logEmoji.generate, `[generate] job FAL.AI in coda: ${requestId}`);
             jobCache.set(requestId, {
               status: 'queued',
               createdAt: Date.now(),
               auth,
-              plan: auth?.user?.plan || 'free',
+              plan: userPlan,
               resolution,
               style: input.style || rawBody.style || null,
               creditCost,
