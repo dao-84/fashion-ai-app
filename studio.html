@@ -3391,6 +3391,8 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
         viewerCaption.textContent = name || 'Anteprima immagine';
 
         if (viewerWatermarkBtn) {
+          viewerWatermarkBtn.disabled = false;
+          viewerWatermarkBtn.innerHTML = '<i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i>Rimuovi watermark — 0,5 cr';
           const plan = window.currentUserPlan || 'free';
           const canRemove = plan === 'free' && currentFile?.hasClean && !currentFile?.watermarkRemoved;
           viewerWatermarkBtn.style.display = canRemove ? 'inline-flex' : 'none';
