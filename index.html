@@ -58,7 +58,7 @@
                 </p>
                 <div class="saas-hero__actions">
                     <a href="studio.html" class="saas-hero__button saas-hero__button--primary" data-i18n="hero_btn_primary">Open studio</a>
-                    <a href="#" class="saas-hero__button saas-hero__button--secondary" data-i18n="hero_btn_secondary" onclick="window.openAuthModal && window.openAuthModal('register'); return false;">12 crediti gratis →</a>
+                    <a href="#" class="saas-hero__button saas-hero__button--secondary" data-i18n="hero_btn_secondary" onclick="if(localStorage.getItem('auth_token')){window.location.href='studio.html';}else{window.openAuthModal && window.openAuthModal('register');} return false;">12 crediti gratis →</a>
                 </div>
             </div>
 
@@ -310,7 +310,6 @@
     <section class="visual-demo-section" id="visual-demo">
         <div class="visual-demo">
             <div class="visual-demo__header">
-                <p class="visual-demo__eyebrow" data-i18n="demo_eyebrow">VISUAL DEMO</p>
                 <h2 class="visual-demo__title" data-i18n="demo_title">See how one garment becomes a complete fashion image</h2>
                 <p class="visual-demo__description" data-i18n="demo_desc">
                     Start from a single garment image and turn it into a polished fashion visual. Choose the right model,
@@ -368,7 +367,7 @@
         </div>
     </section>
 
-    <!-- How It Works Section -->
+    <!-- How It Works Section — RIMOSSA
     <section class="how-it-works-section" id="how-it-works">
         <div class="how-it-works">
             <div class="how-it-works__header">
@@ -434,11 +433,11 @@
             </div>
         </div>
     </section>
+    How It Works Section — FINE RIMOSSA -->
 
     <section class="problem-solution-section" id="problem-solution">
         <div class="problem-solution">
             <div class="problem-solution__header">
-                <p class="problem-solution__eyebrow" data-i18n="ps_eyebrow">PROBLEM / SOLUTION</p>
                 <h2 class="problem-solution__title" data-i18n="ps_title">Fashion production is expensive. It doesn't have to be.</h2>
             </div>
 
@@ -546,12 +545,9 @@
                 </article>
             </div>
 
-            <p class="problem-solution__statement" data-i18n="ps_statement">
-                Create fashion visuals faster, with lower production cost and more flexibility.
-            </p>
-
             <div class="problem-solution__cta">
                 <a href="studio.html" class="problem-solution__button" data-i18n="ps_btn">Open studio</a>
+                <a href="#" class="saas-hero__button saas-hero__button--secondary" data-i18n="hero_btn_secondary" onclick="if(localStorage.getItem('auth_token')){window.location.href='studio.html';}else{window.openAuthModal && window.openAuthModal('register');} return false;">12 crediti gratis →</a>
             </div>
         </div>
     </section>
