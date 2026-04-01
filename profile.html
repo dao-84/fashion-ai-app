@@ -254,13 +254,12 @@
         });
 
       // Acquista crediti
-      function buyPack(packId) {
-        var btn = document.getElementById(packId);
+      function buyPack(btn, priceKey) {
         btn.disabled = true;
         fetch('/api/billing/checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-          body: JSON.stringify({ priceKey: packId.replace('pack_', 'credits_') })
+          body: JSON.stringify({ priceKey: priceKey })
         })
           .then(function (r) { return r.json(); })
           .then(function (data) {
@@ -270,9 +269,9 @@
           })
           .catch(function () { btn.disabled = false; alert('Errore di rete'); });
       }
-      document.getElementById('buyPack10').addEventListener('click', function () { buyPack('pack_10'); });
-      document.getElementById('buyPack50').addEventListener('click', function () { buyPack('pack_50'); });
-      document.getElementById('buyPack100').addEventListener('click', function () { buyPack('pack_100'); });
+      document.getElementById('buyPack10').addEventListener('click', function () { buyPack(this, 'credits_10'); });
+      document.getElementById('buyPack50').addEventListener('click', function () { buyPack(this, 'credits_50'); });
+      document.getElementById('buyPack100').addEventListener('click', function () { buyPack(this, 'credits_100'); });
 
       // Gestisci / Cancella abbonamento → Stripe Portal
       function openPortal(btn) {
