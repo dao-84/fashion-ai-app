@@ -2483,7 +2483,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         try {
           const resp = await fetch('/api/generate-model', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('auth_token') || '') },
             body: JSON.stringify({ input, provider: selectedProvider || 'replicate' }),
           });
           if (resp.status === 429) {
@@ -2580,7 +2580,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         try {
           const resp = await fetch('/api/generate', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('auth_token') || '') },
             body: JSON.stringify({ input, provider }),
           });
           if (resp.status === 429) {
@@ -2675,7 +2675,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         try {
           const resp = await fetch('/api/generate', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('auth_token') || '') },
             body: JSON.stringify({ input: lastInput, provider: selectedProvider || 'replicate' }),
           });
           if (!resp.ok) {
@@ -2760,7 +2760,7 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
         try {
           const resp = await fetch('/api/generate', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('auth_token') || '') },
             body: JSON.stringify({ input, provider: selectedProvider || 'replicate' }),
           });
           if (resp.status === 429) {
