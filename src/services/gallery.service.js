@@ -61,41 +61,74 @@ function createGalleryService(deps) {
       }
     },
 
-    async remove(filename, { userId } = {}) {
-      if (!filename) {
-        throw createServiceError(400, 'Missing filename');
+    async remove(identifier, { userId } = {}) {
+      if (!identifier) {
+        throw createServiceError(400, 'Missing identifier');
       }
 
-      const target = path.join(galleryDir, filename);
+      const deleteFiles = async (urlA, urlB) => {
+        for (const rawUrl of [urlA, urlB]) {
+          if (!rawUrl) continue;
+          const fname = rawUrl.split('/').pop();
+          if (!fname) continue;
+          const target = path.join(galleryDir, fname);
+          if (target.startsWith(galleryDir) && fs.existsSync(target)) {
+            try { fs.unlinkSync(target); } catch (_) {}
+          }
+          if (r2.isConfigured()) {
+            try { await r2.remove(fname); } catch (r2Err) {
+              log.warn(logEmoji.warn, `[gallery] eliminazione R2 fallita: ${r2Err.message}`);
+            }
+          }
+        }
+      };
+
+      if (getPool && userId) {
+        try {
+          const pool = getPool();
+          // Cerca per ID (percorso principale quando il frontend manda file.id)
+          const sel = await pool.query(
+            'SELECT asset_url, asset_url_clean FROM generations WHERE id = $1 AND user_id = $2',
+            [identifier, userId]
+          );
+          if (sel.rows.length) {
+            const row = sel.rows[0];
+            await pool.query('DELETE FROM generations WHERE id = $1 AND user_id = $2', [identifier, userId]);
+            await deleteFiles(row.asset_url, row.asset_url_clean);
+            return { ok: true };
+          }
+          // Fallback: cerca per nome file in asset_url o asset_url_clean
+          const selByName = await pool.query(
+            'SELECT id, asset_url, asset_url_clean FROM generations WHERE user_id = $1 AND (asset_url LIKE $2 OR asset_url_clean LIKE $2)',
+            [userId, `%${identifier}`]
+          );
+          if (selByName.rows.length) {
+            const row = selByName.rows[0];
+            await pool.query('DELETE FROM generations WHERE id = $1 AND user_id = $2', [row.id, userId]);
+            await deleteFiles(row.asset_url, row.asset_url_clean);
+            return { ok: true };
+          }
+        } catch (dbError) {
+          log.warn(logEmoji.warn, `[gallery] DB delete fallita: ${dbError.message}`);
+        }
+      }
+
+      // Fallback filesystem-only (DB non disponibile)
+      const target = path.join(galleryDir, identifier);
       if (!target.startsWith(galleryDir)) {
         throw createServiceError(400, 'Invalid path');
       }
-
       try {
         if (fs.existsSync(target)) {
           fs.unlinkSync(target);
         }
-
         if (r2.isConfigured()) {
           try {
-            await r2.remove(filename);
+            await r2.remove(identifier);
           } catch (r2Error) {
             log.warn(logEmoji.warn, `[gallery] eliminazione R2 fallita: ${r2Error.message}`);
           }
         }
-
-        if (getPool && userId) {
-          try {
-            const pool = getPool();
-            await pool.query(
-              'DELETE FROM generations WHERE user_id = $1 AND asset_url LIKE $2',
-              [userId, `%${filename}`]
-            );
-          } catch (dbError) {
-            log.warn(logEmoji.warn, `[gallery] DB delete fallita: ${dbError.message}`);
-          }
-        }
-
         return { ok: true };
       } catch (error) {
         if (error.status) throw error;
