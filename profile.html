@@ -260,7 +260,7 @@
         fetch('/api/billing/checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-          body: JSON.stringify({ type: 'pack', packId: packId })
+          body: JSON.stringify({ priceKey: packId.replace('pack_', 'credits_') })
         })
           .then(function (r) { return r.json(); })
           .then(function (data) {
