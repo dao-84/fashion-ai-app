@@ -3448,6 +3448,10 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
           viewerImg.src = data.cleanUrl;
           viewerDownload.href = data.cleanUrl;
           viewerWatermarkBtn.style.display = 'none';
+          // Aggiorna anche il risultato corrente se è la stessa immagine
+          if (currentFile.url === lastImageUrl || viewerImg.src === mainImg?.src) {
+            setMainImage(data.cleanUrl);
+          }
         } catch (err) {
           alert('Errore: ' + err.message);
           viewerWatermarkBtn.disabled = false;
