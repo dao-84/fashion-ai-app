@@ -119,8 +119,10 @@ function createGenerationService(deps) {
       }
 
       // Controllo crediti per generazione modella (costo fisso 1 credito)
+      let modelCreditCost = 0;
+      let modelUserId = null;
       if (features?.enableCredits && auth?.isAuthenticated && creditService) {
-        const userId = auth.user.id;
+        modelUserId = auth.user.id;
         const userPlan = auth.user.plan || 'free';
         const planRules = creditService.getPlanRules({ plan: userPlan });
 
@@ -128,13 +130,13 @@ function createGenerationService(deps) {
           throw createServiceError(403, 'La generazione della modella personalizzata non è disponibile nel tuo piano. Passa al piano Pro per sbloccarla.');
         }
 
-        const creditCost = planRules.creditCost['1K'] || 1;
+        modelCreditCost = planRules.creditCost['1K'] || 1;
         await creditService.consumeCredits({
-          userId,
-          amount: creditCost,
+          userId: modelUserId,
+          amount: modelCreditCost,
           description: 'Generazione modella',
         });
-        log.info(logEmoji.generate, `[generate-model] crediti scalati: ${creditCost} (utente ${userId}, piano ${userPlan})`);
+        log.info(logEmoji.generate, `[generate-model] crediti scalati: ${modelCreditCost} (utente ${modelUserId}, piano ${userPlan})`);
       }
 
       const inputPayload = {
@@ -170,6 +172,19 @@ function createGenerationService(deps) {
 
         return { output, saved: saved.map(s => s?.url || s) };
       } catch (error) {
+        // Rimborsa i crediti se Replicate fallisce dopo averli scalati
+        if (modelCreditCost > 0 && modelUserId && features?.enableCredits && creditService) {
+          try {
+            await creditService.refundCredits({
+              userId: modelUserId,
+              amount: modelCreditCost,
+              description: 'Rimborso automatico — errore generazione modella',
+            });
+            log.info(logEmoji.generate, `[generate-model] crediti rimborsati: ${modelCreditCost} (errore provider)`);
+          } catch (refundErr) {
+            log.error(logEmoji.error, `[generate-model] rimborso crediti fallito`, refundErr);
+          }
+        }
         log.error(logEmoji.error, `Replicate generate-model failed`, error);
         throw createServiceError(500, `Replicate request failed`, error.message);
       }
