@@ -71,10 +71,6 @@
       '<label class="auth-modal__label" for="authPassword">Password</label>' +
       '<input class="auth-modal__input" id="authPassword" type="password" autocomplete="current-password" placeholder="••••••••">' +
       '</div>' +
-      '<div class="auth-modal__field">' +
-      '<label class="auth-modal__label" for="authBeta">Codice Beta</label>' +
-      '<input class="auth-modal__input" id="authBeta" type="password" placeholder="••••••••">' +
-      '</div>' +
       '<div class="auth-modal__status" id="authStatus"></div>' +
       '<button type="button" class="auth-modal__btn" id="authSubmit">Accedi</button>' +
       '<div class="auth-modal__footer" id="authFooter">Nuovo utente? Clicca su <strong>Registrati</strong>.</div>' +
@@ -92,7 +88,6 @@
       tabLogin: overlay.querySelector('#authTabLogin'),
       tabRegister: overlay.querySelector('#authTabRegister'),
       close: overlay.querySelector('#authClose'),
-      beta: overlay.querySelector('#authBeta'),
     };
 
     modalElements.close.addEventListener('click', closeModal);
@@ -159,15 +154,13 @@
     var email = (m.email.value || '').trim();
     var password = m.password.value || '';
 
-    var betaToken = m.beta.value || '';
     if (!email || !password) { setStatus('Inserisci email e password.', true); return; }
-    if (!betaToken) { setStatus('Inserisci il codice beta.', true); return; }
 
     m.submit.disabled = true;
     setStatus('Attendere...', false);
 
     var endpoint = activeTab === 'register' ? 'register' : 'login';
-    apiCall(endpoint, { email: email, password: password, betaToken: betaToken })
+    apiCall(endpoint, { email: email, password: password })
       .then(function (result) {
         m.submit.disabled = false;
         if (!result.ok) {
