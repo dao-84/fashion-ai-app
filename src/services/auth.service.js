@@ -166,8 +166,8 @@ function createAuthService(deps) {
       );
       const user = userRow.rows[0];
       user.credits_balance = parseFloat(user.credits_plan) + parseFloat(user.credits_pack);
-      const token = generateToken(user);
-      return { ok: true, token, user: { id: user.id, email: user.email, plan: user.plan, role: user.role, credits_balance: user.credits_balance } };
+      const jwtToken = generateToken(user);
+      return { ok: true, token: jwtToken, user: { id: user.id, email: user.email, plan: user.plan, role: user.role, credits_balance: user.credits_balance } };
     },
 
     async changePassword({ userId, currentPassword, newPassword } = {}) {
