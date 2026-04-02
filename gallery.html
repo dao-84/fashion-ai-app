@@ -443,12 +443,16 @@
 
     loadMoreBtn?.addEventListener('click', () => {});
 
-    // Carica prima il piano utente, poi la gallery
-    fetch('/api/auth/profile').then(r => r.ok ? r.json() : null).then(data => {
-      if (data?.user?.plan) currentUserPlan = data.user.plan;
-    }).catch(() => {}).finally(() => {
+    // Carica prima il piano utente (solo se loggato), poi la gallery
+    if (localStorage.getItem('auth_token')) {
+      fetch('/api/auth/profile').then(r => r.ok ? r.json() : null).then(data => {
+        if (data?.user?.plan) currentUserPlan = data.user.plan;
+      }).catch(() => {}).finally(() => {
+        loadGallery();
+      });
+    } else {
       loadGallery();
-    });
+    }
   </script>
   <script>
     (() => {
