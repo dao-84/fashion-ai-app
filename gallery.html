@@ -131,6 +131,11 @@
       viewerCaption.textContent = isNaN(d) ? '' : d.toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
       viewerCount.textContent = `${index + 1} / ${allFiles.length}`;
 
+      // Nascondi azioni non applicabili alle immagini demo
+      const isDemo = !!file.isDemo;
+      if (viewerDelete) viewerDelete.style.display = isDemo ? 'none' : '';
+      if (viewerAutocopy) viewerAutocopy.style.display = isDemo ? 'none' : '';
+
       // Mostra bottone rimozione watermark solo per Free con versione pulita disponibile
       if (viewerWatermarkBtn) {
         const isFree = currentUserPlan === 'free';
@@ -328,28 +333,80 @@
       return card;
     };
 
+    const DEMO_FILES = [
+      'editorial_elegant_demo.jpeg',
+      'ghost_demo.jpg',
+      'editorial_demo.jpeg',
+      'lookbook2_demo.jpeg',
+      'editorial_summer_demo.jpeg',
+      'lookbook1_demo.jpeg',
+      'golend_hour_demo.jpeg',
+      'luxury_demo.jpeg',
+      'urban_demo.jpeg',
+      'lifestyle_demo.jpeg',
+      'grid_demo.jpeg',
+      'influencer_demo.jpeg',
+      'glowing_demo.jpeg',
+    ].map(name => ({
+      name,
+      url: 'images/demo_gallery/' + name,
+      isDemo: true,
+    }));
+
+    const createDemoCard = (f, idx) => {
+      const name = f.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/demo$/i, '').trim().toUpperCase() || 'LOOK';
+      const card = document.createElement('div');
+      card.className = 'gallery-card';
+      card.style.animationDelay = `${idx * 0.03}s`;
+      card.innerHTML = `
+        <div class="gallery-card-image" style="position:relative;">
+          <img src="${f.url}" alt="${name}">
+          <span style="position:absolute;top:8px;left:8px;background:rgba(212,175,55,.85);color:#141414;font-size:10px;font-weight:700;letter-spacing:.1em;padding:3px 8px;border-radius:999px;">DEMO</span>
+        </div>
+        <div class="gallery-card-footer">
+          <div class="gallery-card-title">${name}</div>
+          <div class="gallery-card-actions">
+            <button class="gallery-card-icon open" type="button" title="Apri">
+              <i class="fa fa-eye"></i>
+            </button>
+            <button class="gallery-card-icon" title="Scarica" onclick="event.stopPropagation(); downloadImage('${f.url}', '${f.name}')">
+              <i class="fa fa-download"></i>
+            </button>
+          </div>
+        </div>
+      `;
+      card.querySelector('.gallery-card-icon.open')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showImageViewer(allFiles.indexOf(f));
+      });
+      card.addEventListener('click', () => showImageViewer(allFiles.indexOf(f)));
+      return card;
+    };
+
     const renderGallery = () => {
       listEl.innerHTML = '';
-      if (!allFiles.length) {
-        emptyEl.style.display = 'block';
-        return;
-      }
       emptyEl.style.display = 'none';
       allFiles.forEach((file, index) => {
-        listEl.appendChild(createCard(file, index));
+        if (file.isDemo) {
+          listEl.appendChild(createDemoCard(file, index));
+        } else {
+          listEl.appendChild(createCard(file, index));
+        }
       });
+      if (!allFiles.length) emptyEl.style.display = 'block';
     };
 
     async function loadGallery() {
       try {
         const resp = await fetch('/api/gallery');
         const data = await resp.json();
-        allFiles = (data?.files || []).sort((a, b) => new Date(b.mtime || 0) - new Date(a.mtime || 0));
+        const userFiles = (data?.files || []).sort((a, b) => new Date(b.mtime || 0) - new Date(a.mtime || 0));
+        allFiles = [...userFiles, ...DEMO_FILES];
         renderGallery();
         updateLoadMoreVisibility();
       } catch (err) {
-        emptyEl.style.display = 'block';
-        emptyEl.textContent = 'Errore nel caricamento della gallery.';
+        allFiles = [...DEMO_FILES];
+        renderGallery();
         console.error('Gallery load failed', err);
       }
     }
