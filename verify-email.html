@@ -42,10 +42,16 @@
         .then(function (r) { return r.json(); })
         .then(function (data) {
           if (data.ok) {
+            // Salva token e utente per login automatico
+            if (data.token) {
+              localStorage.setItem('auth_token', data.token);
+              localStorage.setItem('auth_user', JSON.stringify(data.user));
+            }
             document.getElementById('verifyIcon').textContent = '✅';
             document.getElementById('verifyTitle').textContent = 'Email confermata!';
-            document.getElementById('verifyMsg').textContent = 'Il tuo account è attivo. Accedi per iniziare a usare Shotless.ai.';
+            document.getElementById('verifyMsg').textContent = 'Account attivo. Stai per essere reindirizzato allo studio...';
             document.getElementById('verifyAction').innerHTML = '<a href="studio.html" class="verify-btn">Vai allo studio</a>';
+            setTimeout(function () { window.location.href = 'studio.html'; }, 2500);
           } else {
             document.getElementById('verifyIcon').textContent = '❌';
             document.getElementById('verifyTitle').textContent = 'Link non valido';

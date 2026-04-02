@@ -153,11 +153,21 @@ function createAuthService(deps) {
         err.status = 400;
         throw err;
       }
+      const userId = result.rows[0].id;
       await pool.query(
         'UPDATE users SET email_verified = TRUE, verification_token = NULL WHERE id = $1',
-        [result.rows[0].id]
+        [userId]
       );
-      return { ok: true };
+
+      // Rilascia token JWT per login automatico
+      const userRow = await pool.query(
+        'SELECT id, email, plan, role, credits_plan, credits_pack FROM users WHERE id = $1',
+        [userId]
+      );
+      const user = userRow.rows[0];
+      user.credits_balance = parseFloat(user.credits_plan) + parseFloat(user.credits_pack);
+      const token = generateToken(user);
+      return { ok: true, token, user: { id: user.id, email: user.email, plan: user.plan, role: user.role, credits_balance: user.credits_balance } };
     },
 
     async changePassword({ userId, currentPassword, newPassword } = {}) {
