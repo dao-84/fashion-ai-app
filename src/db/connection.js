@@ -79,6 +79,19 @@ async function initializeDatabase() {
       ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_subscription_id VARCHAR(100)
     `).catch(() => {});
 
+    // Migrazione: aggiungi colonne verifica email se non esistono
+    await pool.query(`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT FALSE
+    `).catch(() => {});
+    await pool.query(`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255)
+    `).catch(() => {});
+
+    // Imposta tutti gli utenti esistenti come già verificati
+    await pool.query(`
+      UPDATE users SET email_verified = TRUE WHERE email_verified IS NULL OR email_verified = FALSE
+    `).catch(() => {});
+
     // Migrazione: sistema crediti a due colonne (credits_plan + credits_pack)
     await pool.query(`
       ALTER TABLE users ADD COLUMN IF NOT EXISTS credits_plan NUMERIC(8,2) DEFAULT 3

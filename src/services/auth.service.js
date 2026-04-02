@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { FREE_CREDITS_ON_REGISTER } = require('../config/constants');
 
 const SALT_ROUNDS = 12;
 
 function createAuthService(deps) {
-  const { getPool, JWT_SECRET, creditService } = deps;
+  const { getPool, JWT_SECRET, creditService, emailService, frontendUrl } = deps;
 
   function generateToken(user) {
     return jwt.sign(
@@ -37,17 +38,25 @@ function createAuthService(deps) {
       }
 
       const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+      const verificationToken = crypto.randomBytes(32).toString('hex');
+
       const result = await pool.query(
-        `INSERT INTO users (email, password_hash, plan, credits_plan, credits_pack)
-         VALUES ($1, $2, 'free', $3, 0)
+        `INSERT INTO users (email, password_hash, plan, credits_plan, credits_pack, email_verified, verification_token)
+         VALUES ($1, $2, 'free', $3, 0, FALSE, $4)
          RETURNING id, email, plan, role, credits_plan, credits_pack, created_at`,
-        [email.toLowerCase(), passwordHash, FREE_CREDITS_ON_REGISTER]
+        [email.toLowerCase(), passwordHash, FREE_CREDITS_ON_REGISTER, verificationToken]
       );
 
       const user = result.rows[0];
-      user.credits_balance = parseFloat(user.credits_plan) + parseFloat(user.credits_pack);
-      const token = generateToken(user);
-      return { token, user };
+
+      // Invia email di verifica
+      if (emailService && emailService.isConfigured()) {
+        const baseUrl = (frontendUrl || 'https://shotless.ai').replace(/\/$/, '');
+        const verificationUrl = `${baseUrl}/verify-email.html?token=${verificationToken}`;
+        await emailService.sendVerificationEmail({ to: user.email, verificationUrl });
+      }
+
+      return { emailSent: true };
     },
 
     async loginUser({ email, password } = {}) {
@@ -59,7 +68,7 @@ function createAuthService(deps) {
 
       const pool = getPool();
       const result = await pool.query(
-        'SELECT id, email, password_hash, plan, role, credits_plan, credits_pack FROM users WHERE email = $1',
+        'SELECT id, email, password_hash, plan, role, credits_plan, credits_pack, email_verified FROM users WHERE email = $1',
         [email.toLowerCase()]
       );
 
@@ -74,6 +83,13 @@ function createAuthService(deps) {
       if (!match) {
         const err = new Error('Credenziali non valide.');
         err.status = 401;
+        throw err;
+      }
+
+      if (!user.email_verified) {
+        const err = new Error('Conferma la tua email prima di accedere. Controlla la tua casella di posta.');
+        err.status = 403;
+        err.code = 'EMAIL_NOT_VERIFIED';
         throw err;
       }
 
@@ -119,6 +135,29 @@ function createAuthService(deps) {
       const row = result.rows[0];
       row.credits_balance = parseFloat(row.credits_plan) + parseFloat(row.credits_pack);
       return row;
+    },
+
+    async verifyEmail({ token } = {}) {
+      if (!token) {
+        const err = new Error('Token mancante.');
+        err.status = 400;
+        throw err;
+      }
+      const pool = getPool();
+      const result = await pool.query(
+        'SELECT id FROM users WHERE verification_token = $1 AND email_verified = FALSE',
+        [token]
+      );
+      if (!result.rows.length) {
+        const err = new Error('Token non valido o già utilizzato.');
+        err.status = 400;
+        throw err;
+      }
+      await pool.query(
+        'UPDATE users SET email_verified = TRUE, verification_token = NULL WHERE id = $1',
+        [result.rows[0].id]
+      );
+      return { ok: true };
     },
 
     async changePassword({ userId, currentPassword, newPassword } = {}) {

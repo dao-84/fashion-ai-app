@@ -174,6 +174,14 @@
           setStatus(result.data.error || 'Errore. Riprova.', true);
           return;
         }
+        // Registrazione: email di verifica inviata
+        if (result.data.emailSent) {
+          setStatus('✓ Controlla la tua email per confermare l\'account.', false);
+          setTab('login');
+          m.email.value = email;
+          m.password.value = '';
+          return;
+        }
         storeToken(result.data.token);
         storeUser(result.data.user);
         setStatus('', false);

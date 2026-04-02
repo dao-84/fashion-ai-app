@@ -65,6 +65,16 @@ function createAuthController(deps) {
         return res.status(error.status || 500).json({ error: error.message });
       }
     },
+
+    verifyEmail: async (req, res) => {
+      try {
+        const { token } = req.params;
+        await authService.verifyEmail({ token });
+        return res.status(200).json({ ok: true });
+      } catch (error) {
+        return res.status(error.status || 500).json({ error: error.message });
+      }
+    },
   };
 }
 
