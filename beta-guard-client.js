@@ -41,7 +41,9 @@
       '.auth-modal__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}' +
       '.auth-modal__logo{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,175,55,.78);margin-bottom:0;}' +
       '.auth-modal__close{background:none;border:0;color:rgba(255,255,255,.4);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;border-radius:6px;transition:.18s;}' +
-      '.auth-modal__close:hover{color:#fff;background:rgba(255,255,255,.08);}';
+      '.auth-modal__close:hover{color:#fff;background:rgba(255,255,255,.08);}' +
+      'input[type="password"]::-ms-reveal{filter:invert(1);}' +
+      'input[type="password"]::-webkit-textfield-decoration-container{filter:invert(1);}';
     document.head.appendChild(s);
   }
 
