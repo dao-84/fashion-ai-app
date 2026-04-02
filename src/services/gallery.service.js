@@ -84,9 +84,10 @@ function createGalleryService(deps) {
       };
 
       if (getPool && userId) {
+        const pool = getPool();
+
+        // Cerca per ID (UUID) — percorso principale quando il frontend manda file.id
         try {
-          const pool = getPool();
-          // Cerca per ID (percorso principale quando il frontend manda file.id)
           const sel = await pool.query(
             'SELECT asset_url, asset_url_clean FROM generations WHERE id = $1 AND user_id = $2',
             [identifier, userId]
@@ -97,7 +98,12 @@ function createGalleryService(deps) {
             await deleteFiles(row.asset_url, row.asset_url_clean);
             return { ok: true };
           }
-          // Fallback: cerca per nome file in asset_url o asset_url_clean
+        } catch (_) {
+          // identifier non è un UUID valido — si prova per nome file
+        }
+
+        // Fallback: cerca per nome file in asset_url o asset_url_clean
+        try {
           const selByName = await pool.query(
             'SELECT id, asset_url, asset_url_clean FROM generations WHERE user_id = $1 AND (asset_url LIKE $2 OR asset_url_clean LIKE $2)',
             [userId, `%${identifier}`]
