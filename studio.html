@@ -308,13 +308,6 @@
                 <option value="16:9">16:9</option>
               </select>
             </div>
-            <textarea id="studioBackgroundPrompt" rows="2" placeholder="Example: fashion studio with soft lighting and golden neon accents"></textarea>
-            <div class="prompt-suggestions studio-inline-suggestions">
-              <button class="prompt-suggestion-btn" type="button">Product detail shot (on model)</button>
-              <button class="prompt-suggestion-btn" type="button">commercial photo</button>
-              <button class="prompt-suggestion-btn" type="button">jewelry e-commerce</button>
-              <button class="prompt-suggestion-btn" type="button">luxury product photography</button>
-            </div>
           </div>
         </div>
       </section>
@@ -362,6 +355,23 @@
           </div>
         </div>
       </section>
+      <!-- CUSTOM SCENE -->
+      <section class="studio-column studio-right" style="margin-top:-6px;">
+        <div class="studio-panel" style="padding:16px 20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <i class="fa fa-image" style="color:rgba(212,175,55,.7);font-size:13px;"></i>
+            <span style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);">Scena personalizzata</span>
+          </div>
+          <textarea id="studioBackgroundPrompt" rows="2" placeholder="Es: studio con luce soffusa e accenti dorati — oppure lascia vuoto per lo stile di default" style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;color:#f4f0e6;font-size:13px;padding:10px 14px;resize:none;outline:none;box-sizing:border-box;font-family:inherit;line-height:1.5;"></textarea>
+          <div class="prompt-suggestions studio-inline-suggestions" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;">
+            <button class="prompt-suggestion-btn" type="button">Product detail shot (on model)</button>
+            <button class="prompt-suggestion-btn" type="button">commercial photo</button>
+            <button class="prompt-suggestion-btn" type="button">jewelry e-commerce</button>
+            <button class="prompt-suggestion-btn" type="button">luxury product photography</button>
+          </div>
+        </div>
+      </section>
+
       <section class="studio-column studio-right studio-recent-panel">
         <div class="studio-panel">
           <h3 class="studio-panel-title" data-i18n="studio_results_panel_title">I tuoi risultati</h3>
