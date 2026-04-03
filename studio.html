@@ -1353,6 +1353,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         let pollCount = 0;
         let pollTimer = null;
         let lastStatus = null;
+        let isDone = false; // Evita che onSuccess venga chiamato più volte da poll concorrenti
 
         function stopPolling() {
           if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
@@ -1382,10 +1383,10 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
               }
             } else if (data.status === 'done') {
               stopPolling();
-              onSuccess(data);
+              if (!isDone) { isDone = true; onSuccess(data); }
             } else if (data.status === 'error') {
               stopPolling();
-              onError(new Error(data.message || 'Errore durante la generazione.'));
+              if (!isDone) { isDone = true; onError(new Error(data.message || 'Errore durante la generazione.')); }
             }
           } catch (_err) {
             // Errore di rete durante il poll — riprova al prossimo ciclo

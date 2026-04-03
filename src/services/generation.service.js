@@ -451,6 +451,11 @@ function createGenerationService(deps) {
         return { status: 'error', message: cached.error };
       }
       if (status === 'COMPLETED') {
+        if (cached.status === 'saving') {
+          // Un altro poll sta già salvando l'immagine — aspetta
+          return { status: 'processing' };
+        }
+        cached.status = 'saving'; // Blocca subito i poll concorrenti
         try {
           const output = await falIntegration.getQueueResult(jobId);
           const plan = cached.plan || 'free';
