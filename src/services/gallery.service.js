@@ -42,7 +42,12 @@ function createGalleryService(deps) {
         }
       }
 
-      // Fallback filesystem (utente non autenticato o DB non disponibile)
+      // Se il DB è configurato ma l'utente non è loggato → lista vuota (le demo le aggiunge il frontend)
+      if (getPool) {
+        return { files: [] };
+      }
+
+      // Fallback filesystem solo se non c'è DB (sviluppo locale senza database)
       try {
         const entries = fs.readdirSync(galleryDir, { withFileTypes: true });
         const images = entries
