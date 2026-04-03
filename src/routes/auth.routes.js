@@ -24,6 +24,8 @@ function registerAuthRoutes(app, deps) {
   router.get('/profile', requireAuth, authController.profile);
   router.post('/change-password', requireAuth, authController.changePassword);
   router.get('/verify-email/:token', authController.verifyEmail);
+  router.post('/request-reset', authController.requestReset);
+  router.post('/reset-password', authController.resetPassword);
 
   app.use('/api/auth', router);
 }

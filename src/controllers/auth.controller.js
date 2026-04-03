@@ -75,6 +75,26 @@ function createAuthController(deps) {
         return res.status(error.status || 500).json({ error: error.message });
       }
     },
+
+    requestReset: async (req, res) => {
+      try {
+        const { email } = req.body || {};
+        await authService.requestPasswordReset({ email });
+        return res.status(200).json({ ok: true });
+      } catch (error) {
+        return res.status(error.status || 500).json({ error: error.message });
+      }
+    },
+
+    resetPassword: async (req, res) => {
+      try {
+        const { token, newPassword } = req.body || {};
+        await authService.resetPassword({ token, newPassword });
+        return res.status(200).json({ ok: true });
+      } catch (error) {
+        return res.status(error.status || 500).json({ error: error.message });
+      }
+    },
   };
 }
 

@@ -170,6 +170,68 @@ function createAuthService(deps) {
       return { ok: true, token: jwtToken, user: { id: user.id, email: user.email, plan: user.plan, role: user.role, credits_balance: user.credits_balance } };
     },
 
+    async requestPasswordReset({ email } = {}) {
+      if (!email) {
+        const err = new Error('Email obbligatoria.');
+        err.status = 400;
+        throw err;
+      }
+      const pool = getPool();
+      const result = await pool.query(
+        'SELECT id, email FROM users WHERE email = $1',
+        [email.toLowerCase()]
+      );
+      // Risposta sempre positiva per non rivelare se l'email esiste
+      if (!result.rows.length) return { ok: true };
+
+      const user = result.rows[0];
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 ora
+
+      await pool.query(
+        'UPDATE users SET reset_token = $1, reset_token_expires = $2 WHERE id = $3',
+        [resetToken, expiresAt, user.id]
+      );
+
+      if (emailService && emailService.isConfigured()) {
+        const baseUrl = (frontendUrl || 'https://shotless.ai').replace(/\/$/, '');
+        const resetUrl = `${baseUrl}/reset-password.html?token=${resetToken}`;
+        await emailService.sendPasswordResetEmail({ to: user.email, resetUrl });
+      }
+
+      return { ok: true };
+    },
+
+    async resetPassword({ token, newPassword } = {}) {
+      if (!token || !newPassword) {
+        const err = new Error('Token e nuova password sono obbligatori.');
+        err.status = 400;
+        throw err;
+      }
+      if (newPassword.length < 6) {
+        const err = new Error('La password deve essere di almeno 6 caratteri.');
+        err.status = 400;
+        throw err;
+      }
+      const pool = getPool();
+      const result = await pool.query(
+        'SELECT id FROM users WHERE reset_token = $1 AND reset_token_expires > NOW()',
+        [token]
+      );
+      if (!result.rows.length) {
+        const err = new Error('Link non valido o scaduto. Richiedi un nuovo link.');
+        err.status = 400;
+        throw err;
+      }
+      const userId = result.rows[0].id;
+      const newHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+      await pool.query(
+        'UPDATE users SET password_hash = $1, reset_token = NULL, reset_token_expires = NULL, updated_at = NOW() WHERE id = $2',
+        [newHash, userId]
+      );
+      return { ok: true };
+    },
+
     async changePassword({ userId, currentPassword, newPassword } = {}) {
       if (!currentPassword || !newPassword) {
         const err = new Error('Password attuale e nuova password sono obbligatorie.');

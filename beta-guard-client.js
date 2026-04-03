@@ -75,6 +75,7 @@
       '</div>' +
       '<div class="auth-modal__status" id="authStatus"></div>' +
       '<button type="button" class="auth-modal__btn" id="authSubmit">Accedi</button>' +
+      '<div style="text-align:center;margin-top:12px;"><a href="forgot-password.html" id="authForgotLink" style="font-size:12px;color:rgba(255,255,255,.4);text-decoration:none;">Password dimenticata?</a></div>' +
       '<div class="auth-modal__footer" id="authFooter">Nuovo utente? Clicca su <strong>Registrati</strong>.</div>' +
       '</div>';
 

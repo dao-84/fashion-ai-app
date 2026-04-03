@@ -9,6 +9,8 @@ const PUBLIC_HTML_ROUTES = [
   ['/pricing.html', 'pricing.html'],
   ['/profile.html', 'profile.html'],
   ['/verify-email.html', 'verify-email.html'],
+  ['/forgot-password.html', 'forgot-password.html'],
+  ['/reset-password.html', 'reset-password.html'],
 ];
 
 const PUBLIC_FILE_ROUTES = [
