@@ -469,6 +469,7 @@
       /* ── PRICING ── */
       pricing_watermark_yes: 'Sì (rimozione 0,5 cr)',
       extra_subtitle: 'Non scadono. Seguono le regole del tuo piano attivo.',
+      unlimited_label: 'illimitata',
       parallel_queue_free: 'Coda parallela — <strong>max 1 in parallelo</strong>',
       parallel_queue_starter: 'Coda parallela — <strong>max 4 in parallelo</strong>',
       parallel_queue_pro: 'Coda parallela — <strong>max 10 in parallelo</strong>',
@@ -936,6 +937,7 @@
       /* ── PRICING ── */
       pricing_watermark_yes: 'Yes (0.5 cr removal)',
       extra_subtitle: "They don't expire. They follow the rules of your active plan.",
+      unlimited_label: 'unlimited',
       parallel_queue_free: 'Parallel queue — <strong>max 1 at once</strong>',
       parallel_queue_starter: 'Parallel queue — <strong>max 4 at once</strong>',
       parallel_queue_pro: 'Parallel queue — <strong>max 10 at once</strong>',
@@ -1403,6 +1405,7 @@
       /* ── PRICING ── */
       pricing_watermark_yes: 'Sí (eliminación 0,5 cr)',
       extra_subtitle: 'No caducan. Siguen las reglas de tu plan activo.',
+      unlimited_label: 'ilimitada',
       parallel_queue_free: 'Cola paralela — <strong>máx. 1 en paralelo</strong>',
       parallel_queue_starter: 'Cola paralela — <strong>máx. 4 en paralelo</strong>',
       parallel_queue_pro: 'Cola paralela — <strong>máx. 10 en paralelo</strong>',
