@@ -2645,12 +2645,12 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         }
       };
 
-      let _pendingRequests = 0; // richieste avviate ma senza jobId ancora
+      window._pendingRequests = 0; // richieste avviate ma senza jobId ancora
 
       const generate = async () => {
         // Limiti generazioni simultanee per piano
         const _plan = getUserPlan();
-        const _totalActive = activeJobs.size + _pendingRequests;
+        const _totalActive = activeJobs.size + window._pendingRequests;
         if (_plan === 'free' && _totalActive >= 1) {
           showFreeTimeoutModal();
           return;
@@ -2663,7 +2663,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           showProLimitModal();
           return;
         }
-        _pendingRequests++;
+        window._pendingRequests++;
 
         const isAccessory = selectedDressType === 'accessory';
         const isGhostMannequin = selectedStyle === 'ghostMannequin';
@@ -2746,7 +2746,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           // ASYNC PATH: il server ha restituito un jobId — parte il polling
           if (data?.jobId) {
             asyncPolling = true; // blocca hideLoader() nel finally
-            _pendingRequests--; // trasferito ad activeJobs
+            window._pendingRequests--; // trasferito ad activeJobs
             hideLoader(); // nascondi subito il loader — l'utente è libero
             createPendingJobCard(data.jobId);
             showStudioToast('✦ Generazione avviata — puoi continuare a lavorare!');
@@ -2801,7 +2801,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           }
         } finally {
           if (!asyncPolling) {
-            _pendingRequests--;
+            window._pendingRequests--;
             hideLoader();
           }
         }
