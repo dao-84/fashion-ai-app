@@ -469,6 +469,20 @@
       /* ── PRICING ── */
       pricing_watermark_yes: 'Sì (rimozione 0,5 cr)',
       extra_subtitle: 'Non scadono. Seguono le regole del tuo piano attivo.',
+      parallel_queue_free: 'Coda parallela — <strong>max 1 in parallelo</strong>',
+      parallel_queue_starter: 'Coda parallela — <strong>max 4 in parallelo</strong>',
+      parallel_queue_pro: 'Coda parallela — <strong>max 10 in parallelo</strong>',
+      parallel_queue_unlimited: 'Coda parallela — <strong>illimitata</strong>',
+
+      /* ── MODALI UPSELL ── */
+      limit_title: 'Limite generazioni raggiunto',
+      limit_skip: 'Non ora, aspetto il completamento',
+      starter_limit_plan_label: 'Piano Starter',
+      starter_limit_desc: 'Hai 4 generazioni in corso. Con il piano <strong style="color:#d4af37;">Pro</strong> puoi avviarne un numero illimitato in parallelo — senza mai aspettare.',
+      starter_limit_cta: 'Passa al piano Pro',
+      pro_limit_plan_label: 'Piano Pro',
+      pro_limit_desc: 'Hai 10 generazioni in corso. Con il piano <strong style="color:#d4af37;">Enterprise</strong> ottieni coda parallela illimitata, API access e account team — ideale per brand con volumi elevati.',
+      pro_limit_cta: 'Passa al piano Enterprise',
 
       /* ── PROFILE — messaggi JS ── */
       profile_err_fill_all: 'Compila tutti i campi.',
@@ -922,6 +936,20 @@
       /* ── PRICING ── */
       pricing_watermark_yes: 'Yes (0.5 cr removal)',
       extra_subtitle: "They don't expire. They follow the rules of your active plan.",
+      parallel_queue_free: 'Parallel queue — <strong>max 1 at once</strong>',
+      parallel_queue_starter: 'Parallel queue — <strong>max 4 at once</strong>',
+      parallel_queue_pro: 'Parallel queue — <strong>max 10 at once</strong>',
+      parallel_queue_unlimited: 'Parallel queue — <strong>unlimited</strong>',
+
+      /* ── UPSELL MODALS ── */
+      limit_title: 'Generation limit reached',
+      limit_skip: "Not now, I'll wait for completion",
+      starter_limit_plan_label: 'Starter Plan',
+      starter_limit_desc: 'You have 4 generations in progress. With the <strong style="color:#d4af37;">Pro</strong> plan you can run unlimited generations in parallel — never wait again.',
+      starter_limit_cta: 'Upgrade to Pro',
+      pro_limit_plan_label: 'Pro Plan',
+      pro_limit_desc: 'You have 10 generations in progress. With the <strong style="color:#d4af37;">Enterprise</strong> plan you get unlimited parallel queue, API access and team accounts — ideal for high-volume brands.',
+      pro_limit_cta: 'Upgrade to Enterprise',
 
       /* ── PROFILE — JS messages ── */
       profile_err_fill_all: 'Please fill in all fields.',
@@ -1375,6 +1403,20 @@
       /* ── PRICING ── */
       pricing_watermark_yes: 'Sí (eliminación 0,5 cr)',
       extra_subtitle: 'No caducan. Siguen las reglas de tu plan activo.',
+      parallel_queue_free: 'Cola paralela — <strong>máx. 1 en paralelo</strong>',
+      parallel_queue_starter: 'Cola paralela — <strong>máx. 4 en paralelo</strong>',
+      parallel_queue_pro: 'Cola paralela — <strong>máx. 10 en paralelo</strong>',
+      parallel_queue_unlimited: 'Cola paralela — <strong>ilimitada</strong>',
+
+      /* ── MODALES UPSELL ── */
+      limit_title: 'Límite de generaciones alcanzado',
+      limit_skip: 'Ahora no, esperaré a que termine',
+      starter_limit_plan_label: 'Plan Starter',
+      starter_limit_desc: 'Tienes 4 generaciones en curso. Con el plan <strong style="color:#d4af37;">Pro</strong> puedes ejecutar un número ilimitado en paralelo — sin esperar nunca.',
+      starter_limit_cta: 'Pasa al plan Pro',
+      pro_limit_plan_label: 'Plan Pro',
+      pro_limit_desc: 'Tienes 10 generaciones en curso. Con el plan <strong style="color:#d4af37;">Enterprise</strong> obtienes cola paralela ilimitada, acceso API y cuentas de equipo — ideal para marcas con alto volumen.',
+      pro_limit_cta: 'Pasa al plan Enterprise',
 
       /* ── PROFILE — mensajes JS ── */
       profile_err_fill_all: 'Completa todos los campos.',
