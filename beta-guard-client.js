@@ -55,6 +55,7 @@
     var overlay = document.createElement('div');
     overlay.className = 'auth-modal';
     overlay.setAttribute('aria-hidden', 'true');
+    var _t = function(k, fb) { return (window.FashionAI && window.FashionAI.i18n && window.FashionAI.i18n.t(k)) || fb; };
     overlay.innerHTML =
       '<div class="auth-modal__panel" role="dialog" aria-modal="true">' +
       '<div class="auth-modal__header">' +
@@ -62,24 +63,29 @@
       '<button type="button" class="auth-modal__close" id="authClose" aria-label="Chiudi">&times;</button>' +
       '</div>' +
       '<div class="auth-modal__tabs">' +
-      '<button type="button" class="auth-modal__tab is-active" id="authTabLogin">Accedi</button>' +
-      '<button type="button" class="auth-modal__tab" id="authTabRegister">Registrati</button>' +
+      '<button type="button" class="auth-modal__tab is-active" id="authTabLogin" data-i18n="auth_tab_login">' + _t('auth_tab_login', 'Accedi') + '</button>' +
+      '<button type="button" class="auth-modal__tab" id="authTabRegister" data-i18n="auth_tab_register">' + _t('auth_tab_register', 'Registrati') + '</button>' +
       '</div>' +
       '<div class="auth-modal__field">' +
-      '<label class="auth-modal__label" for="authEmail">Email</label>' +
-      '<input class="auth-modal__input" id="authEmail" type="email" autocomplete="email" placeholder="la@tua.email">' +
+      '<label class="auth-modal__label" for="authEmail" data-i18n="auth_label_email">' + _t('auth_label_email', 'Email') + '</label>' +
+      '<input class="auth-modal__input" id="authEmail" type="email" autocomplete="email" placeholder="' + _t('auth_placeholder_email', 'la@tua.email') + '">' +
       '</div>' +
       '<div class="auth-modal__field">' +
-      '<label class="auth-modal__label" for="authPassword">Password</label>' +
+      '<label class="auth-modal__label" for="authPassword" data-i18n="auth_label_password">' + _t('auth_label_password', 'Password') + '</label>' +
       '<input class="auth-modal__input" id="authPassword" type="password" autocomplete="current-password" placeholder="••••••••">' +
       '</div>' +
       '<div class="auth-modal__status" id="authStatus"></div>' +
-      '<button type="button" class="auth-modal__btn" id="authSubmit">Accedi</button>' +
-      '<div style="text-align:center;margin-top:12px;"><a href="forgot-password.html" id="authForgotLink" style="font-size:12px;color:rgba(255,255,255,.4);text-decoration:none;">Password dimenticata?</a></div>' +
-      '<div class="auth-modal__footer" id="authFooter">Nuovo utente? Clicca su <strong>Registrati</strong>.</div>' +
+      '<button type="button" class="auth-modal__btn" id="authSubmit" data-i18n="auth_btn_login">' + _t('auth_btn_login', 'Accedi') + '</button>' +
+      '<div style="text-align:center;margin-top:12px;"><a href="forgot-password.html" id="authForgotLink" style="font-size:12px;color:rgba(255,255,255,.4);text-decoration:none;" data-i18n="auth_forgot_password">' + _t('auth_forgot_password', 'Password dimenticata?') + '</a></div>' +
+      '<div class="auth-modal__footer" id="authFooter" data-i18n="auth_footer_new_user">' + _t('auth_footer_new_user', 'Nuovo utente? Clicca su <strong>Registrati</strong>.') + '</div>' +
       '</div>';
 
     document.body.appendChild(overlay);
+    if (window.FashionAI && window.FashionAI.i18n && window.FashionAI.i18n.apply) window.FashionAI.i18n.apply();
+    document.addEventListener('fashionai:langchange', function() {
+      if (window.FashionAI && window.FashionAI.i18n && window.FashionAI.i18n.apply) window.FashionAI.i18n.apply();
+      setTab(activeTab);
+    });
 
     modalElements = {
       overlay: overlay,
@@ -111,10 +117,11 @@
     var m = ensureModal();
     m.tabLogin.classList.toggle('is-active', tab === 'login');
     m.tabRegister.classList.toggle('is-active', tab === 'register');
-    m.submit.textContent = tab === 'login' ? 'Accedi' : 'Crea account';
+    var _t2 = function(k, fb) { return (window.FashionAI && window.FashionAI.i18n && window.FashionAI.i18n.t(k)) || fb; };
+    m.submit.textContent = tab === 'login' ? _t2('auth_btn_login', 'Accedi') : _t2('auth_btn_register', 'Crea account');
     m.footer.innerHTML = tab === 'login'
-      ? 'Nuovo utente? Clicca su <strong>Registrati</strong>.'
-      : 'Hai già un account? Clicca su <strong>Accedi</strong>.';
+      ? _t2('auth_footer_new_user', 'Nuovo utente? Clicca su <strong>Registrati</strong>.')
+      : _t2('auth_footer_have_account', 'Hai già un account? Clicca su <strong>Accedi</strong>.');
     setStatus('', false);
   }
 
@@ -157,17 +164,18 @@
     var email = (m.email.value || '').trim();
     var password = m.password.value || '';
 
-    if (!email || !password) { setStatus('Inserisci email e password.', true); return; }
+    var _tS = function(k, fb) { return (window.FashionAI && window.FashionAI.i18n && window.FashionAI.i18n.t(k)) || fb; };
+    if (!email || !password) { setStatus(_tS('auth_err_fill', 'Inserisci email e password.'), true); return; }
 
     m.submit.disabled = true;
-    setStatus('Attendere...', false);
+    setStatus(_tS('auth_loading', 'Attendere...'), false);
 
     var endpoint = activeTab === 'register' ? 'register' : 'login';
     apiCall(endpoint, { email: email, password: password })
       .then(function (result) {
         m.submit.disabled = false;
         if (!result.ok) {
-          setStatus(result.data.error || 'Errore. Riprova.', true);
+          setStatus(result.data.error || _tS('auth_err_generic', 'Errore. Riprova.'), true);
           return;
         }
         // Registrazione: email di verifica inviata
@@ -175,7 +183,7 @@
           setTab('login');
           m.email.value = email;
           m.password.value = '';
-          setStatus('✓ Controlla la tua email per confermare l\'account.', false);
+          setStatus(_tS('auth_success_register', '✓ Controlla la tua email per confermare l\'account.'), false);
           return;
         }
         storeToken(result.data.token);
@@ -190,7 +198,7 @@
       })
       .catch(function () {
         m.submit.disabled = false;
-        setStatus('Errore di rete. Riprova.', true);
+        setStatus(_tS('auth_err_network', 'Errore di rete. Riprova.'), true);
       });
   }
 

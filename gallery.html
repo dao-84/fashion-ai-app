@@ -366,10 +366,10 @@
         <div class="gallery-card-footer">
           <div class="gallery-card-title">${name}</div>
           <div class="gallery-card-actions">
-            <button class="gallery-card-icon open" type="button" title="Apri">
+            <button class="gallery-card-icon open" type="button" title="${FashionAI.i18n.t('gallery_btn_open')}">
               <i class="fa fa-eye"></i>
             </button>
-            <button class="gallery-card-icon" title="Scarica" onclick="event.stopPropagation(); downloadImage('${f.url}', '${f.name}')">
+            <button class="gallery-card-icon" title="${FashionAI.i18n.t('gallery_btn_download')}" onclick="event.stopPropagation(); downloadImage('${f.url}', '${f.name}')">
               <i class="fa fa-download"></i>
             </button>
           </div>
@@ -415,7 +415,7 @@
       const file = allFiles[currentIndex];
       if (!file?.id) return;
       viewerWatermarkBtn.disabled = true;
-      viewerWatermarkBtn.textContent = 'Rimozione in corso...';
+      viewerWatermarkBtn.textContent = FashionAI.i18n.t('gallery_removing_watermark') || 'Rimozione in corso...';
       try {
         const resp = await fetch(`/api/gallery/${file.id}/remove-watermark`, { method: 'POST' });
         const data = await resp.json();
@@ -435,7 +435,7 @@
         const cardDownload = listEl.querySelector(`.gallery-card:nth-child(${currentIndex + 1}) a[download]`);
         if (cardDownload) cardDownload.href = data.cleanUrl;
       } catch (err) {
-        alert('Errore: ' + err.message);
+        alert((FashionAI.i18n.t('gallery_watermark_error') || 'Errore: ') + err.message);
         viewerWatermarkBtn.disabled = false;
         viewerWatermarkBtn.innerHTML = `<i class="fa fa-wand-magic-sparkles" style="margin-right:6px;"></i>${FashionAI.i18n.t('gallery_remove_watermark')}`;
       }

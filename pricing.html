@@ -947,7 +947,7 @@
         if (params.get('payment') === 'success') {
           const banner = document.createElement('div');
           banner.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1a3a1a;border:1px solid #4caf50;color:#81c784;padding:14px 28px;border-radius:10px;z-index:9999;font-size:0.95rem;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
-          banner.textContent = '✅ Pagamento completato! Il tuo piano è stato attivato.';
+          banner.textContent = window.FashionAI?.i18n?.t('pricing_payment_success') || '✅ Pagamento completato! Il tuo piano è stato attivato.';
           document.body.appendChild(banner);
           setTimeout(() => banner.remove(), 6000);
           window.history.replaceState({}, '', 'pricing.html');
@@ -955,7 +955,7 @@
         if (params.get('payment') === 'cancelled') {
           const banner = document.createElement('div');
           banner.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#2a1a1a;border:1px solid #f44336;color:#e57373;padding:14px 28px;border-radius:10px;z-index:9999;font-size:0.95rem;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
-          banner.textContent = '❌ Pagamento annullato. Puoi riprovare quando vuoi.';
+          banner.textContent = window.FashionAI?.i18n?.t('pricing_payment_cancelled') || '❌ Pagamento annullato. Puoi riprovare quando vuoi.';
           document.body.appendChild(banner);
           setTimeout(() => banner.remove(), 5000);
           window.history.replaceState({}, '', 'pricing.html');
@@ -999,10 +999,10 @@
             if (data.url) {
               window.location.href = data.url;
             } else {
-              alert(data.error || 'Errore durante il checkout. Riprova.');
+              alert(data.error || window.FashionAI?.i18n?.t('pricing_err_checkout') || 'Errore durante il checkout. Riprova.');
             }
           } catch (err) {
-            alert('Errore di rete. Riprova tra qualche istante.');
+            alert(window.FashionAI?.i18n?.t('pricing_err_network_retry') || 'Errore di rete. Riprova tra qualche istante.');
           }
         }
 

@@ -80,9 +80,9 @@
         <img src="images/logo-shotless.png" alt="Shotless.ai" style="height:110px; width:auto; display:block; margin:-33px 0;">
       </a>
       <ul class="nav-menu legal-nav" id="navMenu">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="studio.html" class="nav-link">Studio</a></li>
-        <li><a href="pricing.html" class="nav-link">Prezzi</a></li>
+        <li><a href="index.html" class="nav-link" data-i18n="nav_home">Home</a></li>
+        <li><a href="studio.html" class="nav-link" data-i18n="nav_studio">Studio</a></li>
+        <li><a href="pricing.html" class="nav-link" data-i18n="nav_pricing">Prezzi</a></li>
         <li><a href="#" class="nav-link" data-auth-link data-auth-default="Accedi">Accedi</a></li>
         <li class="nav-credit"><span class="studio-credit" id="studioCredit" aria-label="Remaining credit"></span></li>
       </ul>
@@ -92,7 +92,7 @@
 
   <main class="profile-main">
     <p class="profile-eyebrow" data-i18n="profile_eyebrow">Il tuo account</p>
-    <h1 class="profile-title">Profilo</h1>
+    <h1 class="profile-title" data-i18n="profile_title">Profilo</h1>
     <p class="profile-loading" id="profileLoading" data-i18n="profile_loading">Caricamento profilo...</p>
 
     <div id="profileContent" style="display:none;">
@@ -162,8 +162,8 @@
             </button>
           </div>
           <div style="margin-top: 16px; padding: 12px 14px; background: rgba(212,175,55,0.07); border: 1px solid rgba(212,175,55,0.2); border-radius: 10px;">
-            <p style="font-size: 12px; color: rgba(212,175,55,0.9); font-weight: 600; margin: 0 0 4px;">✦ Non scadono mai</p>
-            <p style="font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.5; margin: 0;">I crediti extra vengono utilizzati per primi, prima di quelli del piano. Perfetti per i mesi più intensi — compri quando ne hai bisogno, li usi quando vuoi.</p>
+            <p style="font-size: 12px; color: rgba(212,175,55,0.9); font-weight: 600; margin: 0 0 4px;" data-i18n="profile_credits_no_expire_title">✦ Non scadono mai</p>
+            <p style="font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.5; margin: 0;" data-i18n="profile_credits_no_expire_desc">I crediti extra vengono utilizzati per primi, prima di quelli del piano. Perfetti per i mesi più intensi — compri quando ne hai bisogno, li usi quando vuoi.</p>
           </div>
         </div>
 
@@ -215,7 +215,7 @@
       fetch('/api/auth/profile', { headers: { 'Authorization': 'Bearer ' + token } })
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          if (!data.user) { document.getElementById('profileLoading').textContent = 'Errore: ' + (data.error || 'risposta non valida dal server'); return; }
+          if (!data.user) { document.getElementById('profileLoading').textContent = (FashionAI.i18n.t('profile_err_loading_prefix') || 'Errore: ') + (data.error || 'risposta non valida dal server'); return; }
           var u = data.user;
           document.getElementById('profileEmail').textContent = u.email;
           document.getElementById('profilePlan').textContent = (u.plan || 'free').charAt(0).toUpperCase() + (u.plan || 'free').slice(1);
@@ -227,7 +227,7 @@
           document.getElementById('profileLoading').style.display = 'none';
           document.getElementById('profileContent').style.display = 'block';
         })
-        .catch(function (err) { document.getElementById('profileLoading').textContent = 'Errore: ' + (err && err.message ? err.message : String(err)); });
+        .catch(function (err) { document.getElementById('profileLoading').textContent = (FashionAI.i18n.t('profile_err_loading_prefix') || 'Errore: ') + (err && err.message ? err.message : String(err)); });
 
       // Carica transazioni
       fetch('/api/credits/transactions', { headers: { 'Authorization': 'Bearer ' + token } })
@@ -250,7 +250,7 @@
           }).join('');
         })
         .catch(function () {
-          document.getElementById('txList').innerHTML = '<p class="tx-empty">Errore caricamento</p>';
+          document.getElementById('txList').innerHTML = '<p class="tx-empty">' + (FashionAI.i18n.t('profile_tx_error') || 'Errore caricamento') + '</p>';
         });
 
       // Acquista crediti
@@ -265,9 +265,9 @@
           .then(function (data) {
             btn.disabled = false;
             if (data.url) window.location.href = data.url;
-            else alert(data.error || 'Errore checkout');
+            else alert(data.error || FashionAI.i18n.t('profile_err_checkout') || 'Errore checkout');
           })
-          .catch(function () { btn.disabled = false; alert('Errore di rete'); });
+          .catch(function () { btn.disabled = false; alert(FashionAI.i18n.t('profile_err_network') || 'Errore di rete'); });
       }
       document.getElementById('buyPack10').addEventListener('click', function () { buyPack(this, 'credits_10'); });
       document.getElementById('buyPack50').addEventListener('click', function () { buyPack(this, 'credits_50'); });
@@ -284,9 +284,9 @@
           .then(function (data) {
             btn.disabled = false;
             if (data.url) window.location.href = data.url;
-            else alert(data.error || 'Errore portale');
+            else alert(data.error || FashionAI.i18n.t('profile_err_portal') || 'Errore portale');
           })
-          .catch(function () { btn.disabled = false; alert('Errore di rete'); });
+          .catch(function () { btn.disabled = false; alert(FashionAI.i18n.t('profile_err_network') || 'Errore di rete'); });
       }
       document.getElementById('manageSubBtn').addEventListener('click', function () { openPortal(this); });
       document.getElementById('cancelSubBtn').addEventListener('click', function () { openPortal(this); });
