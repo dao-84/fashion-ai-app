@@ -2593,6 +2593,16 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       };
 
       const generate = async () => {
+        // Utenti Free: massimo 1 generazione simultanea
+        if (getUserPlan() === 'free') {
+          const hasSyncGeneration = loader?.classList.contains('active');
+          const hasAsyncGeneration = activeJobs.size > 0;
+          if (hasSyncGeneration || hasAsyncGeneration) {
+            showFreeTimeoutModal();
+            return;
+          }
+        }
+
         const isAccessory = selectedDressType === 'accessory';
         const isGhostMannequin = selectedStyle === 'ghostMannequin';
         const hasDress = !!dressInput?.files?.length;
