@@ -2854,28 +2854,40 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
         }
       });
 
+      const POSE_VARIANTS = [
+        'standing relaxed pose (weight shifted, one leg slightly forward)',
+        'slight walking motion',
+        'subtle contrapposto pose',
+        'upper body fashion pose (hands near face or waist)',
+        'seated elegant pose (if composition allows)',
+        'arms raised behind the head, confident and sensual pose',
+        'standing with legs crossed, weight shifted to one side',
+        'gaze directed downward, body slightly closed inward',
+        'one hand in the hair, head slightly tilted',
+        'leaning against a wall, relaxed and natural',
+        'body half-turned, torso facing the camera',
+      ];
+
+      let _poseQueue = [];
+      function _nextPose() {
+        if (_poseQueue.length === 0) {
+          _poseQueue = [...POSE_VARIANTS].sort(() => Math.random() - 0.5);
+        }
+        return _poseQueue.pop();
+      }
+
       poseBtn?.addEventListener('click', async () => {
         if (!lastImageUrl) {
           alert('No result available for pose change.');
           return;
         }
         trackEvent('change_pose_clicked', getTrackingMetadata({ imageUrl: lastImageUrl }));
+        const selectedPose = _nextPose();
         const FIXED_POSE_PROMPT = `Modify the pose and camera framing of the subject while preserving the original image identity, outfit, garment details, proportions, colors, and overall visual consistency.
 
 The garment must remain unchanged in shape, fit, texture, and structure.
 
-Generate a natural fashion pose, choosing randomly but realistically between:
-- standing relaxed pose (weight shifted, one leg slightly forward)
-- slight walking motion
-- subtle contrapposto pose
-- upper body fashion pose (hands near face or waist)
-- seated elegant pose (if composition allows)
-- arms raised behind the head, confident and sensual pose
-- standing with legs crossed, weight shifted to one side
-- gaze directed downward, body slightly closed inward
-- one hand in the hair, head slightly tilted
-- leaning against a wall, relaxed and natural
-- body half-turned, torso facing the camera
+Use exactly this pose: ${selectedPose}.
 
 Camera framing: choose one:
 - full body shot
