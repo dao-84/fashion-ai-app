@@ -624,6 +624,19 @@
     </div>
   </div>
 
+  <!-- Modal upsell Free → Starter (custom scene bloccata) -->
+  <div id="sceneUpsellBackdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:10000;backdrop-filter:blur(4px);"></div>
+  <div id="sceneUpsellModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;width:90%;max-width:420px;">
+    <div style="background:linear-gradient(180deg,rgba(15,15,18,.99),rgba(10,10,12,.99));border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:36px 32px 32px;position:relative;">
+      <button id="sceneUpsellClose" style="position:absolute;top:16px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;line-height:1;" aria-label="Chiudi">✕</button>
+      <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.7);margin-bottom:10px;">Piano Free</div>
+      <h2 style="font-size:20px;font-weight:700;color:#f4f0e6;margin:0 0 12px;font-family:'Orbitron','Rajdhani',sans-serif;">Scena personalizzata non disponibile</h2>
+      <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.7;margin:0 0 24px;">Con il piano <strong style="color:#d4af37;">Starter</strong> puoi personalizzare la scena e lo sfondo di ogni generazione — scegli l'ambiente che si adatta meglio al tuo brand.</p>
+      <a href="pricing.html" style="display:block;text-align:center;padding:13px;border-radius:999px;background:linear-gradient(135deg,#d4af37,#f6dd8a);color:#141414;font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;margin-bottom:12px;">Passa al piano Starter</a>
+      <p style="text-align:center;font-size:12px;color:rgba(255,255,255,.3);margin:0;cursor:pointer;" id="sceneUpsellSkip">Non ora</p>
+    </div>
+  </div>
+
   <!-- Modal upsell Free → Starter (timeout generazione) -->
   <div id="freeTimeoutModalBackdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:10000;backdrop-filter:blur(4px);"></div>
   <div id="freeTimeoutModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;width:90%;max-width:440px;">
@@ -1179,6 +1192,25 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       document.getElementById('watermarkUpsellClose')?.addEventListener('click', hideWatermarkUpsellModal);
       document.getElementById('watermarkUpsellBackdrop')?.addEventListener('click', hideWatermarkUpsellModal);
       document.getElementById('watermarkUpsellSkip')?.addEventListener('click', hideWatermarkUpsellModal);
+
+      // Modal upsell scena custom (solo Free)
+      function showSceneUpsellModal() {
+        document.getElementById('sceneUpsellBackdrop').style.display = 'block';
+        document.getElementById('sceneUpsellModal').style.display = 'block';
+      }
+      function hideSceneUpsellModal() {
+        document.getElementById('sceneUpsellBackdrop').style.display = 'none';
+        document.getElementById('sceneUpsellModal').style.display = 'none';
+      }
+      document.getElementById('sceneUpsellClose')?.addEventListener('click', hideSceneUpsellModal);
+      document.getElementById('sceneUpsellBackdrop')?.addEventListener('click', hideSceneUpsellModal);
+      document.getElementById('sceneUpsellSkip')?.addEventListener('click', hideSceneUpsellModal);
+      document.getElementById('studioBackgroundPrompt')?.addEventListener('focus', (e) => {
+        if (getUserPlan() === 'free') {
+          e.target.blur();
+          showSceneUpsellModal();
+        }
+      });
       document.getElementById('watermarkUpsellRemoveBtn')?.addEventListener('click', async () => {
         if (!lastGenerationId) return;
         const btn = document.getElementById('watermarkUpsellRemoveBtn');
