@@ -71,11 +71,6 @@
                 <span class="studio-progress-step__label" data-i18n="studio_step_style">Stile</span>
                 <span class="studio-progress-step__status" aria-hidden="true"></span>
               </button>
-              <button type="button" class="studio-progress-step" data-step="background" aria-label="Custom Scene">
-                <span class="studio-progress-step__thumb" aria-hidden="true"></span>
-                <span class="studio-progress-step__label" data-i18n="studio_step_background">Scena custom</span>
-                <span class="studio-progress-step__status" aria-hidden="true"></span>
-              </button>
             </div>
             <div class="studio-progress-content" id="studioProgressContent">
               <div class="studio-progress-panel is-active" data-step-panel="model">
@@ -163,32 +158,6 @@
                 <div class="studio-progress-control-wrap">
                   <div class="style-type-options studio-progress-style-options" id="studioProgressStyleOptions"></div>
                   <div class="prompt-suggestions studio-inline-suggestions studio-progress-suggestions" id="studioProgressSuggestions" hidden></div>
-                </div>
-                <div class="studio-progress-panel-actions">
-                  <select class="studio-progress-aspect-mini" aria-label="Aspect ratio">
-                    <option value="1:1">1:1</option>
-                    <option value="3:4" selected>3:4</option>
-                    <option value="4:3">4:3</option>
-                    <option value="9:16">9:16</option>
-                    <option value="16:9">16:9</option>
-                  </select>
-                  <select class="studio-progress-resolution-mini" aria-label="Resolution">
-                    <option value="1K" selected>1K</option>
-                    <option value="2K">2K</option>
-                    <option value="4K">4K</option>
-                  </select>
-                  <button type="button" class="studio-progress-confirm" data-next-step="background" data-i18n="studio_continue">Continua</button>
-                </div>
-              </div>
-              <div class="studio-progress-panel" data-step-panel="background" hidden>
-                <div class="studio-progress-panel-head">
-                  <h3 class="studio-progress-panel-title" data-i18n="studio_panel_background_title">Scena personalizzata (opzionale)</h3>
-                  <p class="studio-progress-panel-helper" data-i18n="studio_panel_background_helper">Aggiungi un ambiente personalizzato per guidare lo sfondo.</p>
-                </div>
-                <div class="studio-progress-background">
-                  <label class="studio-progress-field">
-                    <textarea id="studioProgressBackgroundPrompt" rows="3" data-i18n-placeholder="studio_background_placeholder" placeholder="Esempio: studio fashion con luce soffusa e accenti dorati al neon"></textarea>
-                  </label>
                 </div>
                 <div class="studio-progress-panel-actions">
                   <select class="studio-progress-aspect-mini" aria-label="Aspect ratio">
