@@ -470,7 +470,7 @@
 
       /* ── PRICING ── */
       pricing_watermark_yes: 'Sì (rimozione 0,5 cr)',
-      extra_subtitle: 'Non scadono. Seguono le regole del tuo piano attivo.',
+      extra_subtitle: 'Se non vuoi sottoscrivere un piano mensile puoi acquistare solamente i crediti extra. Non scadono. Seguono le regole del tuo piano attivo.',
       unlimited_label: 'illimitata',
       parallel_queue_free: 'Coda parallela — <strong>max 1 in parallelo</strong>',
 
@@ -1034,7 +1034,7 @@
 
       /* ── PRICING ── */
       pricing_watermark_yes: 'Yes (0.5 cr removal)',
-      extra_subtitle: "They don't expire. They follow the rules of your active plan.",
+      extra_subtitle: "If you don't want to subscribe to a monthly plan, you can purchase extra credits only. They don't expire. They follow the rules of your active plan.",
       unlimited_label: 'unlimited',
       parallel_queue_free: 'Parallel queue — <strong>max 1 at once</strong>',
 
@@ -1598,7 +1598,7 @@
 
       /* ── PRICING ── */
       pricing_watermark_yes: 'Sí (eliminación 0,5 cr)',
-      extra_subtitle: 'No caducan. Siguen las reglas de tu plan activo.',
+      extra_subtitle: 'Si no quieres suscribirte a un plan mensual, puedes comprar solo créditos extra. No caducan. Siguen las reglas de tu plan activo.',
       unlimited_label: 'ilimitada',
       parallel_queue_free: 'Cola paralela — <strong>máx. 1 en paralelo</strong>',
 
