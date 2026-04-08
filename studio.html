@@ -2965,6 +2965,7 @@ Do not introduce distortions, extra elements, text, or changes to the clothing.`
           image_input: [lastImageUrl],
           output_format: 'jpg',
           aspect_ratio: lastInput?.aspect_ratio || '1:1',
+          resolution: selectedResolution || '1K',
         };
         const poseStartTime = Date.now();
         showLoader();
