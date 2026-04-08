@@ -582,6 +582,14 @@
               </div>
             </div>
 
+            <div class="model-builder-section">
+              <div class="model-builder-label" data-i18n="mb_engine">Motore AI</div>
+              <div style="display:flex;gap:8px;">
+                <button type="button" class="mb-engine-btn active" id="mbEngineStandard" data-model-engine="standard" style="flex:1;padding:10px 8px;border-radius:12px;border:1px solid rgba(212,175,55,.4);background:rgba(212,175,55,.15);color:#d4af37;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;" data-i18n="mb_engine_standard">Standard</button>
+                <button type="button" class="mb-engine-btn" id="mbEngineAnalog" data-model-engine="analog" style="flex:1;padding:10px 8px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:rgba(255,255,255,.5);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;" data-i18n="mb_engine_analog">Analog Film</button>
+              </div>
+            </div>
+
             <div class="model-builder-footer">
               <button class="upload-action" type="button" id="studioGenerateModelBtn" data-i18n="mb_generate_btn">Genera modella</button>
             </div>
@@ -766,6 +774,21 @@
       const genShoot = document.getElementById('studioGenShoot');
       const genModelBtn = document.getElementById('studioGenerateModelBtn');
       const settingsToggle = document.getElementById('studioSettingsToggle');
+
+      // Selezione motore AI per la generazione modella
+      let selectedModelEngine = 'standard';
+      document.querySelectorAll('.mb-engine-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          selectedModelEngine = btn.dataset.modelEngine;
+          document.querySelectorAll('.mb-engine-btn').forEach((b) => {
+            const isActive = b === btn;
+            b.classList.toggle('active', isActive);
+            b.style.background = isActive ? 'rgba(212,175,55,.15)' : 'rgba(255,255,255,.03)';
+            b.style.borderColor = isActive ? 'rgba(212,175,55,.4)' : 'rgba(255,255,255,.08)';
+            b.style.color = isActive ? '#d4af37' : 'rgba(255,255,255,.5)';
+          });
+        });
+      });
       const settingsBody = document.getElementById('studioSettingsBody');
       const TRACKING_SESSION_KEY = 'fashion-ai.session-id';
       const trackingPage = 'studio';
