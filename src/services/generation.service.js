@@ -98,7 +98,9 @@ function createGenerationService(deps) {
 
   return {
     async generateModel(input = {}, _rawBody = {}, auth = {}) {
-      if (!replicateIntegration.isConfigured()) {
+      const useFal = (_rawBody.modelEngine === 'fal' || _rawBody.modelEngine === 'analog') && falIntegration && falIntegration.isConfigured();
+
+      if (!useFal && !replicateIntegration.isConfigured()) {
         throw createServiceError(400, 'Replicate non configurato.');
       }
 
@@ -136,20 +138,25 @@ function createGenerationService(deps) {
           amount: modelCreditCost,
           description: 'Generazione modella',
         });
-        log.info(logEmoji.generate, `[generate-model] crediti scalati: ${modelCreditCost} (utente ${modelUserId}, piano ${userPlan})`);
+        log.info(logEmoji.generate, `[generate-model] crediti scalati: ${modelCreditCost} (utente ${modelUserId}, piano ${useFal ? 'FAL.AI' : 'Replicate'})`);
       }
 
       const inputPayload = {
         prompt: cleanedPrompt,
         aspect_ratio: input.aspect_ratio || '4:3',
-        output_format: input.output_format || 'jpg',
-        image_input: [],
+        ...(useFal ? {} : { output_format: input.output_format || 'jpg', image_input: [] }),
       };
+
+      const providerName = useFal ? 'FAL.AI' : 'Replicate';
 
       try {
         log.info(logEmoji.generate, `[generate-model] prompt: ${cleanedPrompt}`);
-        log.info(logEmoji.generate, `[generate-model] richiesta a Replicate avviata`);
-        const output = await replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
+        log.info(logEmoji.generate, `[generate-model] richiesta a ${providerName} avviata`);
+
+        const output = useFal
+          ? await falIntegration.runTextToImage(inputPayload)
+          : await replicateIntegration.runModel(REPLICATE_MODEL_VERSION, inputPayload);
+
         const userPlanForSave = auth?.user?.plan || 'free';
         const saved = await collectSavedOutputs(output, userPlanForSave);
         log.info(logEmoji.generate, `[generate-model] completata. File salvati: ${saved.length}`);
@@ -161,7 +168,7 @@ function createGenerationService(deps) {
               if (item?.url) {
                 await pool.query(
                   'INSERT INTO generations (user_id, asset_url, asset_url_clean, provider, resolution, style, credits_used, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-                  [auth.user.id, item.url, item.cleanUrl || null, 'Replicate', '1K', 'model', 1, 'completed']
+                  [auth.user.id, item.url, item.cleanUrl || null, providerName, '1K', 'model', 1, 'completed']
                 );
               }
             }
@@ -172,21 +179,20 @@ function createGenerationService(deps) {
 
         return { output, saved: saved.map(s => s?.url || s) };
       } catch (error) {
-        // Rimborsa i crediti se Replicate fallisce dopo averli scalati
         if (modelCreditCost > 0 && modelUserId && features?.enableCredits && creditService) {
           try {
             await creditService.refundCredits({
               userId: modelUserId,
               amount: modelCreditCost,
-              description: 'Rimborso automatico — errore generazione modella',
+              description: `Rimborso automatico — errore generazione modella (${providerName})`,
             });
             log.info(logEmoji.generate, `[generate-model] crediti rimborsati: ${modelCreditCost} (errore provider)`);
           } catch (refundErr) {
             log.error(logEmoji.error, `[generate-model] rimborso crediti fallito`, refundErr);
           }
         }
-        log.error(logEmoji.error, `Replicate generate-model failed`, error);
-        throw createServiceError(500, `Replicate request failed`, error.message);
+        log.error(logEmoji.error, `${providerName} generate-model failed`, error);
+        throw createServiceError(500, `${providerName} request failed`, error.message);
       }
     },
 

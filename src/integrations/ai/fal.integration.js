@@ -85,6 +85,23 @@ function createFalIntegration(deps) {
       if (Array.isArray(result)) return result;
       throw new Error('FAL.AI: nessuna immagine ricevuta nella risposta');
     },
+
+    // Text-to-image puro — usato per generare la modella AI con fal-ai/nano-banana-2
+    async runTextToImage(input) {
+      if (!fal) {
+        throw new Error('FAL.AI non configurato: aggiungi FAL_KEY in .env');
+      }
+      const falInput = { ...input };
+      delete falInput.image_input;
+      if (falInput.output_format === 'jpg') falInput.output_format = 'jpeg';
+      const result = await fal.subscribe('fal-ai/nano-banana-2', { input: falInput });
+      const images = result?.images ?? result?.data?.images ?? [];
+      if (images.length > 0) {
+        return images.map((img) => img.url ?? img);
+      }
+      if (Array.isArray(result)) return result;
+      throw new Error('FAL.AI: nessuna immagine ricevuta nella risposta');
+    },
   };
 }
 

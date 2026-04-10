@@ -2624,7 +2624,7 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
           const resp = await fetch('/api/generate-model', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('auth_token') || '') },
-            body: JSON.stringify({ input, provider: selectedProvider || 'replicate' }),
+            body: JSON.stringify({ input, provider: selectedProvider || 'replicate', modelEngine: selectedModelEngine }),
           });
           if (resp.status === 429) {
             showFreeTimeoutModal();
