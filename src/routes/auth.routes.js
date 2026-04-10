@@ -14,6 +14,8 @@ function registerAuthRoutes(app, deps) {
     creditService,
     emailService,
     frontendUrl: deps.env?.FRONTEND_URL,
+    telegramBotToken: deps.env?.TELEGRAM_BOT_TOKEN,
+    telegramChatId: deps.env?.TELEGRAM_CHAT_ID,
   });
   const authController = createAuthController({ authService });
 

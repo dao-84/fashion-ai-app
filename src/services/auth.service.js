@@ -6,7 +6,22 @@ const { FREE_CREDITS_ON_REGISTER } = require('../config/constants');
 const SALT_ROUNDS = 12;
 
 function createAuthService(deps) {
-  const { getPool, JWT_SECRET, creditService, emailService, frontendUrl } = deps;
+  const { getPool, JWT_SECRET, creditService, emailService, frontendUrl, telegramBotToken, telegramChatId } = deps;
+
+  async function notifyTelegram(email) {
+    if (!telegramBotToken || !telegramChatId) return;
+    try {
+      const now = new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' });
+      const text = `🆕 Nuovo utente registrato\n📧 ${email}\n📅 ${now}`;
+      await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: telegramChatId, text }),
+      });
+    } catch (_err) {
+      // notifica fallita — non blocca la registrazione
+    }
+  }
 
   function generateToken(user) {
     return jwt.sign(
@@ -48,6 +63,9 @@ function createAuthService(deps) {
       );
 
       const user = result.rows[0];
+
+      // Notifica Telegram nuovo utente (fire-and-forget)
+      notifyTelegram(user.email).catch(() => {});
 
       // Invia email di verifica
       if (emailService && emailService.isConfigured()) {
