@@ -14,8 +14,19 @@ const PLAN_CREDITS = {
   free:       0,
 };
 
-function createBillingService({ getPool, log, logEmoji, creditService }) {
+function createBillingService({ getPool, log, logEmoji, creditService, telegramBotToken, telegramChatId }) {
   const pool = () => getPool();
+
+  async function notifyTelegram(text) {
+    if (!telegramBotToken || !telegramChatId) return;
+    try {
+      await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: telegramChatId, text }),
+      });
+    } catch (_err) {}
+  }
 
   return {
     async createCheckoutSession({ userId, userEmail, priceKey, successUrl, cancelUrl }) {
@@ -101,6 +112,8 @@ function createBillingService({ getPool, log, logEmoji, creditService }) {
               [planInfo.plan, planInfo.credits, session.subscription || null, userId]
             );
             log.info(logEmoji.auth, `[billing] piano aggiornato a ${planInfo.plan} per utente ${userId}, +${planInfo.credits} credits_plan`);
+            const now = new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' });
+            notifyTelegram(`💳 Nuovo abbonamento attivato\n👤 Utente ID: ${userId}\n📋 Piano: ${planInfo.plan}\n💰 Crediti aggiunti: ${planInfo.credits}\n📅 ${now}`).catch(() => {});
           } else {
             // Pacchetto crediti one-time — aggiunge a credits_pack (non scadono mai)
             await db.query(
@@ -108,6 +121,8 @@ function createBillingService({ getPool, log, logEmoji, creditService }) {
               [planInfo.credits, userId]
             );
             log.info(logEmoji.auth, `[billing] +${planInfo.credits} credits_pack per utente ${userId}`);
+            const now = new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' });
+            notifyTelegram(`📦 Acquisto pacchetto crediti\n👤 Utente ID: ${userId}\n💰 Crediti aggiunti: ${planInfo.credits}\n📅 ${now}`).catch(() => {});
           }
 
           // Registra transazione
@@ -137,6 +152,8 @@ function createBillingService({ getPool, log, logEmoji, creditService }) {
             [credits, user.id]
           );
           log.info(logEmoji.auth, `[billing] rinnovo: credits_plan = ${credits} per utente ${user.id} (piano ${user.plan})`);
+          const now = new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' });
+          notifyTelegram(`🔄 Rinnovo abbonamento\n👤 Utente ID: ${user.id}\n📋 Piano: ${user.plan}\n💰 Crediti rinnovati: ${credits}\n📅 ${now}`).catch(() => {});
           break;
         }
 
@@ -149,6 +166,8 @@ function createBillingService({ getPool, log, logEmoji, creditService }) {
             ['free', customerId]
           );
           log.info(logEmoji.warn, `[billing] abbonamento cancellato per customer ${customerId} → piano free (crediti invariati)`);
+          const now = new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' });
+          notifyTelegram(`❌ Abbonamento cancellato\n👤 Customer: ${customerId}\n📋 Downgrade a: Free\n📅 ${now}`).catch(() => {});
           break;
         }
 

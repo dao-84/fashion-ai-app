@@ -21,7 +21,7 @@ function registerMainRoutes(app, deps) {
   const galleryService = createGalleryService({ ...deps, creditService });
   const publishService = createPublishService(deps);
   const trackService = createTrackService(deps);
-  const billingService = createBillingService({ getPool: deps.getPool, log: deps.log, logEmoji: deps.logEmoji, creditService });
+  const billingService = createBillingService({ getPool: deps.getPool, log: deps.log, logEmoji: deps.logEmoji, creditService, telegramBotToken: deps.env?.TELEGRAM_BOT_TOKEN, telegramChatId: deps.env?.TELEGRAM_CHAT_ID });
 
   const appController = createAppController({
     appService,

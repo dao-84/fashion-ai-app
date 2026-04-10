@@ -8,11 +8,11 @@ const SALT_ROUNDS = 12;
 function createAuthService(deps) {
   const { getPool, JWT_SECRET, creditService, emailService, frontendUrl, telegramBotToken, telegramChatId } = deps;
 
-  async function notifyTelegram(email) {
+  async function notifyTelegram(email, plan) {
     if (!telegramBotToken || !telegramChatId) return;
     try {
       const now = new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' });
-      const text = `🆕 Nuovo utente registrato\n📧 ${email}\n📅 ${now}`;
+      const text = `🆕 Nuovo utente registrato\n📧 ${email}\n📋 Piano: ${plan || 'Free'}\n📅 ${now}`;
       await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,7 +65,7 @@ function createAuthService(deps) {
       const user = result.rows[0];
 
       // Notifica Telegram nuovo utente (fire-and-forget)
-      notifyTelegram(user.email).catch(() => {});
+      notifyTelegram(user.email, user.plan).catch(() => {});
 
       // Invia email di verifica
       if (emailService && emailService.isConfigured()) {
