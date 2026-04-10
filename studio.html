@@ -2459,12 +2459,65 @@ Extract the clothing from [Image1] and present it as a clean ghost mannequin e-c
       const MODEL_BASE_PROMPT =
         'A hyper-realistic, hight-end fashion editorial, aspect ratio 4:3';
 
+      const MODEL_ETHNICITY_TRAITS = {
+        european: {
+          hair: ['blonde hair', 'light brunette hair', 'auburn hair', 'chestnut hair', 'dark blonde hair'],
+          eyes: ['blue eyes', 'green eyes', 'hazel eyes', 'light brown eyes', 'grey eyes'],
+          face: ['oval face shape', 'heart-shaped face', 'soft round face', 'defined cheekbones'],
+        },
+        asian: {
+          hair: ['straight black hair', 'dark brown hair', 'sleek black hair', 'soft black waves'],
+          eyes: ['dark brown eyes', 'deep brown eyes', 'warm dark eyes'],
+          face: ['soft oval face', 'high cheekbones', 'delicate facial features', 'smooth oval face'],
+        },
+        latin: {
+          hair: ['dark brunette hair', 'rich mahogany hair', 'black wavy hair', 'warm brown hair'],
+          eyes: ['warm brown eyes', 'amber eyes', 'deep brown eyes', 'honey-brown eyes'],
+          face: ['oval face shape', 'defined cheekbones', 'strong facial features', 'soft square jaw'],
+        },
+        african: {
+          hair: ['natural curly hair', 'short natural hair', 'braided hair', 'tight coils hair', 'voluminous afro'],
+          eyes: ['deep brown eyes', 'dark amber eyes', 'rich brown eyes'],
+          face: ['oval face shape', 'high cheekbones', 'round face shape', 'strong defined features'],
+        },
+        middleeastern: {
+          hair: ['dark brown hair', 'black straight hair', 'dark wavy hair', 'rich black hair'],
+          eyes: ['deep brown eyes', 'dark hazel eyes', 'warm amber eyes', 'black eyes'],
+          face: ['oval face shape', 'strong cheekbones', 'defined nose', 'elegant facial features'],
+        },
+        southasian: {
+          hair: ['long black hair', 'dark brown hair', 'black wavy hair', 'straight dark hair'],
+          eyes: ['dark brown eyes', 'deep brown eyes', 'warm dark eyes'],
+          face: ['oval face shape', 'soft features', 'high cheekbones', 'delicate facial structure'],
+        },
+      };
+
+      const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
       const buildModelPrompt = (settings) => {
         const clothing = 'wearing a white t-shirt and fitted blue jeans';
+
+        const ethnicityKey = (settings.ethnicity || '')
+          .toLowerCase()
+          .replace(/[^a-z]/g, '');
+        const traits =
+          MODEL_ETHNICITY_TRAITS[ethnicityKey] ||
+          MODEL_ETHNICITY_TRAITS[
+            Object.keys(MODEL_ETHNICITY_TRAITS).find((k) => ethnicityKey.includes(k)) || 'european'
+          ] ||
+          MODEL_ETHNICITY_TRAITS.european;
+
+        const hairVariation = pickRandom(traits.hair);
+        const eyeVariation = pickRandom(traits.eyes);
+        const faceVariation = pickRandom(traits.face);
+
         const bits = [
           MODEL_BASE_PROMPT,
           settings.gender || 'female fashion model',
           settings.ethnicity || 'European ethnicity',
+          hairVariation,
+          eyeVariation,
+          faceVariation,
           settings.age || 'age 25-35',
           settings.body || 'slim body type',
           settings.shoot || 'waist-up shot',
