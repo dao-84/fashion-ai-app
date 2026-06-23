@@ -106,6 +106,9 @@
     let currentIndex = -1;
     let currentUserPlan = null;
 
+    const PAGE_SIZE = 30;          // quante immagini mostrare per volta
+    let visibleCount = PAGE_SIZE;  // quante sono attualmente visibili
+
 
     const readableName = (file) => file?.name?.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').trim() || 'LOOK';
 
@@ -165,7 +168,9 @@
     };
 
     const updateLoadMoreVisibility = () => {
-      if (loadMoreWrap) loadMoreWrap.style.display = 'none';
+      if (!loadMoreWrap) return;
+      // Mostra "Mostra altre" solo se ci sono ancora immagini non visualizzate
+      loadMoreWrap.style.display = visibleCount < allFiles.length ? '' : 'none';
     };
 
     window.downloadImage = async (url, filename) => {
@@ -256,7 +261,7 @@
       card.style.animationDelay = `${idx * 0.03}s`;
       card.innerHTML = `
         <div class="gallery-card-image">
-          <img src="${f.url}" alt="${f.name}">
+          <img src="${f.url}" alt="${f.name}" loading="lazy" decoding="async">
         </div>
         <div class="gallery-card-footer">
           <div class="gallery-card-title">${name}</div>
@@ -360,7 +365,7 @@
       card.style.animationDelay = `${idx * 0.03}s`;
       card.innerHTML = `
         <div class="gallery-card-image" style="position:relative;">
-          <img src="${f.url}" alt="${name}">
+          <img src="${f.url}" alt="${name}" loading="lazy" decoding="async">
           <span style="position:absolute;top:8px;left:8px;background:rgba(212,175,55,.85);color:#141414;font-size:10px;font-weight:700;letter-spacing:.1em;padding:3px 8px;border-radius:999px;">DEMO</span>
         </div>
         <div class="gallery-card-footer">
@@ -386,7 +391,8 @@
     const renderGallery = () => {
       listEl.innerHTML = '';
       emptyEl.style.display = 'none';
-      allFiles.forEach((file, index) => {
+      // Disegna solo le prime "visibleCount" immagini; le altre con "Mostra altre"
+      allFiles.slice(0, visibleCount).forEach((file, index) => {
         if (file.isDemo) {
           listEl.appendChild(createDemoCard(file, index));
         } else {
@@ -441,7 +447,11 @@
       }
     });
 
-    loadMoreBtn?.addEventListener('click', () => {});
+    loadMoreBtn?.addEventListener('click', () => {
+      visibleCount += PAGE_SIZE;   // mostra le successive 30 immagini
+      renderGallery();
+      updateLoadMoreVisibility();
+    });
 
     // Carica prima il piano utente (solo se loggato), poi la gallery
     if (localStorage.getItem('auth_token')) {
